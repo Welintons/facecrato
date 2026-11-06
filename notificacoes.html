@@ -39,10 +39,13 @@ body{
 <!-- TOPO -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
     <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">F</div>
+        <!-- LOGO / BOTÃO HOME -->
+        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
+                <i data-lucide="home" class="w-5 h-5"></i>
+            </div>
             FaceCrato
-        </div>
+        </a>
 
         <div class="flex-1 max-w-md relative hidden sm:block">
             <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
@@ -52,7 +55,7 @@ body{
         <div class="ml-auto flex items-center gap-2.5">
             <button class="w-10 h-10 bg-cyan-50 border border-cyan-200 rounded-xl text-cyan-700 flex items-center justify-center shadow-sm" id="notificationsButton" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
             <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
-            
+
             <!-- BOTÃO SANDUÍCHE (Mobile) -->
             <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
         </div>
@@ -557,7 +560,7 @@ async function init(){
 
   document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
   document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
-  
+
   document.getElementById("sideAvatar").innerHTML =
       renderAvatar(currentProfile, "w-full h-full rounded-full flex items-center justify-center");
 
