@@ -17,52 +17,55 @@
 
 <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
-    <!-- LADO ESQUERDO: BRANDING -->
+    <!-- LADO ESQUERDO: BRANDING COM LOGO E NOME GRANDES + TEXTO TEMÁTICO -->
     <section class="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-950 text-white border-r border-gray-200">
-        <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
+        
+        <!-- LOGO E NOME GRANDES NO TOPO DA ESQUERDA -->
+        <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-lg shadow-cyan-500/30 border-2 border-cyan-400 shrink-0">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
             </div>
             <div class="flex flex-col">
-                <span class="text-2xl font-black tracking-tight leading-none">FaceCrato</span>
-                <span class="text-[10px] font-bold text-amber-500 tracking-wider uppercase mt-1">Cariri · CE</span>
+                <span class="text-3xl font-black tracking-tight leading-none text-white">FaceCrato</span>
+                <span class="text-xs font-extrabold text-amber-400 tracking-widest uppercase mt-1">Cariri · Ceará</span>
             </div>
         </div>
 
-        <div class="max-w-md">
+        <!-- DESCRIÇÃO TEMÁTICA E ACOLHEDORA -->
+        <div class="max-w-lg my-auto py-8">
             <h1 class="text-4xl xl:text-5xl font-black tracking-tight leading-tight mb-6">
-                Pessoas.<br>
-                Conexões.<br>
-                <span class="text-cyan-400">Comunidade.</span>
+                A nossa terra.<br>
+                A nossa gente.<br>
+                <span class="text-cyan-400">A nossa rede.</span>
             </h1>
 
-            <p class="text-slate-300 text-sm xl:text-base leading-relaxed">
-                Uma rede social independente para conectar o povo do Cariri, compartilhar momentos e criar novas conexões. De Crato para todos os lugares.
+            <p class="text-slate-300 text-base xl:text-lg leading-relaxed font-medium">
+                Do Crato para todo o Cariri e o mundo. Um cantinho digital feito por nós e para nós, onde a amizade é forte que nem o sol do sertão e a prosa nunca tem fim. Chegue mais, puxe uma cadeira e venha prosear!
             </p>
         </div>
 
         <div class="text-xs text-slate-400 tracking-wider font-medium">
-            FACECRATO © 2026 — UMA NOVA FORMA DE SE CONECTAR.
+            FACECRATO © 2026 — FEITO COM ORGULHO NO CARIRI.
         </div>
     </section>
 
-    <!-- LADO DIREITO: LOGIN -->
+    <!-- LADO DIREITO: FORMULÁRIO DE LOGIN -->
     <section class="flex items-center justify-center p-6 sm:p-12">
         <div class="w-full max-w-md">
 
-            <!-- LOGO MOBILE -->
-            <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 mb-8 lg:hidden">
-                <div class="w-10 h-10 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
+            <!-- LOGO E NOME GRANDES NO MOBILE -->
+            <div class="flex items-center gap-3.5 mb-8 lg:hidden">
+                <div class="w-14 h-14 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-xl font-black tracking-tight text-cyan-600 leading-none">FaceCrato</span>
-                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase">Cariri · CE</span>
+                    <span class="text-2xl font-black tracking-tight text-slate-900 leading-none">FaceCrato</span>
+                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase mt-0.5">Cariri · Ceará</span>
                 </div>
             </div>
 
             <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Bem-vindo de volta!</h2>
-            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre na sua conta para continuar conectado com a galera.</p>
+            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre na sua conta para ver o que a galera está postando.</p>
 
             <form id="loginForm" class="space-y-4">
 
@@ -122,7 +125,7 @@
             </div>
 
             <div class="text-center text-[11px] text-gray-400 mt-12">
-                FaceCrato — Conectando o Cariri.
+                FaceCrato — Conectando o Cariri com estilo.
             </div>
 
         </div>
