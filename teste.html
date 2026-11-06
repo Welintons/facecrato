@@ -153,8 +153,8 @@
 
 </main>
 
-<!-- MODAL DE MÍDIA ESTILO REDE SOCIAL (IMERSIVO) -->
-<div id="mediaModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
+<!-- MODAL DE MÍDIA COM PLAYER PERSONALIZADO ESTILO FACEWATER/FACECRATO -->
+<div id="mediaModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[200] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
     <div class="bg-white w-full max-w-6xl h-[92vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
         
         <!-- Botão Fechar Modal -->
@@ -162,17 +162,17 @@
             <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
-        <!-- LADO ESQUERDO: MÍDIA COM SUPORTE A NAVEGAÇÃO LATERAL (CASO HAJA MAIS DE UMA) -->
+        <!-- LADO ESQUERDO: MÍDIA E PLAYER PERSONALIZADO -->
         <div class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
             <div id="modalMediaContainer" class="w-full h-full flex items-center justify-center relative">
                 <!-- Injetado dinamicamente via JS -->
             </div>
             
             <!-- Botões Laterais de Navegação de Mídia -->
-            <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden">
+            <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
                 <i data-lucide="chevron-left" class="w-6 h-6"></i>
             </button>
-            <button id="nextMediaBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden">
+            <button id="nextMediaBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
                 <i data-lucide="chevron-right" class="w-6 h-6"></i>
             </button>
         </div>
@@ -199,7 +199,7 @@
             <div class="p-3 border-t border-gray-100 bg-gray-50/50">
                 <form id="modalCommentForm" class="flex gap-2">
                     <input type="text" id="modalCommentInput" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
-                    <button type="submit" class="bg-cyan-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-cyan-700 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+                    <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:brightness-110 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
                 </form>
             </div>
 
@@ -566,7 +566,7 @@ function renderPosts(posts) {
                         <source src="${escapeHTML(m.signedUrl)}">
                     </video>
                     <div class="absolute inset-0 bg-black/20 hover:bg-black/0 transition flex items-center justify-center">
-                        <div class="w-12 h-12 rounded-full bg-black/60 text-white flex items-center justify-center shadow-lg"><i data-lucide="play" class="w-6 h-6 ml-0.5"></i></div>
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition"><i data-lucide="play" class="w-7 h-7 ml-0.5 fill-current"></i></div>
                     </div>
                 </div>`;
             return `
@@ -591,7 +591,7 @@ function renderPosts(posts) {
         const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
         return `
-            <article class="bg-white border border-gray-200 rounded-2xl p-5 mb-5 shadow-xs">
+            <article class="bg-white border border-gray-200 rounded-2xl p-5 mb-5 shadow-xs" data-post-id="${post.id}">
                 <div class="flex items-center gap-3.5 mb-3">
                     ${renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
                     <div class="flex-1 min-w-0">
@@ -648,7 +648,7 @@ function renderPosts(posts) {
 }
 
 /* ==========================================
-   FUNÇÕES DO MODAL DE MÍDIA (FOTO/VÍDEO)
+   FUNÇÕES DO MODAL DE MÍDIA COM PLAYER CUSTOMIZADO
    ========================================== */
 
 window.openMediaModal = function(postId, mediaIndex = 0) {
@@ -669,19 +669,41 @@ function updateModalContent() {
     const media = activeModalPost.media[activeMediaIndex];
     const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
 
-    // Renderizar a mídia atual (Foto ou Vídeo com controles completos)
     if (media.media_type === "video") {
         modalMediaContainer.innerHTML = `
-            <video class="max-w-full max-h-full object-contain mx-auto" controls autoplay controlsList="nodownload">
-                <source src="${escapeHTML(media.signedUrl)}">
-                Seu navegador não suporta vídeos.
-            </video>`;
+            <div class="relative w-full h-full flex items-center justify-center bg-black group custom-video-wrapper">
+                <video id="modalCustomVideo" class="max-w-full max-h-full object-contain mx-auto" preload="metadata">
+                    <source src="${escapeHTML(media.signedUrl)}">
+                </video>
+
+                <!-- Barra de Controles Customizada do Player -->
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 flex flex-col gap-2 opacity-90 group-hover:opacity-100 transition">
+                    <!-- Barra de Progresso -->
+                    <div id="videoProgressContainer" class="w-full bg-white/30 h-1.5 rounded-full cursor-pointer relative overflow-hidden">
+                        <div id="videoProgressBar" class="bg-gradient-to-r from-cyan-500 to-violet-500 h-full w-0"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-white text-xs">
+                        <div class="flex items-center gap-3">
+                            <button id="modalPlayPauseBtn" class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 flex items-center justify-center hover:scale-105 transition shadow">
+                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5" id="playPauseIcon"></i>
+                            </button>
+                            <span id="videoTimeDisplay">0:00 / 0:00</span>
+                        </div>
+
+                        <button id="modalFullscreenBtn" class="p-2 hover:bg-white/20 rounded-lg transition">
+                            <i data-lucide="maximize" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+
+        setupCustomVideoPlayer();
     } else {
         modalMediaContainer.innerHTML = `
             <img class="max-w-full max-h-full object-contain mx-auto select-none" src="${escapeHTML(media.signedUrl)}" alt="Mídia ampliada">`;
     }
 
-    // Exibir ou ocultar botões laterais caso haja mais de uma mídia no post
     if (activeModalPost.media.length > 1) {
         prevMediaBtn.classList.toggle("hidden", activeMediaIndex === 0);
         nextMediaBtn.classList.toggle("hidden", activeMediaIndex === activeModalPost.media.length - 1);
@@ -690,7 +712,6 @@ function updateModalContent() {
         nextMediaBtn.classList.add("hidden");
     }
 
-    // Autor do post no topo do modal
     modalAuthorHeader.innerHTML = `
         ${renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
         <div class="flex-1 min-w-0">
@@ -699,11 +720,63 @@ function updateModalContent() {
         </div>
     `;
 
-    // Legenda do post
     modalPostContent.innerHTML = activeModalPost.content ? `<p class="text-slate-800 leading-relaxed whitespace-pre-wrap">${formatRichText(activeModalPost.content)}</p>` : `<span class="text-gray-400 italic">Sem legenda.</span>`;
 
     renderModalComments();
     lucide.createIcons();
+}
+
+function setupCustomVideoPlayer() {
+    const video = document.getElementById("modalCustomVideo");
+    const playBtn = document.getElementById("modalPlayPauseBtn");
+    const playIcon = document.getElementById("playPauseIcon");
+    const progressBar = document.getElementById("videoProgressBar");
+    const progressContainer = document.getElementById("videoProgressContainer");
+    const timeDisplay = document.getElementById("videoTimeDisplay");
+    const fullscreenBtn = document.getElementById("modalFullscreenBtn");
+
+    if (!video) return;
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    video.addEventListener("loadedmetadata", () => {
+        timeDisplay.textContent = `0:00 / ${formatTime(video.duration)}`;
+    });
+
+    function togglePlay() {
+        if (video.paused) {
+            video.play();
+            playBtn.innerHTML = `<i data-lucide="pause" class="w-4 h-4 fill-current"></i>`;
+        } else {
+            video.pause();
+            playBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>`;
+        }
+        lucide.createIcons();
+    }
+
+    playBtn.addEventListener("click", togglePlay);
+    video.addEventListener("click", togglePlay);
+
+    video.addEventListener("timeupdate", () => {
+        if (!video.duration) return;
+        const percent = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = `${percent}%`;
+        timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+    });
+
+    progressContainer.addEventListener("click", (e) => {
+        const rect = progressContainer.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        video.currentTime = pos * video.duration;
+    });
+
+    fullscreenBtn.addEventListener("click", () => {
+        if (video.requestFullscreen) video.requestFullscreen();
+    });
 }
 
 function renderModalComments() {
@@ -729,7 +802,6 @@ function renderModalComments() {
     }).join("");
 }
 
-// Navegação entre mídias do mesmo post
 prevMediaBtn.addEventListener("click", () => {
     if (activeMediaIndex > 0) {
         activeMediaIndex--;
@@ -744,7 +816,6 @@ nextMediaBtn.addEventListener("click", () => {
     }
 });
 
-// Fechar Modal
 closeMediaModal.addEventListener("click", closeModal);
 mediaModal.addEventListener("click", (e) => {
     if (e.target === mediaModal) closeModal();
@@ -754,11 +825,10 @@ function closeModal() {
     mediaModal.classList.add("hidden");
     mediaModal.classList.remove("flex");
     document.body.style.overflow = "auto";
-    modalMediaContainer.innerHTML = ""; // Para o vídeo parar de tocar ao fechar
+    modalMediaContainer.innerHTML = "";
     activeModalPost = null;
 }
 
-// Enviar comentário direto pelo modal
 modalCommentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!activeModalPost) return;
@@ -776,7 +846,7 @@ modalCommentForm.addEventListener("submit", async (e) => {
         activeModalPost.comments.push(data);
         modalCommentInput.value = "";
         renderModalComments();
-        await loadFeed(); // Atualiza feed de fundo também
+        await loadFeed();
     }
 });
 
@@ -845,7 +915,10 @@ postsContainer.addEventListener("click", async event => {
         return;
     }
 
-    if (action === "toggle-comments") { document.getElementById(`comments-${postId}`)?.classList.toggle("open"); }
+    // CORREÇÃO: Abre/fecha os comentários do feed perfeitamente
+    if (action === "toggle-comments") { 
+        document.getElementById(`comments-${postId}`)?.classList.toggle("open"); 
+    }
 
     if (action === "save-post") {
         const { data: existing } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
