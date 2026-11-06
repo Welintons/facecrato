@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101827">
+<meta name="theme-color" content="#ffffff">
 
 <title>Criar conta | FaceCrato</title>
 
@@ -12,321 +11,58 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    min-height:100vh;
-    background:#0b1120;
-    color:#f8fafc;
-    font-family:Inter,system-ui,sans-serif;
-}
-
-.page{
-    min-height:100vh;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-}
-
-.brand-side{
-    padding:60px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    background:
-    radial-gradient(circle at 20% 20%,#2563eb55,transparent 40%),
-    radial-gradient(circle at 80% 80%,#7c3aed33,transparent 40%),
-    #111c32;
-    border-right:1px solid #26334a;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    font-size:25px;
-    font-weight:900;
-    letter-spacing:-1px;
-}
-
-.logo-icon{
-    width:45px;
-    height:45px;
-    display:grid;
-    place-items:center;
-    border-radius:14px;
-    background:linear-gradient(135deg,#3b82f6,#6366f1);
-}
-
-.brand-content{
-    max-width:520px;
-}
-
-.brand-content h1{
-    font-size:clamp(40px,5vw,65px);
-    line-height:1.05;
-    letter-spacing:-3px;
-    font-weight:900;
-    margin:0 0 22px;
-}
-
-.brand-content h1 span{color:#60a5fa}
-
-.brand-content p{
-    color:#a8b5ca;
-    font-size:17px;
-    line-height:1.8;
-}
-
-.brand-footer{
-    color:#718096;
-    font-size:12px;
-}
-
-.form-side{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:35px;
-}
-
-.form-box{
-    width:100%;
-    max-width:430px;
-}
-
-.mobile-logo{
-    display:none;
-}
-
-.form-box h2{
-    font-size:31px;
-    font-weight:850;
-    letter-spacing:-1px;
-    margin:0 0 8px;
-}
-
-.subtitle{
-    color:#94a3b8;
-    font-size:14px;
-    margin-bottom:27px;
-}
-
-.field-group{
-    margin-bottom:16px;
-}
-
-.field-group label{
-    display:block;
-    font-size:13px;
-    font-weight:700;
-    color:#cbd5e1;
-    margin-bottom:8px;
-}
-
-.input-wrap{
-    position:relative;
-}
-
-.input-wrap input{
-    width:100%;
-    height:50px;
-    background:#131e30;
-    border:1px solid #2d3c54;
-    border-radius:11px;
-    padding:0 45px 0 15px;
-    outline:none;
-    color:white;
-    font-size:14px;
-    transition:.2s;
-}
-
-.input-wrap input:focus{
-    border-color:#3b82f6;
-    box-shadow:0 0 0 3px #3b82f622;
-}
-
-.input-wrap input::placeholder{color:#64748b}
-
-.input-icon{
-    position:absolute;
-    right:15px;
-    top:15px;
-    color:#64748b;
-    width:19px;
-    height:19px;
-    pointer-events:none;
-}
-
-.toggle-password{
-    position:absolute;
-    right:12px;
-    top:11px;
-    padding:5px;
-    color:#94a3b8;
-    background:none;
-    border:0;
-    cursor:pointer;
-}
-
-.toggle-password svg{width:19px}
-
-.password-hint{
-    font-size:11px;
-    color:#64748b;
-    margin-top:6px;
-}
-
-.register-button{
-    width:100%;
-    height:53px;
-    margin-top:9px;
-    border:0;
-    border-radius:12px;
-    background:linear-gradient(100deg,#2563eb,#4f46e5);
-    color:white;
-    font-weight:800;
-    font-size:15px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.register-button:hover{
-    filter:brightness(1.12);
-    transform:translateY(-1px);
-}
-
-.register-button:disabled{
-    opacity:.6;
-    cursor:wait;
-    transform:none;
-}
-
-.message{
-    display:none;
-    margin-top:15px;
-    padding:13px;
-    border-radius:10px;
-    font-size:13px;
-    line-height:1.5;
-}
-
-.message.error{
-    display:block;
-    color:#fca5a5;
-    background:#7f1d1d33;
-    border:1px solid #991b1b66;
-}
-
-.message.success{
-    display:block;
-    color:#86efac;
-    background:#14532d33;
-    border:1px solid #16653466;
-}
-
-.login-link{
-    text-align:center;
-    color:#94a3b8;
-    font-size:14px;
-    margin-top:24px;
-}
-
-.login-link a{
-    color:#60a5fa;
-    text-decoration:none;
-    font-weight:800;
-}
-
-.login-link a:hover{text-decoration:underline}
-
-.form-footer{
-    text-align:center;
-    margin-top:35px;
-    font-size:12px;
-    color:#64748b;
-}
-
-@media(max-width:850px){
-    .page{grid-template-columns:1fr}
-    .brand-side{display:none}
-    .form-side{
-        min-height:100vh;
-        padding:24px;
-    }
-    .mobile-logo{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        margin-bottom:35px;
-        font-size:23px;
-        font-weight:900;
-    }
-    .form-box h2{font-size:28px}
-}
-</style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
-<div class="page">
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
-    <!-- IDENTIDADE VISUAL -->
-    <section class="brand-side">
-
-        <div class="logo">
-            <div class="logo-icon">
-                <i data-lucide="users"></i>
+    <!-- LADO ESQUERDO: BRANDING -->
+    <section class="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-950 text-white border-r border-gray-200">
+        <div class="flex items-center gap-3 text-2xl font-black tracking-tight">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <i data-lucide="users" class="w-6 h-6"></i>
             </div>
             FaceCrato
         </div>
 
-        <div class="brand-content">
-            <h1>
+        <div class="max-w-md">
+            <h1 class="text-4xl xl:text-5xl font-black tracking-tight leading-tight mb-6">
                 Sua história.<br>
                 Suas conexões.<br>
-                <span>Seu espaço.</span>
+                <span class="text-cyan-400">Seu espaço.</span>
             </h1>
 
-            <p>
-                Crie sua conta e faça parte de uma comunidade
-                onde pessoas compartilham ideias, momentos
-                e experiências.
+            <p class="text-slate-300 text-sm xl:text-base leading-relaxed">
+                Crie sua conta e faça parte de uma comunidade onde pessoas compartilham ideias, momentos e experiências com total estilo.
             </p>
         </div>
 
-        <div class="brand-footer">
+        <div class="text-xs text-slate-400 tracking-wider font-medium">
             FACECRATO © 2026 — UMA NOVA FORMA DE SE CONECTAR.
         </div>
-
     </section>
 
-    <!-- FORMULÁRIO -->
-    <section class="form-side">
+    <!-- LADO DIREITO: FORMULÁRIO -->
+    <section class="flex items-center justify-center p-6 sm:p-12">
+        <div class="w-full max-w-md">
 
-        <div class="form-box">
-
-            <div class="mobile-logo">
-                <div class="logo-icon">
-                    <i data-lucide="users"></i>
+            <!-- LOGO MOBILE -->
+            <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 mb-8 lg:hidden">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">
+                    <i data-lucide="users" class="w-5 h-5"></i>
                 </div>
                 FaceCrato
             </div>
 
-            <h2>Crie sua conta</h2>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Crie sua conta</h2>
+            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre para a comunidade FaceCrato.</p>
 
-            <p class="subtitle">
-                Entre para a comunidade FaceCrato.
-            </p>
+            <form id="registerForm" class="space-y-4">
 
-            <form id="registerForm">
-
-                <div class="field-group">
-                    <label for="fullName">Nome completo</label>
-
-                    <div class="input-wrap">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="fullName">Nome completo</label>
+                    <div class="relative">
                         <input
                             id="fullName"
                             type="text"
@@ -334,15 +70,15 @@ body{
                             autocomplete="name"
                             maxlength="100"
                             required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
                         >
-                        <i data-lucide="user" class="input-icon"></i>
+                        <i data-lucide="user" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
                 </div>
 
-                <div class="field-group">
-                    <label for="username">Nome de usuário</label>
-
-                    <div class="input-wrap">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="username">Nome de usuário</label>
+                    <div class="relative">
                         <input
                             id="username"
                             type="text"
@@ -351,34 +87,31 @@ body{
                             maxlength="30"
                             pattern="[a-z0-9_]{3,30}"
                             required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
                         >
-                        <i data-lucide="at-sign" class="input-icon"></i>
+                        <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
-
-                    <p class="password-hint">
-                        Use letras minúsculas, números e underline. De 3 a 30 caracteres.
-                    </p>
+                    <small class="text-[11px] text-gray-400 mt-1 block">Use letras minúsculas, números e underline. De 3 a 30 caracteres.</small>
                 </div>
 
-                <div class="field-group">
-                    <label for="email">E-mail</label>
-
-                    <div class="input-wrap">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">E-mail</label>
+                    <div class="relative">
                         <input
                             id="email"
                             type="email"
                             placeholder="seuemail@exemplo.com"
                             autocomplete="email"
                             required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
                         >
-                        <i data-lucide="mail" class="input-icon"></i>
+                        <i data-lucide="mail" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
                 </div>
 
-                <div class="field-group">
-                    <label for="password">Senha</label>
-
-                    <div class="input-wrap">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Senha</label>
+                    <div class="relative">
                         <input
                             id="password"
                             type="password"
@@ -386,27 +119,23 @@ body{
                             autocomplete="new-password"
                             minlength="8"
                             required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
                         >
-
                         <button
                             type="button"
-                            class="toggle-password"
+                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
                             data-target="password"
                             aria-label="Mostrar senha"
                         >
-                            <i data-lucide="eye"></i>
+                            <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
-
-                    <p class="password-hint">
-                        Mínimo de 8 caracteres.
-                    </p>
+                    <small class="text-[11px] text-gray-400 mt-1 block">Mínimo de 8 caracteres.</small>
                 </div>
 
-                <div class="field-group">
-                    <label for="confirmPassword">Confirmar senha</label>
-
-                    <div class="input-wrap">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="confirmPassword">Confirmar senha</label>
+                    <div class="relative">
                         <input
                             id="confirmPassword"
                             type="password"
@@ -414,15 +143,15 @@ body{
                             autocomplete="new-password"
                             minlength="8"
                             required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
                         >
-
                         <button
                             type="button"
-                            class="toggle-password"
+                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
                             data-target="confirmPassword"
                             aria-label="Mostrar confirmação"
                         >
-                            <i data-lucide="eye"></i>
+                            <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
@@ -430,26 +159,25 @@ body{
                 <button
                     type="submit"
                     id="registerButton"
-                    class="register-button"
+                    class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2"
                 >
                     Criar minha conta
                 </button>
 
-                <div id="message" class="message"></div>
+                <div id="message" class="hidden mt-4 p-3.5 rounded-xl text-xs leading-relaxed"></div>
 
             </form>
 
-            <div class="login-link">
+            <div class="text-center text-xs text-gray-500 mt-6">
                 Já tem uma conta?
-                <a href="./login.html">Entrar</a>
+                <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar</a>
             </div>
 
-            <div class="form-footer">
+            <div class="text-center text-[11px] text-gray-400 mt-10">
                 FaceCrato — Conectando pessoas.
             </div>
 
         </div>
-
     </section>
 
 </div>
@@ -477,22 +205,18 @@ const confirmPassword = document.getElementById("confirmPassword");
 // =====================================
 
 document.querySelectorAll(".toggle-password").forEach(btn => {
-
     btn.addEventListener("click", () => {
-
         const input = document.getElementById(btn.dataset.target);
         const showing = input.type === "text";
 
         input.type = showing ? "password" : "text";
 
         btn.innerHTML = showing
-            ? '<i data-lucide="eye"></i>'
-            : '<i data-lucide="eye-off"></i>';
+            ? '<i data-lucide="eye" class="w-4 h-4"></i>'
+            : '<i data-lucide="eye-off" class="w-4 h-4"></i>';
 
         lucide.createIcons();
-
     });
-
 });
 
 // =====================================
@@ -500,10 +224,12 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
 // =====================================
 
 function showMessage(text, type = "error") {
-
     message.textContent = text;
-    message.className = "message " + type;
-
+    message.className = `mt-4 p-3.5 rounded-xl text-xs leading-relaxed block ${
+        type === "success"
+            ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
+            : "bg-red-50 border border-red-200 text-red-700"
+    }`;
 }
 
 function normalizeUsername(value) {
@@ -515,18 +241,14 @@ function normalizeUsername(value) {
 // =====================================
 
 async function verificarSessao() {
-
     const { data, error } = await supabase.auth.getSession();
-
     if (error) {
         console.error(error);
         return;
     }
-
     if (data.session) {
         window.location.replace("./feed.html");
     }
-
 }
 
 verificarSessao();
@@ -536,7 +258,6 @@ verificarSessao();
 // =====================================
 
 form.addEventListener("submit", async event => {
-
     event.preventDefault();
 
     const nome = fullName.value.trim();
@@ -567,28 +288,23 @@ form.addEventListener("submit", async event => {
 
     button.disabled = true;
     button.textContent = "Criando sua conta...";
-    message.className = "message";
+    message.className = "hidden";
 
     try {
-
         const { data, error } = await supabase.auth.signUp({
-
             email: emailValor,
             password: senha,
-
             options: {
                 data: {
                     full_name: nome,
                     username: usuario
                 },
-
                 emailRedirectTo: window.location.origin +
                     window.location.pathname.replace(
                         /[^/]*$/,
                         "login.html"
                     )
             }
-
         });
 
         if (error) throw error;
@@ -597,33 +313,24 @@ form.addEventListener("submit", async event => {
             throw new Error("O Supabase não retornou os dados do usuário.");
         }
 
-        // Se já existir uma sessão, cadastro foi autenticado.
         if (data.session) {
-
             showMessage(
                 "Conta criada! Seu perfil está sendo preparado. Redirecionando...",
                 "success"
             );
-
             window.location.replace("./feed.html");
-
         } else {
-
             showMessage(
                 "Cadastro realizado! Verifique seu e-mail para confirmar a conta antes de entrar.",
                 "success"
             );
-
             form.reset();
-
         }
 
     } catch (error) {
-
         console.error("Erro no cadastro:", error);
 
         let texto = "Não foi possível criar sua conta.";
-
         const erro = (error.message || "").toLowerCase();
 
         if (
@@ -646,12 +353,9 @@ form.addEventListener("submit", async event => {
         showMessage(texto);
 
     } finally {
-
         button.disabled = false;
         button.textContent = "Criar minha conta";
-
     }
-
 });
 
 </script>
