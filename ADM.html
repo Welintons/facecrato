@@ -1,0 +1,748 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>Administração | FaceCrato</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+body {
+    font-family: Inter, system-ui, sans-serif;
+    background: #f8fafc;
+}
+.gradient {
+    background: linear-gradient(135deg,#0891b2,#7c3aed);
+}
+.gradient-text {
+    background: linear-gradient(135deg,#0891b2,#7c3aed);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.sidebar-link {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:12px;
+    color:#64748b;
+    font-size:13px;
+    font-weight:700;
+    transition:.2s;
+    cursor:pointer;
+}
+.sidebar-link:hover,
+.sidebar-link.active {
+    background:#ecfeff;
+    color:#0891b2;
+}
+.sidebar-link.active {
+    box-shadow:inset 3px 0 #0891b2;
+}
+.panel-card {
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    box-shadow:0 3px 12px rgba(15,23,42,.025);
+}
+.page-section { display:none; }
+.page-section.active { display:block; }
+.nav-mobile {
+    position:fixed;
+    inset:0;
+    z-index:40;
+    background:rgba(15,23,42,.35);
+}
+.table-row:hover { background:#f8fafc; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+</style>
+</head>
+
+<body class="text-slate-800">
+
+<div class="min-h-screen flex">
+
+<!-- SIDEBAR -->
+<aside id="sidebar"
+class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300">
+
+    <div class="h-20 px-6 flex items-center justify-between border-b border-slate-100">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl gradient flex items-center justify-center text-white">
+                <i data-lucide="shield-check"></i>
+            </div>
+            <div>
+                <h1 class="font-black text-lg tracking-tight">Face<span class="gradient-text">Crato</span></h1>
+                <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Administração</p>
+            </div>
+        </div>
+        <button id="closeSidebar" class="lg:hidden text-slate-400">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+
+    <div class="px-4 py-6 flex-1 overflow-y-auto">
+
+        <p class="px-3 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Principal</p>
+
+        <nav class="space-y-1">
+            <button class="sidebar-link active w-full" data-page="dashboard">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                Visão geral
+            </button>
+
+            <button class="sidebar-link w-full" data-page="users">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Usuários
+            </button>
+
+            <button class="sidebar-link w-full" data-page="posts">
+                <i data-lucide="images" class="w-4 h-4"></i>
+                Publicações
+            </button>
+
+            <button class="sidebar-link w-full" data-page="reports">
+                <i data-lucide="flag" class="w-4 h-4"></i>
+                Denúncias
+                <span id="reportBadge" class="ml-auto text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded-full hidden">0</span>
+            </button>
+        </nav>
+
+        <p class="px-3 mb-3 mt-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Sistema</p>
+
+        <nav class="space-y-1">
+            <button class="sidebar-link w-full" data-page="activity">
+                <i data-lucide="activity" class="w-4 h-4"></i>
+                Atividades
+            </button>
+
+            <button class="sidebar-link w-full" data-page="settings">
+                <i data-lucide="settings" class="w-4 h-4"></i>
+                Configurações
+            </button>
+        </nav>
+    </div>
+
+    <div class="p-4 border-t border-slate-100">
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+            <div class="w-9 h-9 rounded-full gradient flex items-center justify-center text-white">
+                <i data-lucide="shield" class="w-4 h-4"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p id="adminName" class="text-xs font-black truncate">Administrador</p>
+                <p class="text-[10px] text-emerald-600 font-bold">Sessão protegida</p>
+            </div>
+            <button id="logoutBtn" title="Sair" class="text-slate-400 hover:text-red-500">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+</aside>
+
+<!-- MOBILE OVERLAY -->
+<div id="sidebarOverlay" class="nav-mobile hidden lg:hidden"></div>
+
+<!-- MAIN -->
+<main class="flex-1 min-w-0">
+
+    <!-- TOPBAR -->
+    <header class="h-20 bg-white border-b border-slate-200 px-5 lg:px-8 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+            <button id="openSidebar" class="lg:hidden text-slate-500">
+                <i data-lucide="menu"></i>
+            </button>
+            <div>
+                <h2 id="pageTitle" class="font-black text-lg">Visão geral</h2>
+                <p class="text-[11px] text-slate-400">Central de controle do FaceCrato</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <span class="hidden sm:flex items-center gap-2 text-[11px] font-bold text-emerald-600">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Painel administrativo
+            </span>
+            <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
+                <i data-lucide="shield-check"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="p-5 lg:p-8 max-w-7xl mx-auto">
+
+        <!-- DASHBOARD -->
+        <section id="page-dashboard" class="page-section active space-y-6">
+
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-xl font-black">Bem-vindo ao painel 👋</h3>
+                    <p class="text-sm text-slate-400 mt-1">Acompanhe o funcionamento da sua rede social.</p>
+                </div>
+                <button id="refreshDashboard" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold flex items-center gap-2 hover:bg-slate-50">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                    Atualizar dados
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="panel-card p-5">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-bold">TOTAL</span>
+                    </div>
+                    <p id="totalUsers" class="text-3xl font-black mt-5">—</p>
+                    <p class="text-xs text-slate-400 mt-1">Usuários cadastrados</p>
+                </div>
+
+                <div class="panel-card p-5">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+                            <i data-lucide="images"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-bold">TOTAL</span>
+                    </div>
+                    <p id="totalPosts" class="text-3xl font-black mt-5">—</p>
+                    <p class="text-xs text-slate-400 mt-1">Publicações</p>
+                </div>
+
+                <div class="panel-card p-5">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <i data-lucide="user-check"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-bold">TOTAL</span>
+                    </div>
+                    <p id="totalFriends" class="text-3xl font-black mt-5">—</p>
+                    <p class="text-xs text-slate-400 mt-1">Amizades aceitas</p>
+                </div>
+
+                <div class="panel-card p-5">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                            <i data-lucide="flag"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-bold">PENDENTES</span>
+                    </div>
+                    <p id="totalReports" class="text-3xl font-black mt-5">—</p>
+                    <p class="text-xs text-slate-400 mt-1">Denúncias aguardando</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                <div class="panel-card p-6">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="font-black text-sm">Últimos usuários</h3>
+                        <button data-goto="users" class="text-xs font-bold text-cyan-600">Ver todos</button>
+                    </div>
+                    <div id="recentUsers" class="space-y-4">
+                        <p class="text-xs text-slate-400">Carregando...</p>
+                    </div>
+                </div>
+
+                <div class="panel-card p-6">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="font-black text-sm">Últimas publicações</h3>
+                        <button data-goto="posts" class="text-xs font-bold text-cyan-600">Ver todas</button>
+                    </div>
+                    <div id="recentPosts" class="space-y-4">
+                        <p class="text-xs text-slate-400">Carregando...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-card p-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i data-lucide="info"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-sm">Central de administração</h3>
+                        <p class="text-xs text-slate-400 mt-1">As ações administrativas dependem das permissões configuradas no banco.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USERS -->
+        <section id="page-users" class="page-section space-y-5">
+            <div>
+                <h3 class="text-xl font-black">Gerenciar usuários</h3>
+                <p class="text-sm text-slate-400 mt-1">Consulte os perfis cadastrados na plataforma.</p>
+            </div>
+
+            <div class="panel-card p-4 flex flex-wrap gap-3">
+                <div class="relative flex-1 min-w-[200px]">
+                    <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+                    <input id="userSearch" placeholder="Buscar por nome ou username..." class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-cyan-500">
+                </div>
+                <button id="searchUsers" class="gradient text-white px-5 py-3 rounded-xl text-xs font-bold">Pesquisar</button>
+            </div>
+
+            <div class="panel-card overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="font-black text-sm">Lista de usuários</h3>
+                    <span id="usersCount" class="text-xs text-slate-400">0 registros</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[600px]">
+                        <thead class="bg-slate-50 text-[10px] uppercase text-slate-400 font-black">
+                            <tr>
+                                <th class="p-4">Usuário</th>
+                                <th class="p-4">Username</th>
+                                <th class="p-4">Cadastro</th>
+                                <th class="p-4">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable" class="text-xs divide-y divide-slate-100">
+                            <tr><td colspan="4" class="p-8 text-center text-slate-400">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- POSTS -->
+        <section id="page-posts" class="page-section space-y-5">
+            <div>
+                <h3 class="text-xl font-black">Publicações</h3>
+                <p class="text-sm text-slate-400 mt-1">Acompanhe o conteúdo publicado na rede.</p>
+            </div>
+
+            <div class="panel-card p-4 flex gap-3">
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+                    <input id="postSearch" placeholder="Pesquisar conteúdo..." class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-cyan-500">
+                </div>
+                <button id="searchPosts" class="gradient text-white px-5 py-3 rounded-xl text-xs font-bold">Pesquisar</button>
+            </div>
+
+            <div id="postsList" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <p class="text-xs text-slate-400">Carregando publicações...</p>
+            </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section id="page-reports" class="page-section space-y-5">
+            <div>
+                <h3 class="text-xl font-black">Denúncias</h3>
+                <p class="text-sm text-slate-400 mt-1">Área preparada para análise de denúncias.</p>
+            </div>
+
+            <div class="panel-card p-10 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="flag" class="w-7 h-7"></i>
+                </div>
+                <h4 class="font-black">Módulo de denúncias</h4>
+                <p class="text-sm text-slate-400 mt-2 max-w-md mx-auto">
+                    Será conectado quando confirmarmos o nome e as colunas da tabela de denúncias do FaceCrato.
+                </p>
+            </div>
+        </section>
+
+        <!-- ACTIVITY -->
+        <section id="page-activity" class="page-section space-y-5">
+            <div>
+                <h3 class="text-xl font-black">Atividades</h3>
+                <p class="text-sm text-slate-400 mt-1">Histórico de operações administrativas.</p>
+            </div>
+            <div class="panel-card p-10 text-center">
+                <i data-lucide="activity" class="w-10 h-10 text-cyan-500 mx-auto mb-3"></i>
+                <h4 class="font-black">Registro de atividades</h4>
+                <p class="text-xs text-slate-400 mt-2">Será ativado após a criação da tabela de auditoria administrativa.</p>
+            </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="page-settings" class="page-section space-y-5">
+            <div>
+                <h3 class="text-xl font-black">Configurações</h3>
+                <p class="text-sm text-slate-400 mt-1">Informações e controle do painel.</p>
+            </div>
+
+            <div class="panel-card p-6 space-y-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-sm">Segurança administrativa</h4>
+                        <p class="text-xs text-slate-400">A autorização deve ser validada no banco.</p>
+                    </div>
+                </div>
+                <div class="border-t border-slate-100 pt-5">
+                    <p class="text-xs font-bold text-slate-500">Usuário conectado</p>
+                    <p id="settingsEmail" class="text-sm mt-1 break-all">—</p>
+                </div>
+                <div class="border-t border-slate-100 pt-5">
+                    <p class="text-xs font-bold text-slate-500">Identificação administrativa</p>
+                    <p id="adminStatus" class="text-sm mt-1 text-emerald-600 font-bold">Verificando...</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="pt-8 pb-4 text-center text-[10px] text-slate-400">
+            FaceCrato Administração · Painel administrativo
+        </footer>
+    </div>
+</main>
+</div>
+
+<script type="module">
+import { supabase } from "./supabase.js";
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let usersCache = [];
+let postsCache = [];
+
+const titles = {
+    dashboard:"Visão geral",
+    users:"Usuários",
+    posts:"Publicações",
+    reports:"Denúncias",
+    activity:"Atividades",
+    settings:"Configurações"
+};
+
+function esc(value = "") {
+    return String(value).replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    })[c]);
+}
+
+function date(value) {
+    if (!value) return "—";
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString("pt-BR");
+}
+
+function initials(name = "U") {
+    return name.trim().split(/\s+/).slice(0,2).map(x => x[0] || "").join("").toUpperCase();
+}
+
+function alertError(message) {
+    Swal.fire("Erro", message, "error");
+}
+
+function navigate(page) {
+    document.querySelectorAll(".page-section").forEach(section => section.classList.remove("active"));
+    document.querySelectorAll(".sidebar-link").forEach(link => link.classList.remove("active"));
+
+    $("page-" + page)?.classList.add("active");
+    document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
+    $("pageTitle").textContent = titles[page] || "FaceCrato";
+
+    closeSidebar();
+
+    if (page === "users") loadUsers();
+    if (page === "posts") loadPosts();
+}
+
+document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => navigate(button.dataset.page));
+});
+
+document.querySelectorAll("[data-goto]").forEach(button => {
+    button.addEventListener("click", () => navigate(button.dataset.goto));
+});
+
+function openSidebar() {
+    $("sidebar").classList.remove("-translate-x-full");
+    $("sidebarOverlay").classList.remove("hidden");
+}
+
+function closeSidebar() {
+    $("sidebar").classList.add("-translate-x-full");
+    $("sidebarOverlay").classList.add("hidden");
+}
+
+$("openSidebar").onclick = openSidebar;
+$("closeSidebar").onclick = closeSidebar;
+$("sidebarOverlay").onclick = closeSidebar;
+
+// Autorização: o servidor deve validar a função admin_check.
+// Não confiar apenas na interface.
+async function verifyAdmin() {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error || !data.session) {
+        location.replace("./login.html");
+        return false;
+    }
+
+    currentUser = data.session.user;
+    $("settingsEmail").textContent = currentUser.email || currentUser.id;
+
+    const { data: allowed, error: adminError } = await supabase.rpc("admin_check");
+
+    if (adminError) {
+        $("adminStatus").textContent = "Autorização não configurada";
+        await Swal.fire({
+            icon:"warning",
+            title:"Painel ainda não autorizado",
+            text:"A função admin_check não foi encontrada ou não está acessível. Configure a autorização no Supabase antes de usar o painel."
+        });
+        return false;
+    }
+
+    if (allowed !== true) {
+        $("adminStatus").textContent = "Acesso negado";
+        await Swal.fire({
+            icon:"error",
+            title:"Acesso restrito",
+            text:"Sua conta não possui autorização administrativa."
+        });
+        await supabase.auth.signOut();
+        location.replace("./login.html");
+        return false;
+    }
+
+    $("adminStatus").textContent = "Administrador autorizado";
+    $("adminName").textContent = currentUser.email || "Administrador";
+    return true;
+}
+
+async function countRows(table, filters = {}) {
+    let query = supabase.from(table).select("*", { count:"exact", head:true });
+
+    for (const [column, value] of Object.entries(filters)) {
+        query = query.eq(column, value);
+    }
+
+    const { count, error } = await query;
+    if (error) throw error;
+    return count ?? 0;
+}
+
+// DASHBOARD
+async function loadDashboard() {
+    try {
+        const [users, posts, friends] = await Promise.all([
+            countRows("profiles"),
+            countRows("posts"),
+            countRows("friendships", { status:"accepted" })
+        ]);
+
+        $("totalUsers").textContent = users;
+        $("totalPosts").textContent = posts;
+        $("totalFriends").textContent = friends;
+        $("totalReports").textContent = "—";
+
+        await Promise.all([loadRecentUsers(), loadRecentPosts()]);
+
+    } catch (error) {
+        console.error(error);
+        notifyError("Não foi possível carregar todos os indicadores: " + error.message);
+    }
+}
+
+function notifyError(message) {
+    Swal.fire({toast:true,position:"top",icon:"error",title:message,showConfirmButton:false,timer:3500});
+}
+
+async function loadRecentUsers() {
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("id,username,full_name,created_at")
+        .order("created_at", { ascending:false })
+        .limit(5);
+
+    if (error) throw error;
+
+    $("recentUsers").innerHTML = (data || []).map(user => `
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-cyan-50 text-cyan-700 flex items-center justify-center text-xs font-black">${esc(initials(user.full_name || user.username))}</div>
+            <div class="min-w-0 flex-1">
+                <p class="text-xs font-black truncate">${esc(user.full_name || "Usuário")}</p>
+                <p class="text-[10px] text-slate-400">@${esc(user.username || "—")}</p>
+            </div>
+            <span class="text-[10px] text-slate-400">${date(user.created_at)}</span>
+        </div>
+    `).join("") || `<p class="text-xs text-slate-400">Nenhum usuário encontrado.</p>`;
+}
+
+async function loadRecentPosts() {
+    const { data, error } = await supabase
+        .from("posts")
+        .select("id,user_id,content,created_at")
+        .order("created_at", { ascending:false })
+        .limit(5);
+
+    if (error) throw error;
+
+    $("recentPosts").innerHTML = (data || []).map(post => `
+        <div class="border-b border-slate-100 pb-3 last:border-0">
+            <p class="text-xs text-slate-700 line-clamp-2">${esc(post.content || "Publicação sem texto")}</p>
+            <p class="text-[10px] text-slate-400 mt-1">${date(post.created_at)}</p>
+        </div>
+    `).join("") || `<p class="text-xs text-slate-400">Nenhuma publicação encontrada.</p>`;
+}
+
+// USUÁRIOS
+async function loadUsers() {
+    $("usersTable").innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400">Carregando usuários...</td></tr>`;
+
+    try {
+        const { data, error } = await supabase
+            .from("profiles")
+            .select("id,username,full_name,created_at")
+            .order("created_at", { ascending:false })
+            .limit(100);
+
+        if (error) throw error;
+
+        usersCache = data || [];
+        renderUsers(usersCache);
+
+    } catch (error) {
+        $("usersTable").innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-500">${esc(error.message)}</td></tr>`;
+    }
+}
+
+function renderUsers(users) {
+    $("usersCount").textContent = users.length + " registros";
+
+    $("usersTable").innerHTML = users.map(user => `
+        <tr class="table-row">
+            <td class="p-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-violet-50 text-violet-700 flex items-center justify-center font-black">${esc(initials(user.full_name || user.username))}</div>
+                    <div>
+                        <p class="font-bold text-slate-800">${esc(user.full_name || "Usuário")}</p>
+                        <p class="text-[10px] text-slate-400">${esc(user.id)}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="p-4 text-slate-500">@${esc(user.username || "—")}</td>
+            <td class="p-4 text-slate-500">${date(user.created_at)}</td>
+            <td class="p-4">
+                <button class="view-user text-cyan-600 font-bold hover:underline" data-id="${esc(user.id)}">Ver perfil</button>
+            </td>
+        </tr>
+    `).join("") || `<tr><td colspan="4" class="p-8 text-center text-slate-400">Nenhum usuário encontrado.</td></tr>`;
+
+    document.querySelectorAll(".view-user").forEach(button => {
+        button.onclick = () => window.open("./perfil.html?id=" + encodeURIComponent(button.dataset.id), "_blank");
+    });
+}
+
+$("searchUsers").onclick = () => {
+    const term = $("userSearch").value.trim().toLowerCase();
+
+    const filtered = usersCache.filter(user =>
+        (user.full_name || "").toLowerCase().includes(term) ||
+        (user.username || "").toLowerCase().includes(term)
+    );
+
+    renderUsers(filtered);
+};
+
+$("userSearch").addEventListener("keydown", event => {
+    if (event.key === "Enter") $("searchUsers").click();
+});
+
+// PUBLICAÇÕES
+async function loadPosts() {
+    $("postsList").innerHTML = `<p class="text-xs text-slate-400">Carregando publicações...</p>`;
+
+    try {
+        const { data, error } = await supabase
+            .from("posts")
+            .select("id,user_id,content,created_at")
+            .order("created_at", { ascending:false })
+            .limit(100);
+
+        if (error) throw error;
+
+        postsCache = data || [];
+        renderPosts(postsCache);
+
+    } catch (error) {
+        $("postsList").innerHTML = `<p class="text-sm text-red-500">${esc(error.message)}</p>`;
+    }
+}
+
+function renderPosts(posts) {
+    $("postsList").innerHTML = posts.map(post => `
+        <article class="panel-card p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-[10px] font-bold text-slate-400">${date(post.created_at)}</span>
+                <span class="text-[10px] bg-cyan-50 text-cyan-700 rounded-full px-2 py-1">Publicação</span>
+            </div>
+            <p class="text-sm leading-relaxed text-slate-700 whitespace-pre-wrap break-words">${esc(post.content || "Sem texto")}</p>
+            <div class="border-t border-slate-100 mt-4 pt-3 flex items-center justify-between">
+                <span class="text-[10px] text-slate-400">ID: ${esc(post.id)}</span>
+                <button class="open-post-user text-xs font-bold text-cyan-600" data-id="${esc(post.user_id)}">Ver autor</button>
+            </div>
+        </article>
+    `).join("") || `<p class="text-xs text-slate-400">Nenhuma publicação encontrada.</p>`;
+
+    document.querySelectorAll(".open-post-user").forEach(button => {
+        button.onclick = () => window.open("./perfil.html?id=" + encodeURIComponent(button.dataset.id), "_blank");
+    });
+}
+
+$("searchPosts").onclick = () => {
+    const term = $("postSearch").value.trim().toLowerCase();
+    renderPosts(postsCache.filter(post => (post.content || "").toLowerCase().includes(term)));
+};
+
+$("postSearch").addEventListener("keydown", event => {
+    if (event.key === "Enter") $("searchPosts").click();
+});
+
+// ATUALIZAÇÃO
+$("refreshDashboard").onclick = async () => {
+    $("refreshDashboard").disabled = true;
+    try {
+        await loadDashboard();
+        Swal.fire({toast:true,position:"top",icon:"success",title:"Dados atualizados",showConfirmButton:false,timer:1500});
+    } catch (error) {
+        notifyError(error.message);
+    } finally {
+        $("refreshDashboard").disabled = false;
+    }
+};
+
+// LOGOUT
+$("logoutBtn").onclick = async () => {
+    const result = await Swal.fire({
+        title:"Sair do painel?",
+        icon:"question",
+        showCancelButton:true,
+        confirmButtonText:"Sair",
+        cancelButtonText:"Cancelar"
+    });
+
+    if (result.isConfirmed) {
+        await supabase.auth.signOut();
+        location.replace("./login.html");
+    }
+};
+
+// INICIAR
+async function init() {
+    const allowed = await verifyAdmin();
+    if (!allowed) return;
+
+    await loadDashboard();
+}
+
+init().catch(error => {
+    console.error(error);
+    alertError(error.message || "Erro ao iniciar painel.");
+});
+
+lucide.createIcons();
+</script>
+</body>
+</html>
