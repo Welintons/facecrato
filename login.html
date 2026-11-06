@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+
+<title>Entrar | FaceCrato</title>
+
+<link rel="manifest" href="./manifest.json">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0b1120;
+    color: #f8fafc;
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+}
+
+.brand-side {
+    padding: 65px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+        radial-gradient(circle at 20% 20%, #2563eb55, transparent 40%),
+        radial-gradient(circle at 80% 80%, #7c3aed33, transparent 40%),
+        #111c32;
+    border-right: 1px solid #26334a;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo-icon {
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+}
+
+.brand-content {
+    max-width: 540px;
+}
+
+.brand-content h1 {
+    font-size: clamp(40px, 5vw, 65px);
+    line-height: 1.05;
+    letter-spacing: -3px;
+    font-weight: 900;
+    margin: 0 0 22px;
+}
+
+.brand-content h1 span {
+    color: #60a5fa;
+}
+
+.brand-content p {
+    color: #a8b5ca;
+    font-size: 17px;
+    line-height: 1.8;
+    max-width: 430px;
+}
+
+.brand-footer {
+    color: #718096;
+    font-size: 12px;
+}
+
+.login-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 35px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 410px;
+}
+
+.mobile-logo {
+    display: none;
+}
+
+.login-box h2 {
+    font-size: 32px;
+    font-weight: 850;
+    letter-spacing: -1px;
+    margin: 0 0 8px;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 34px;
+}
+
+.field-group {
+    margin-bottom: 19px;
+}
+
+.field-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e1;
+    margin-bottom: 9px;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap input {
+    width: 100%;
+    height: 53px;
+    background: #131e30;
+    border: 1px solid #2d3c54;
+    border-radius: 12px;
+    padding: 0 48px 0 16px;
+    outline: none;
+    color: white;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.input-wrap input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px #3b82f622;
+}
+
+.input-wrap input::placeholder {
+    color: #64748b;
+}
+
+.input-icon {
+    position: absolute;
+    right: 16px;
+    top: 17px;
+    color: #64748b;
+    width: 19px;
+    height: 19px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 13px;
+    top: 12px;
+    padding: 5px;
+    color: #94a3b8;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-password svg {
+    width: 19px;
+}
+
+.login-button {
+    width: 100%;
+    height: 54px;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(100deg, #2563eb, #4f46e5);
+    color: white;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.login-button:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+}
+
+.login-button:disabled {
+    opacity: .6;
+    cursor: wait;
+    transform: none;
+}
+
+.message {
+    display: none;
+    margin-top: 17px;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.message.error {
+    display: block;
+    color: #fca5a5;
+    background: #7f1d1d33;
+    border: 1px solid #991b1b66;
+}
+
+.message.success {
+    display: block;
+    color: #86efac;
+    background: #14532d33;
+    border: 1px solid #16653466;
+}
+
+.signup {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 27px;
+}
+
+.signup a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 55px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+@media(max-width: 850px) {
+    .page {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-side {
+        display: none;
+    }
+
+    .login-side {
+        min-height: 100vh;
+        padding: 25px;
+    }
+
+    .mobile-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 55px;
+        font-size: 23px;
+        font-weight: 900;
+        letter-spacing: -1px;
+    }
+
+    .login-box h2 {
+        font-size: 29px;
+    }
+
+    .login-footer {
+        margin-top: 45px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- IDENTIDADE VISUAL -->
+    <section class="brand-side">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <i data-lucide="users"></i>
+            </div>
+            FaceCrato
+        </div>
+
+        <div class="brand-content">
+            <h1>
+                Pessoas.<br>
+                Conexões.<br>
+                <span>Comunidade.</span>
+            </h1>
+
+            <p>
+                Uma rede social independente para conectar
+                pessoas, compartilhar momentos e criar novas
+                conexões. De Crato para todos os lugares.
+            </p>
+        </div>
+
+        <div class="brand-footer">
+            FACECRATO © 2026 — UMA NOVA FORMA DE SE CONECTAR.
+        </div>
+
+    </section>
+
+    <!-- LOGIN -->
+    <section class="login-side">
+
+        <div class="login-box">
+
+            <div class="mobile-logo">
+                <div class="logo-icon">
+                    <i data-lucide="users"></i>
+                </div>
+                FaceCrato
+            </div>
+
+            <h2>Bem-vindo de volta!</h2>
+
+            <p class="subtitle">
+                Entre na sua conta para continuar conectado.
+            </p>
+
+            <form id="loginForm">
+
+                <div class="field-group">
+                    <label for="email">E-mail</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="seuemail@exemplo.com"
+                            autocomplete="email"
+                            required
+                        >
+                        <i data-lucide="mail" class="input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="password">Senha</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Digite sua senha"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword"
+                            aria-label="Mostrar senha"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+                    Entrar na minha conta
+                </button>
+
+                <div id="message" class="message"></div>
+
+            </form>
+
+            <div class="signup">
+                Ainda não tem uma conta?
+                <a href="./cadastro.html">Criar conta</a>
+            </div>
+
+            <div class="login-footer">
+                FaceCrato — Conectando pessoas.
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+lucide.createIcons();
+</script>
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+const form = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const button = document.getElementById("loginButton");
+const message = document.getElementById("message");
+const togglePassword = document.getElementById("togglePassword");
+
+// MOSTRAR / OCULTAR SENHA
+togglePassword.addEventListener("click", () => {
+
+    const showing = passwordInput.type === "text";
+
+    passwordInput.type = showing ? "password" : "text";
+
+    togglePassword.innerHTML = showing
+        ? '<i data-lucide="eye"></i>'
+        : '<i data-lucide="eye-off"></i>';
+
+    lucide.createIcons();
+
+});
+
+// MENSAGENS
+function showMessage(text, type = "error") {
+
+    message.textContent = text;
+    message.className = "message " + type;
+
+}
+
+// VERIFICAR SESSÃO EXISTENTE
+async function verificarSessao() {
+
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+        console.error("Erro ao verificar sessão:", error);
+        return;
+    }
+
+    if (data.session) {
+        window.location.replace("./feed.html");
+    }
+
+}
+
+verificarSessao();
+
+// LOGIN
+form.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        showMessage("Preencha seu e-mail e sua senha.");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Entrando...";
+
+    message.className = "message";
+
+    try {
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data.session) {
+            throw new Error("Não foi possível iniciar sua sessão.");
+        }
+
+        showMessage("Login realizado! Redirecionando...", "success");
+
+        window.location.replace("./feed.html");
+
+    } catch (error) {
+
+        console.error("Erro de login:", error);
+
+        let texto = "Não foi possível entrar. Tente novamente.";
+
+        if (error.message?.toLowerCase().includes("invalid login credentials")) {
+            texto = "E-mail ou senha incorretos.";
+        } else if (error.message?.toLowerCase().includes("email not confirmed")) {
+            texto = "Confirme seu e-mail antes de entrar.";
+        } else if (error.message?.toLowerCase().includes("network")) {
+            texto = "Erro de conexão. Verifique sua internet.";
+        }
+
+        showMessage(texto);
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Entrar na minha conta";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
