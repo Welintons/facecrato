@@ -27,8 +27,33 @@
             <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
-        <div class="ml-auto flex items-center gap-2.5">
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="notificationsButton" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div class="ml-auto flex items-center gap-2.5 relative">
+            
+            <!-- BOTÃO DE NOTIFICAÇÕES COM DROPDOWN MODAL -->
+            <div class="relative">
+                <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition relative" id="notificationsButton" title="Notificações">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <!-- Badge de não lidas -->
+                    <span id="notifBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+
+                <!-- MODAL DROPDOWN DE NOTIFICAÇÕES -->
+                <div id="notifDropdown" class="absolute right-0 mt-3 w-80 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-50 overflow-hidden">
+                    <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
+                        <h3 class="font-bold text-sm text-slate-900">Notificações</h3>
+                        <button onclick="markAllReadFromDropdown()" class="text-xs font-bold text-cyan-600 hover:underline">Marcar lidas</button>
+                    </div>
+
+                    <div id="notifDropdownList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                        <div class="p-6 text-center text-xs text-gray-400">Carregando...</div>
+                    </div>
+
+                    <div class="p-3 border-t border-gray-100 bg-gray-50/50 text-center">
+                        <a href="./notificacoes.html" class="text-xs font-bold text-cyan-600 hover:underline">Ver todas as notificações</a>
+                    </div>
+                </div>
+            </div>
+
             <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
             
             <!-- BOTÃO SANDUÍCHE (Mobile) -->
@@ -192,6 +217,14 @@ const menuCloseBtn = document.getElementById("menuCloseBtn");
 const mobileMenuDrawer = document.getElementById("mobileMenuDrawer");
 const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
 
+// Elementos do Modal de Notificações
+const notificationsButton = document.getElementById("notificationsButton");
+const notifDropdown = document.getElementById("notifDropdown");
+const notifDropdownList = document.getElementById("notifDropdownList");
+const notifBadge = document.getElementById("notifBadge");
+
+let notifsChannel = null;
+
 function toggleMobileMenu(open) {
     if (open) {
         mobileMenuOverlay.classList.remove("hidden");
@@ -206,6 +239,22 @@ menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
 menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
 mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
+// Abrir/Fechar Modal de Notificações ao clicar no sino
+notificationsButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    notifDropdown.classList.toggle("hidden");
+    if (!notifDropdown.classList.contains("hidden")) {
+        fetchDropdownNotifications();
+    }
+});
+
+// Fechar modal ao clicar fora
+document.addEventListener("click", (e) => {
+    if (!notifDropdown.contains(e.target) && !notificationsButton.contains(e.target)) {
+        notifDropdown.classList.add("hidden");
+    }
+});
+
 let currentUser = null;
 let currentProfile = null;
 let currentFeed = "discover";
@@ -214,7 +263,7 @@ let loadingFeed = false;
 const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
 
 function escapeHTML(value = "") {
-    return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
+    return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 }
 
 function formatRichText(text = "") {
@@ -251,7 +300,9 @@ function renderAvatar(profile, classes = "") {
 }
 
 function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(new Date(date));
+    const d = new Date(date);
+    if(isNaN(d)) return "";
+    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(d);
 }
 
 function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
@@ -275,6 +326,87 @@ async function initialize() {
         renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm");
 
     await loadFeed();
+    await checkUnreadCount();
+    subscribeDropdownNotifications();
+}
+
+// Funções do Modal Dropdown de Notificações
+async function checkUnreadCount() {
+    const { count, error } = await supabase
+        .from("notifications")
+        .select("*", { count: "exact", head: true })
+        .eq("recipient_id", currentUser.id)
+        .eq("is_read", false);
+
+    if (!error && count > 0) {
+        notifBadge.textContent = count > 9 ? "9+" : count;
+        notifBadge.classList.remove("hidden");
+    } else {
+        notifBadge.classList.add("hidden");
+    }
+}
+
+async function fetchDropdownNotifications() {
+    notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Carregando...</div>`;
+
+    const { data, error } = await supabase
+        .from("notifications")
+        .select("*")
+        .eq("recipient_id", currentUser.id)
+        .order("created_at", { ascending: false })
+        .limit(6);
+
+    if (error || !data || data.length === 0) {
+        notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhuma notificação por enquanto.</div>`;
+        return;
+    }
+
+    notifDropdownList.innerHTML = data.map(item => {
+        const message = escapeHTML(item.message || "Nova atividade");
+        const date = formatDate(item.created_at);
+        const unreadClass = !item.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
+        
+        let target = "#";
+        if (item.post_id) target = `./feed.html?post=${encodeURIComponent(item.post_id)}`;
+        else if (item.actor_id) target = `./perfil.html?id=${encodeURIComponent(item.actor_id)}`;
+
+        return `
+            <a href="${target}" onclick="markOneReadModal('${item.id}')" class="block p-3 hover:bg-gray-50 transition ${unreadClass}">
+                <p class="text-xs text-slate-800 leading-relaxed">${message}</p>
+                <span class="text-[10px] text-gray-400 mt-1 block">${date}</span>
+            </a>
+        `;
+    }).join("");
+}
+
+window.markOneReadModal = async function(id) {
+    await supabase.from("notifications").update({ is_read: true }).eq("id", id).eq("recipient_id", currentUser.id);
+    await checkUnreadCount();
+}
+
+window.markAllReadFromDropdown = async function() {
+    await supabase.from("notifications").update({ is_read: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
+    await checkUnreadCount();
+    await fetchDropdownNotifications();
+}
+
+function subscribeDropdownNotifications() {
+    if (notifsChannel) supabase.removeChannel(notifsChannel);
+
+    notifsChannel = supabase
+        .channel("feed-notifs-" + currentUser.id)
+        .on("postgres_changes", {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications",
+            filter: "recipient_id=eq." + currentUser.id
+        }, async () => {
+            await checkUnreadCount();
+            if (!notifDropdown.classList.contains("hidden")) {
+                await fetchDropdownNotifications();
+            }
+        })
+        .subscribe();
 }
 
 async function getFriendIds() {
@@ -556,7 +688,6 @@ document.querySelectorAll("[data-nav]").forEach(btn => {
 });
 
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
-document.getElementById("notificationsButton").addEventListener("click", () => window.location.href = "./notificacoes.html");
 document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
 const handleLogout = async () => {
