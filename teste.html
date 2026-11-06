@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>Feed | FaceCrato</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://unpkg.com/lucide@0.468.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5"></script>
+<style>
+body{font-family:'Inter',system-ui,sans-serif}
+.reaction-wrapper{position:relative}
+.reaction-popup{position:absolute;bottom:100%;left:0;padding-bottom:6px;display:none;z-index:30}
+.reaction-popup>div{display:flex;gap:4px;background:#fff;border:1px solid #e2e8f0;box-shadow:0 8px 24px rgba(15,23,42,.12);border-radius:999px;padding:6px 8px}
+.reaction-wrapper:hover .reaction-popup,.reaction-popup.show{display:block}
+.react-emoji-btn{font-size:22px;padding:2px 4px;border-radius:999px;transition:transform .12s}
+.react-emoji-btn:hover{transform:scale(1.25)}
+.comments-area{display:none}.comments-area.open{display:block}
+:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+</style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased min-h-screen">
+
+<header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+  <div class="max-w-6xl h-16 mx-auto px-4 flex items-center gap-4">
+    <a href="./feed.html" class="flex items-center gap-2.5 font-bold text-lg tracking-tight">
+      <span class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center"><i data-lucide="home" class="w-4 h-4"></i></span>
+      FaceCrato
+    </a>
+    <div class="flex-1 max-w-sm relative hidden sm:block">
+      <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400"></i>
+      <input type="search" placeholder="Pesquisar" disabled class="w-full h-9 pl-9 pr-3 bg-slate-100 rounded-lg text-sm placeholder:text-slate-400">
+    </div>
+    <div class="ml-auto flex items-center gap-2">
+      <div class="relative">
+        <button id="notificationsButton" aria-label="Notificações" class="relative w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100 flex items-center justify-center">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span id="notifBadge" class="hidden absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 bg-red-600 text-white text-[10px] font-semibold rounded-full flex items-center justify-center">0</span>
+        </button>
+        <div id="notifDropdown" class="hidden fixed top-[68px] left-3 right-3 sm:absolute sm:top-full sm:left-auto sm:right-0 sm:mt-2 sm:w-96 bg-white border border-slate-200 rounded-xl shadow-lg z-[100] overflow-hidden">
+          <div class="flex justify-between items-center px-4 py-3 border-b border-slate-100">
+            <h3 class="font-semibold text-sm">Notificações</h3>
+            <button id="markAllRead" class="text-xs font-medium text-blue-600 hover:underline">Marcar como lidas</button>
+          </div>
+          <div id="notifDropdownList" class="max-h-80 overflow-y-auto divide-y divide-slate-100"></div>
+          <a href="./notificacoes.html" class="block px-4 py-3 border-t border-slate-100 text-center text-xs font-medium text-blue-600 hover:bg-slate-50">Ver todas</a>
+        </div>
+      </div>
+      <a href="./perfil.html" aria-label="Meu perfil" class="w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100 flex items-center justify-center"><i data-lucide="user-round" class="w-5 h-5"></i></a>
+      <button id="menuToggleBtn" aria-label="Menu" class="lg:hidden w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100 flex items-center justify-center"><i data-lucide="menu" class="w-5 h-5"></i></button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)_240px] gap-6 items-start">
+
+  <aside class="hidden lg:block sticky top-20 bg-white border border-slate-200 rounded-xl p-4">
+    <div class="flex items-center gap-3">
+      <div id="sideAvatar" class="w-11 h-11 shrink-0"></div>
+      <div class="min-w-0">
+        <strong id="sideName" class="block text-sm font-semibold truncate">Carregando...</strong>
+        <small id="sideUsername" class="text-xs text-slate-500 truncate block"></small>
+      </div>
+    </div>
+  </aside>
+
+  <section class="min-w-0 max-w-2xl w-full mx-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-xl font-bold tracking-tight">Feed</h1>
+      <button id="refreshButton" aria-label="Atualizar feed" class="w-9 h-9 rounded-lg text-slate-500 hover:bg-white hover:text-slate-900 flex items-center justify-center"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+    </div>
+
+    <div class="flex gap-1 p-1 bg-slate-200/70 rounded-lg mb-4" role="tablist">
+      <button data-feed="discover" class="flex-1 py-2 rounded-md text-sm font-medium transition bg-white text-slate-900 shadow-sm">Para você</button>
+      <button data-feed="friends" class="flex-1 py-2 rounded-md text-sm font-medium transition text-slate-500 hover:text-slate-900">Amigos</button>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-xl p-4 mb-4">
+      <div class="flex gap-3 items-start">
+        <div id="composerAvatar" class="w-10 h-10 shrink-0"></div>
+        <textarea id="postContent" maxlength="5000" rows="3" placeholder="Compartilhe algo com a rede" class="w-full resize-none bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-blue-600 focus:bg-white placeholder:text-slate-400"></textarea>
+      </div>
+      <div id="filePreview" class="hidden mt-3 ml-[52px] text-xs text-slate-600"></div>
+      <div class="flex items-center flex-wrap gap-2 mt-3 pt-3 border-t border-slate-100">
+        <label for="mediaInput" class="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:bg-slate-100"><i data-lucide="image" class="w-4 h-4"></i> Foto ou vídeo</label>
+        <input id="mediaInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
+        <select id="visibility" aria-label="Visibilidade" class="bg-white border border-slate-200 text-slate-700 rounded-lg px-2.5 py-2 text-xs focus:outline-none">
+          <option value="public">Público</option><option value="friends">Amigos</option><option value="private">Somente eu</option>
+        </select>
+        <button id="publishButton" class="ml-auto bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-5 py-2 text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed">Publicar</button>
+      </div>
+    </div>
+
+    <div id="postsContainer"></div>
+  </section>
+
+  <aside class="hidden lg:block sticky top-20 bg-white border border-slate-200 rounded-xl p-3">
+    <nav class="space-y-0.5" id="navDesktop"></nav>
+    <div class="h-px bg-slate-100 my-3"></div>
+    <button id="logoutButton" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50"><i data-lucide="log-out" class="w-4 h-4"></i> Sair</button>
+    <p class="text-[11px] text-slate-400 mt-3 px-3">FaceCrato © 2026</p>
+  </aside>
+</main>
+
+<div id="mobileMenuOverlay" class="fixed inset-0 bg-slate-900/40 z-[60] hidden lg:hidden"></div>
+<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white p-4 z-[70] shadow-2xl translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
+  <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+    <h3 class="font-semibold">Menu</h3>
+    <button id="menuCloseBtn" aria-label="Fechar" class="w-9 h-9 rounded-lg hover:bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
+  </div>
+  <nav class="space-y-0.5" id="navMobile"></nav>
+  <button id="logoutButtonMobile" class="mt-auto w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 bg-red-50"><i data-lucide="log-out" class="w-4 h-4"></i> Sair</button>
+</div>
+
+<script type="module">
+import { supabase } from "./supabase.js";
+
+const $ = id => document.getElementById(id);
+const postsContainer = $("postsContainer"), postContent = $("postContent"), visibility = $("visibility"),
+  mediaInput = $("mediaInput"), filePreview = $("filePreview"), publishButton = $("publishButton"),
+  drawer = $("mobileMenuDrawer"), overlay = $("mobileMenuOverlay"),
+  notifBtn = $("notificationsButton"), notifDropdown = $("notifDropdown"), notifList = $("notifDropdownList"), notifBadge = $("notifBadge");
+
+let currentUser = null, currentProfile = null, currentFeed = "discover", loadingFeed = false, notifsChannel = null;
+const openComments = new Set();
+const urlCache = new Map();
+const reactionIcons = { like:"👍", love:"❤️", haha:"😂", wow:"😮", sad:"😢", angry:"😡" };
+const visLabel = { public:"Público", friends:"Amigos", private:"Somente eu" };
+const focusPost = new URLSearchParams(location.search).get("post");
+
+// Navegação (desktop e mobile)
+const navItems = [["./feed.html","house","Feed",true],["./amigos.html","users","Amigos"],["./notificacoes.html","bell","Notificações"],["./perfil.html","user-round","Meu perfil"]];
+const navHTML = size => navItems.map(([href,icon,label,active]) =>
+  `<a href="${href}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium ${active?"bg-blue-50 text-blue-700":"text-slate-600 hover:bg-slate-50 hover:text-slate-900"}"><i data-lucide="${icon}" class="w-4 h-4"></i>${label}</a>`).join("");
+$("navDesktop").innerHTML = navHTML(); $("navMobile").innerHTML = navHTML();
+
+function toggleMobileMenu(open) {
+  if (open) { overlay.classList.remove("hidden"); requestAnimationFrame(() => drawer.classList.remove("translate-x-full")); }
+  else { drawer.classList.add("translate-x-full"); setTimeout(() => overlay.classList.add("hidden"), 300); }
+}
+$("menuToggleBtn").onclick = () => toggleMobileMenu(true);
+$("menuCloseBtn").onclick = () => toggleMobileMenu(false);
+overlay.onclick = () => toggleMobileMenu(false);
+
+notifBtn.addEventListener("click", e => {
+  e.stopPropagation();
+  notifDropdown.classList.toggle("hidden");
+  if (!notifDropdown.classList.contains("hidden")) fetchNotifications();
+});
+document.addEventListener("click", e => {
+  if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) notifDropdown.classList.add("hidden");
+  if (!e.target.closest(".reaction-wrapper")) document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+});
+
+// Utilitários
+const escapeHTML = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" })[c]);
+
+// Passagem única: evita que "#039" de entidades HTML ou "#" dentro de URLs virem hashtag
+function formatRichText(text = "") {
+  return escapeHTML(text).replace(/(https?:\/\/[^\s]+)|(?<=^|\s)#([\p{L}\p{N}_]+)|(?<=^|\s)@(\w+)/gu, (m, url, tag, user) => {
+    if (url) return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline break-all">${url}</a>`;
+    if (tag) return `<span class="text-blue-600 font-medium">#${tag}</span>`;
+    return `<span class="text-blue-600 font-medium">@${user}</span>`;
+  });
+}
+
+const initials = (name = "U") => name.trim().split(/\s+/).slice(0, 2).map(p => p[0] || "").join("").toUpperCase();
+
+function renderAvatar(profile, classes = "w-10 h-10") {
+  const name = profile?.full_name || profile?.username || "U";
+  const avatar = profile?.avatar_url;
+  const base = `${classes} rounded-full overflow-hidden shrink-0 flex items-center justify-center`;
+  if (avatar && /^https?:\/\//i.test(avatar))
+    return `<div class="${base}"><img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover"></div>`;
+  return `<div class="${base} bg-slate-200 text-slate-600 text-xs font-semibold">${escapeHTML(initials(name))}</div>`;
+}
+
+function formatDate(date) {
+  const d = new Date(date);
+  if (isNaN(d)) return "";
+  const diff = (Date.now() - d) / 1000;
+  if (diff < 60) return "agora";
+  if (diff < 3600) return `${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} h`;
+  return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(d);
+}
+
+const showError = text => Swal.fire({ icon:"error", title:"Não foi possível concluir", text, confirmButtonColor:"#2563eb" });
+const showSuccess = text => Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2000 });
+
+const skeleton = () => `<div class="bg-white border border-slate-200 rounded-xl p-5 mb-4 animate-pulse"><div class="flex gap-3 items-center mb-4"><div class="w-10 h-10 rounded-full bg-slate-200"></div><div class="space-y-2"><div class="w-32 h-3 bg-slate-200 rounded"></div><div class="w-20 h-2.5 bg-slate-100 rounded"></div></div></div><div class="w-full h-14 bg-slate-100 rounded-lg"></div></div>`;
+
+// Inicialização
+async function initialize() {
+  postsContainer.innerHTML = skeleton();
+  const { data, error } = await supabase.auth.getSession();
+  if (error || !data.session) { location.replace("./login.html"); return; }
+  currentUser = data.session.user;
+
+  const { data: profile } = await supabase.from("profiles").select("id,username,full_name,avatar_url").eq("id", currentUser.id).maybeSingle();
+  const fallback = currentUser.email?.split("@")[0] || "usuario";
+  currentProfile = profile || { id: currentUser.id, username: fallback, full_name: fallback };
+
+  $("sideName").textContent = currentProfile.full_name || "Usuário";
+  $("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
+  $("sideAvatar").innerHTML = renderAvatar(currentProfile, "w-11 h-11");
+  $("composerAvatar").innerHTML = renderAvatar(currentProfile, "w-10 h-10");
+  lucide.createIcons();
+
+  await loadFeed();
+  await checkUnreadCount();
+  subscribeNotifications();
+}
+
+// Notificações
+async function checkUnreadCount() {
+  const { count, error } = await supabase.from("notifications").select("*", { count:"exact", head:true }).eq("recipient_id", currentUser.id).eq("is_read", false);
+  if (!error && count > 0) { notifBadge.textContent = count > 9 ? "9+" : count; notifBadge.classList.remove("hidden"); }
+  else notifBadge.classList.add("hidden");
+}
+
+async function fetchNotifications() {
+  notifList.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">Carregando...</div>`;
+  const { data, error } = await supabase.from("notifications").select("*").eq("recipient_id", currentUser.id).order("created_at", { ascending:false }).limit(6);
+  if (error || !data?.length) { notifList.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">Você não tem notificações.</div>`; return; }
+  notifList.innerHTML = data.map(n => {
+    const target = n.post_id ? `./feed.html?post=${encodeURIComponent(n.post_id)}` : n.actor_id ? `./perfil.html?id=${encodeURIComponent(n.actor_id)}` : "#";
+    return `<a href="${target}" data-notif-id="${escapeHTML(n.id)}" class="block px-4 py-3 hover:bg-slate-50 ${n.is_read ? "" : "bg-blue-50/60"}">
+      <p class="text-xs text-slate-800 leading-relaxed">${escapeHTML(n.message || "Nova atividade")}</p>
+      <span class="text-[11px] text-slate-400 mt-1 block">${formatDate(n.created_at)}</span></a>`;
+  }).join("");
+}
+
+notifList.addEventListener("click", async e => {
+  const a = e.target.closest("[data-notif-id]");
+  if (!a) return;
+  await supabase.from("notifications").update({ is_read:true }).eq("id", a.dataset.notifId).eq("recipient_id", currentUser.id);
+});
+
+$("markAllRead").onclick = async () => {
+  await supabase.from("notifications").update({ is_read:true }).eq("recipient_id", currentUser.id).eq("is_read", false);
+  await checkUnreadCount(); await fetchNotifications();
+};
+
+function subscribeNotifications() {
+  if (notifsChannel) supabase.removeChannel(notifsChannel);
+  notifsChannel = supabase.channel("feed-notifs-" + currentUser.id)
+    .on("postgres_changes", { event:"INSERT", schema:"public", table:"notifications", filter:"recipient_id=eq." + currentUser.id }, async () => {
+      await checkUnreadCount();
+      if (!notifDropdown.classList.contains("hidden")) await fetchNotifications();
+    }).subscribe();
+}
+
+// Feed
+async function getFriendIds() {
+  const { data, error } = await supabase.from("friendships").select("user_a,user_b").eq("status", "accepted").or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
+  if (error) throw error;
+  const ids = new Set([currentUser.id]);
+  (data || []).forEach(f => ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a));
+  return [...ids];
+}
+
+async function signedUrl(path) {
+  const hit = urlCache.get(path);
+  if (hit && hit.exp > Date.now()) return hit.url;
+  const { data } = await supabase.storage.from("post-media").createSignedUrl(path, 3600);
+  if (data?.signedUrl) urlCache.set(path, { url:data.signedUrl, exp:Date.now() + 50 * 60 * 1000 });
+  return data?.signedUrl || null;
+}
+
+const group = (rows, key) => (rows || []).reduce((acc, r) => ((acc[r[key]] ||= []).push(r), acc), {});
+
+async function loadFeed({ silent = false } = {}) {
+  if (loadingFeed) return;
+  loadingFeed = true;
+  if (!silent) postsContainer.innerHTML = skeleton();
+  try {
+    let query = supabase.from("posts").select("id,user_id,content,post_type,visibility,comments_permission,created_at,edited_at").order("created_at", { ascending:false }).limit(40);
+    if (currentFeed === "friends") query = query.in("user_id", await getFriendIds());
+    const { data: posts, error } = await query;
+    if (error) throw error;
+
+    if (!posts?.length) {
+      postsContainer.innerHTML = `<div class="bg-white border border-slate-200 rounded-xl p-10 text-center text-slate-500"><i data-lucide="messages-square" class="w-9 h-9 mx-auto mb-3 text-slate-300"></i><strong class="block text-slate-800 mb-1">Nenhuma publicação ainda</strong><p class="text-xs">Publique algo ou adicione amigos para ver novidades aqui.</p></div>`;
+      lucide.createIcons(); return;
+    }
+
+    const postIds = posts.map(p => p.id);
+    const [mediaRes, reactionsRes, commentsRes, savedRes] = await Promise.all([
+      supabase.from("post_media").select("id,post_id,media_url,media_type,position").in("post_id", postIds).order("position"),
+      supabase.from("reactions").select("post_id,user_id,reaction_type").in("post_id", postIds),
+      supabase.from("comments").select("id,post_id,user_id,content,created_at,parent_id").in("post_id", postIds).is("parent_id", null).order("created_at", { ascending:true }),
+      supabase.from("saved_posts").select("post_id").eq("user_id", currentUser.id).in("post_id", postIds)
+    ]);
+
+    // Perfis de autores dos posts E dos comentários (corrige avatar/nome nos comentários)
+    const userIds = [...new Set([...posts.map(p => p.user_id), ...(commentsRes.data || []).map(c => c.user_id)])];
+    const { data: profiles } = await supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", userIds);
+    const profileMap = Object.fromEntries((profiles || []).map(p => [p.id, p]));
+
+    const mediaMap = group(mediaRes.data, "post_id"), reactionMap = group(reactionsRes.data, "post_id"), commentsMap = group(commentsRes.data, "post_id");
+    const saved = new Set((savedRes.data || []).map(s => s.post_id));
+
+    const prepared = await Promise.all(posts.map(async post => ({
+      ...post,
+      author: profileMap[post.user_id],
+      media: await Promise.all((mediaMap[post.id] || []).map(async m => ({ ...m, signedUrl: await signedUrl(m.media_url) }))),
+      reactions: reactionMap[post.id] || [],
+      comments: (commentsMap[post.id] || []).map(c => ({ ...c, author: profileMap[c.user_id] })),
+      saved: saved.has(post.id)
+    })));
+
+    renderPosts(prepared);
+  } catch (err) {
+    console.error("Erro no feed:", err);
+    postsContainer.innerHTML = `<div class="bg-white border border-slate-200 rounded-xl p-8 text-center text-sm text-slate-500">Não foi possível carregar o feed. <button class="text-blue-600 font-medium hover:underline" id="retryFeed">Tentar novamente</button></div>`;
+    $("retryFeed")?.addEventListener("click", () => loadFeed());
+  } finally { loadingFeed = false; }
+}
+
+function renderPosts(posts) {
+  postsContainer.innerHTML = posts.map(post => {
+    const author = post.author || { full_name:"Usuário", username:"usuario" };
+    const mine = post.reactions.find(r => r.user_id === currentUser.id);
+    const counts = post.reactions.reduce((a, r) => (a[r.reaction_type] = (a[r.reaction_type] || 0) + 1, a), {});
+    const summary = Object.entries(counts).map(([t, n]) => `<span>${reactionIcons[t] || "👍"} ${n}</span>`).join("");
+    const nComments = post.comments.length;
+
+    const mediaHTML = post.media.map(m => {
+      if (!m.signedUrl) return "";
+      return m.media_type === "video"
+        ? `<video class="w-full max-h-[520px] rounded-lg bg-black mb-3" controls preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>`
+        : `<img class="w-full max-h-[520px] object-cover rounded-lg bg-slate-100 mb-3" src="${escapeHTML(m.signedUrl)}" alt="Mídia da publicação" loading="lazy">`;
+    }).join("");
+
+    const commentsHTML = post.comments.map(c => {
+      const ca = c.author || { full_name:"Usuário" };
+      return `<div class="flex gap-2.5 my-3">
+        ${renderAvatar(ca, "w-8 h-8")}
+        <div class="flex-1 min-w-0 bg-slate-50 rounded-lg px-3 py-2">
+          <div class="flex items-baseline gap-2"><strong class="text-xs font-semibold">${escapeHTML(ca.full_name || ca.username || "Usuário")}</strong><span class="text-[11px] text-slate-400">${formatDate(c.created_at)}</span></div>
+          <p class="text-xs text-slate-700 leading-relaxed break-words">${formatRichText(c.content)}</p>
+        </div></div>`;
+    }).join("");
+
+    const btn = "flex items-center justify-center gap-2 py-2 text-xs font-medium rounded-lg hover:bg-slate-50 transition";
+    return `
+    <article id="post-${post.id}" data-post-id="${post.id}" class="bg-white border border-slate-200 rounded-xl p-5 mb-4">
+      <div class="flex items-center gap-3 mb-3">
+        ${renderAvatar(author, "w-10 h-10")}
+        <div class="flex-1 min-w-0">
+          <strong class="block text-sm font-semibold truncate">${escapeHTML(author.full_name || "Usuário")}</strong>
+          <small class="text-xs text-slate-500">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visLabel[post.visibility] || "Público"}</small>
+        </div>
+        ${post.user_id === currentUser.id ? `<button data-action="delete-post" aria-label="Excluir publicação" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ""}
+      </div>
+      ${post.content ? `<div class="text-sm leading-relaxed mb-3 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
+      ${mediaHTML}
+      <div class="flex justify-between text-xs text-slate-500 py-2 border-b border-slate-100 mb-1">
+        <span class="flex gap-2">${summary}</span>
+        <span>${nComments} ${nComments === 1 ? "comentário" : "comentários"}</span>
+      </div>
+      <div class="grid grid-cols-3 gap-1">
+        <div class="reaction-wrapper">
+          <button data-action="like-click" class="${btn} w-full ${mine ? "text-blue-600" : "text-slate-600"}">
+            <span>${mine ? reactionIcons[mine.reaction_type] : "👍"}</span>${mine ? "Reagiu" : "Curtir"}
+          </button>
+          <div class="reaction-popup" id="popup-${post.id}"><div>
+            ${Object.entries(reactionIcons).map(([k, e]) => `<button class="react-emoji-btn" data-reaction="${k}" data-post-id="${post.id}" aria-label="${k}">${e}</button>`).join("")}
+          </div></div>
+        </div>
+        <button data-action="toggle-comments" class="${btn} text-slate-600"><i data-lucide="message-circle" class="w-4 h-4"></i> Comentar</button>
+        <button data-action="save-post" class="${btn} ${post.saved ? "text-blue-600" : "text-slate-600"}"><i data-lucide="bookmark" class="w-4 h-4 ${post.saved ? "fill-current" : ""}"></i> ${post.saved ? "Salvo" : "Salvar"}</button>
+      </div>
+      <div class="comments-area ${openComments.has(post.id) ? "open" : ""} pt-2 border-t border-slate-100 mt-2" id="comments-${post.id}">
+        ${commentsHTML || `<p class="text-xs text-slate-400 py-2">Seja o primeiro a comentar.</p>`}
+        <form class="flex gap-2 mt-2" data-post-id="${post.id}">
+          <input type="text" name="comment" placeholder="Escreva um comentário" maxlength="2000" required class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600 focus:bg-white">
+          <button type="submit" aria-label="Enviar comentário" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 flex items-center"><i data-lucide="send" class="w-4 h-4"></i></button>
+        </form>
+      </div>
+    </article>`;
+  }).join("");
+  lucide.createIcons();
+
+  // Abre publicação vinda de uma notificação (?post=ID)
+  const el = focusPost && $("post-" + focusPost);
+  if (el && !el.dataset.focused) {
+    el.dataset.focused = "1";
+    el.classList.add("ring-2", "ring-blue-500");
+    el.scrollIntoView({ block:"center" });
+  }
+}
+
+// Publicar
+mediaInput.addEventListener("change", () => {
+  const file = mediaInput.files[0];
+  if (!file) { filePreview.classList.add("hidden"); return; }
+  filePreview.classList.remove("hidden");
+  filePreview.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+});
+
+publishButton.addEventListener("click", async () => {
+  const content = postContent.value.trim(), file = mediaInput.files[0];
+  if (!content && !file) { showError("Escreva um texto ou escolha uma foto ou vídeo."); return; }
+  publishButton.disabled = true; publishButton.textContent = "Publicando...";
+  try {
+    const isVideo = !!file && file.type.startsWith("video/");
+    const { data: post, error: postErr } = await supabase.from("posts").insert({
+      user_id: currentUser.id, content, post_type: file ? (isVideo ? "video" : "photo") : "text",
+      visibility: visibility.value, comments_permission: "everyone"
+    }).select("id").single();
+    if (postErr) throw postErr;
+
+    if (file) {
+      const ext = file.name.split(".").pop();
+      const filePath = `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, file, { contentType:file.type });
+      if (upErr) { await supabase.from("posts").delete().eq("id", post.id); throw upErr; }
+      const { error: mErr } = await supabase.from("post_media").insert({ post_id: post.id, media_url: filePath, media_type: isVideo ? "video" : "image", position: 0 });
+      if (mErr) throw mErr;
+    }
+    postContent.value = ""; mediaInput.value = ""; filePreview.classList.add("hidden");
+    showSuccess("Publicado");
+    await loadFeed({ silent:true });
+  } catch (err) { showError(err.message || "Erro ao publicar."); }
+  finally { publishButton.disabled = false; publishButton.textContent = "Publicar"; }
+});
+
+// Interações nos posts
+async function applyReaction(postId, type) {
+  document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+  const { data: ex } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+  if (ex && ex.reaction_type === type) await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
+  else if (ex) await supabase.from("reactions").update({ reaction_type:type }).eq("post_id", postId).eq("user_id", currentUser.id);
+  else await supabase.from("reactions").insert({ post_id:postId, user_id:currentUser.id, reaction_type:type });
+  await loadFeed({ silent:true });
+}
+
+postsContainer.addEventListener("click", async e => {
+  const emoji = e.target.closest(".react-emoji-btn");
+  if (emoji) { await applyReaction(emoji.dataset.postId, emoji.dataset.reaction); return; }
+
+  const button = e.target.closest("[data-action]");
+  const article = e.target.closest("article[data-post-id]");
+  if (!button || !article) return;
+  const postId = article.dataset.postId, action = button.dataset.action;
+
+  if (action === "like-click") {
+    if (matchMedia("(hover: none)").matches || innerWidth <= 768) {
+      const popup = $(`popup-${postId}`), wasOpen = popup.classList.contains("show");
+      document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+      if (!wasOpen) popup.classList.add("show");
+    } else await applyReaction(postId, "like");
+  }
+
+  if (action === "toggle-comments") {
+    const area = $(`comments-${postId}`);
+    area.classList.toggle("open");
+    area.classList.contains("open") ? openComments.add(postId) : openComments.delete(postId);
+  }
+
+  if (action === "save-post") {
+    const { data: ex } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+    if (ex) await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id);
+    else await supabase.from("saved_posts").insert({ post_id:postId, user_id:currentUser.id });
+    await loadFeed({ silent:true });
+  }
+
+  if (action === "delete-post") {
+    const ok = await Swal.fire({ title:"Excluir publicação?", text:"Essa ação não pode ser desfeita.", icon:"warning", showCancelButton:true, confirmButtonText:"Excluir", cancelButtonText:"Cancelar", confirmButtonColor:"#dc2626" });
+    if (!ok.isConfirmed) return;
+    const { error } = await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
+    if (error) { showError(error.message); return; }
+    showSuccess("Publicação excluída");
+    await loadFeed({ silent:true });
+  }
+});
+
+postsContainer.addEventListener("submit", async e => {
+  const form = e.target.closest("form");
+  if (!form?.dataset.postId) return;
+  e.preventDefault();
+  const postId = form.dataset.postId, input = form.querySelector("input[name='comment']"), content = input.value.trim();
+  if (!content) return;
+  input.disabled = true;
+  const { error } = await supabase.from("comments").insert({ post_id:postId, user_id:currentUser.id, content });
+  if (error) { input.disabled = false; showError(error.message); return; }
+  openComments.add(postId);
+  await loadFeed({ silent:true });
+});
+
+// Abas
+document.querySelectorAll("[data-feed]").forEach(btn => btn.addEventListener("click", async () => {
+  currentFeed = btn.dataset.feed;
+  document.querySelectorAll("[data-feed]").forEach(b => {
+    const on = b === btn;
+    b.classList.toggle("bg-white", on); b.classList.toggle("text-slate-900", on); b.classList.toggle("shadow-sm", on); b.classList.toggle("text-slate-500", !on);
+  });
+  await loadFeed();
+}));
+
+$("refreshButton").onclick = () => loadFeed();
+
+const handleLogout = async () => {
+  const ok = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonText:"Sair", cancelButtonText:"Cancelar", confirmButtonColor:"#2563eb" });
+  if (ok.isConfirmed) { await supabase.auth.signOut(); location.replace("./login.html"); }
+};
+$("logoutButton").onclick = handleLogout;
+$("logoutButtonMobile").onclick = handleLogout;
+
+lucide.createIcons();
+initialize();
+</script>
+</body>
+</html>
