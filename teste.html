@@ -14,12 +14,12 @@
 
 <body class="bg-gray-100 text-slate-900 font-sans antialiased min-h-screen">
 
-<!-- TOPO ESTILO FACEBOOK -->
+<!-- TOPO -->
 <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
-    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-2 sm:gap-4">
+    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-4">
         
-        <!-- LOGO E PESQUISA ESQUERDA -->
-        <div class="flex items-center gap-2">
+        <!-- LOGO E PESQUISA -->
+        <div class="flex items-center gap-3">
             <a href="./feed.html" class="flex items-center gap-2 text-2xl font-black tracking-tight text-cyan-600 group cursor-pointer" title="Início">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
                     <i data-lucide="home" class="w-5 h-5"></i>
@@ -27,27 +27,14 @@
                 <span class="hidden md:inline">FaceCrato</span>
             </a>
 
-            <div class="relative hidden sm:block ml-2">
+            <div class="relative hidden sm:block">
                 <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
                 <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-48 lg:w-64 h-10 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
             </div>
         </div>
 
-        <!-- ABAS CENTRAIS ESTILO APP -->
-        <div class="flex items-center justify-center h-full gap-1 md:gap-2">
-            <a href="./feed.html" class="flex items-center justify-center w-14 md:w-20 h-full border-b-4 border-cyan-600 text-cyan-600 transition" title="Início">
-                <i data-lucide="home" class="w-6 h-6"></i>
-            </a>
-            <a href="./amigos.html" class="flex items-center justify-center w-14 md:w-20 h-full text-gray-500 hover:bg-gray-100 rounded-xl md:rounded-none transition" title="Amigos">
-                <i data-lucide="users" class="w-6 h-6"></i>
-            </a>
-            <a href="./notificacoes.html" class="flex items-center justify-center w-14 md:w-20 h-full text-gray-500 hover:bg-gray-100 rounded-xl md:rounded-none transition relative" title="Notificações">
-                <i data-lucide="bell" class="w-6 h-6"></i>
-            </a>
-        </div>
-
-        <!-- BOTÕES DA DIREITA (PERFIL, MENU NOTIFICAÇÃO E MENU MOBILE) -->
-        <div class="flex items-center gap-2 relative">
+        <!-- BOTÕES DA DIREITA -->
+        <div class="flex items-center gap-2.5 relative">
             
             <!-- BOTÃO DE NOTIFICAÇÕES COM DROPDOWN MODAL -->
             <div class="relative">
@@ -74,7 +61,7 @@
                 </div>
             </div>
 
-            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition overflow-hidden" id="profileButton" title="Meu perfil">
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition" id="profileButton" title="Meu perfil">
                 <i data-lucide="user-round" class="w-5 h-5"></i>
             </button>
             
@@ -109,46 +96,6 @@
 
     <!-- FEED CENTRAL -->
     <section class="min-w-0 max-w-xl mx-auto w-full">
-
-        <!-- CARROSSEL DE STORIES ESTILO FACEBOOK -->
-        <div class="grid grid-cols-4 gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
-            <!-- Card de Criar Story -->
-            <div class="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer group">
-                <div class="h-32 bg-gray-100 overflow-hidden flex items-center justify-center relative" id="storyUserThumb">
-                    <div class="w-full h-full bg-slate-200 flex items-center justify-center text-xs text-gray-500 font-bold">Foto</div>
-                </div>
-                <div class="flex-1 bg-white relative flex flex-col items-center justify-end pb-2">
-                    <div class="absolute -top-4 w-8 h-8 rounded-full bg-cyan-600 text-white border-2 border-white flex items-center justify-center shadow-md group-hover:scale-105 transition">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-slate-800 text-center px-1 truncate w-full mt-2">Criar story</span>
-                </div>
-            </div>
-
-            <!-- Story Exemplo 1 -->
-            <div class="relative bg-gradient-to-b from-cyan-500 to-violet-600 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer p-2 justify-between text-white group">
-                <div class="w-8 h-8 rounded-full border-2 border-cyan-400 bg-white flex items-center justify-center text-slate-900 text-xs font-bold shadow">M</div>
-                <div>
-                    <strong class="block text-xs font-bold leading-tight drop-shadow">Mila Ribeiro</strong>
-                </div>
-            </div>
-
-            <!-- Story Exemplo 2 -->
-            <div class="relative bg-gradient-to-b from-purple-500 to-pink-600 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer p-2 justify-between text-white group">
-                <div class="w-8 h-8 rounded-full border-2 border-pink-400 bg-white flex items-center justify-center text-slate-900 text-xs font-bold shadow">W</div>
-                <div>
-                    <strong class="block text-xs font-bold leading-tight drop-shadow">WS Infor</strong>
-                </div>
-            </div>
-
-            <!-- Story Exemplo 3 -->
-            <div class="relative bg-gradient-to-b from-emerald-500 to-teal-700 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer p-2 justify-between text-white group">
-                <div class="w-8 h-8 rounded-full border-2 border-emerald-400 bg-white flex items-center justify-center text-slate-900 text-xs font-bold shadow">R</div>
-                <div>
-                    <strong class="block text-xs font-bold leading-tight drop-shadow">Raissa</strong>
-                </div>
-            </div>
-        </div>
 
         <!-- CRIAR PUBLICAÇÃO -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-xs">
@@ -367,9 +314,6 @@ async function initialize() {
     
     document.getElementById("composerAvatar").innerHTML =
         renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm");
-
-    document.getElementById("storyUserThumb").innerHTML =
-        renderAvatar(currentProfile, "w-full h-full object-cover");
 
     await loadFeed();
     await checkUnreadCount();
