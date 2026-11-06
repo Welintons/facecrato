@@ -14,7 +14,7 @@
 
 <body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
-<!-- TOPO -->
+<!-- TOPO (Sem o botão de logout e sem o menu antigo) -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
     <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-6">
         <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900">
@@ -30,7 +30,6 @@
         <div class="ml-auto flex items-center gap-3">
             <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="notificationsButton" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
             <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="logoutButton" title="Sair"><i data-lucide="log-out" class="w-5 h-5"></i></button>
         </div>
     </div>
 </header>
@@ -48,14 +47,7 @@
             </div>
         </div>
 
-        <nav class="space-y-1">
-            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
-        </nav>
-
-        <div class="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
+        <div class="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
             <strong class="text-slate-800">FACECRATO</strong><br>
             Conectando pessoas em alto estilo.
         </div>
@@ -119,26 +111,26 @@
         </div>
     </section>
 
-    <!-- SIDEBAR DIREITA -->
+    <!-- SIDEBAR DIREITA (Com o Menu de Navegação e Botão de Sair) -->
     <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
-        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sobre o FaceCrato</h3>
-        <p class="text-xs text-gray-500 leading-relaxed">Uma rede social independente e moderna criada para fortalecer conexões locais.</p>
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
+        <nav class="space-y-1 mb-5">
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
+        </nav>
+
         <div class="h-px bg-gray-100 my-4"></div>
-        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Comunidade</h3>
-        <p class="text-xs text-gray-500 leading-relaxed">Novos recursos chegam em breve.</p>
+
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sessão</h3>
+        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm transition" id="logoutButton"><i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta</button>
+
         <div class="h-px bg-gray-100 my-4"></div>
         <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
     </aside>
 
 </main>
-
-<!-- NAVEGAÇÃO MOBILE -->
-<nav class="fixed bottom-0 left-0 right-0 z-60 bg-white/90 backdrop-blur-md border-t border-gray-200 px-3 py-3 flex justify-around lg:hidden">
-    <button class="flex flex-col items-center gap-1 text-[11px] font-bold text-cyan-600" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
-    <button class="flex flex-col items-center gap-1 text-[11px] font-semibold text-gray-500" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
-    <button class="flex flex-col items-center gap-1 text-[11px] font-semibold text-gray-500" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Alertas</button>
-    <button class="flex flex-col items-center gap-1 text-[11px] font-semibold text-gray-500" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Perfil</button>
-</nav>
 
 <style>
 /* Estilo customizado para os popups de reação no Tailwind */
