@@ -1,0 +1,660 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+
+<title>Criar conta | FaceCrato</title>
+
+<link rel="manifest" href="./manifest.json">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#0b1120;
+    color:#f8fafc;
+    font-family:Inter,system-ui,sans-serif;
+}
+
+.page{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+.brand-side{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    background:
+    radial-gradient(circle at 20% 20%,#2563eb55,transparent 40%),
+    radial-gradient(circle at 80% 80%,#7c3aed33,transparent 40%),
+    #111c32;
+    border-right:1px solid #26334a;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.logo-icon{
+    width:45px;
+    height:45px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:linear-gradient(135deg,#3b82f6,#6366f1);
+}
+
+.brand-content{
+    max-width:520px;
+}
+
+.brand-content h1{
+    font-size:clamp(40px,5vw,65px);
+    line-height:1.05;
+    letter-spacing:-3px;
+    font-weight:900;
+    margin:0 0 22px;
+}
+
+.brand-content h1 span{color:#60a5fa}
+
+.brand-content p{
+    color:#a8b5ca;
+    font-size:17px;
+    line-height:1.8;
+}
+
+.brand-footer{
+    color:#718096;
+    font-size:12px;
+}
+
+.form-side{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:35px;
+}
+
+.form-box{
+    width:100%;
+    max-width:430px;
+}
+
+.mobile-logo{
+    display:none;
+}
+
+.form-box h2{
+    font-size:31px;
+    font-weight:850;
+    letter-spacing:-1px;
+    margin:0 0 8px;
+}
+
+.subtitle{
+    color:#94a3b8;
+    font-size:14px;
+    margin-bottom:27px;
+}
+
+.field-group{
+    margin-bottom:16px;
+}
+
+.field-group label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.input-wrap{
+    position:relative;
+}
+
+.input-wrap input{
+    width:100%;
+    height:50px;
+    background:#131e30;
+    border:1px solid #2d3c54;
+    border-radius:11px;
+    padding:0 45px 0 15px;
+    outline:none;
+    color:white;
+    font-size:14px;
+    transition:.2s;
+}
+
+.input-wrap input:focus{
+    border-color:#3b82f6;
+    box-shadow:0 0 0 3px #3b82f622;
+}
+
+.input-wrap input::placeholder{color:#64748b}
+
+.input-icon{
+    position:absolute;
+    right:15px;
+    top:15px;
+    color:#64748b;
+    width:19px;
+    height:19px;
+    pointer-events:none;
+}
+
+.toggle-password{
+    position:absolute;
+    right:12px;
+    top:11px;
+    padding:5px;
+    color:#94a3b8;
+    background:none;
+    border:0;
+    cursor:pointer;
+}
+
+.toggle-password svg{width:19px}
+
+.password-hint{
+    font-size:11px;
+    color:#64748b;
+    margin-top:6px;
+}
+
+.register-button{
+    width:100%;
+    height:53px;
+    margin-top:9px;
+    border:0;
+    border-radius:12px;
+    background:linear-gradient(100deg,#2563eb,#4f46e5);
+    color:white;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.register-button:hover{
+    filter:brightness(1.12);
+    transform:translateY(-1px);
+}
+
+.register-button:disabled{
+    opacity:.6;
+    cursor:wait;
+    transform:none;
+}
+
+.message{
+    display:none;
+    margin-top:15px;
+    padding:13px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.message.error{
+    display:block;
+    color:#fca5a5;
+    background:#7f1d1d33;
+    border:1px solid #991b1b66;
+}
+
+.message.success{
+    display:block;
+    color:#86efac;
+    background:#14532d33;
+    border:1px solid #16653466;
+}
+
+.login-link{
+    text-align:center;
+    color:#94a3b8;
+    font-size:14px;
+    margin-top:24px;
+}
+
+.login-link a{
+    color:#60a5fa;
+    text-decoration:none;
+    font-weight:800;
+}
+
+.login-link a:hover{text-decoration:underline}
+
+.form-footer{
+    text-align:center;
+    margin-top:35px;
+    font-size:12px;
+    color:#64748b;
+}
+
+@media(max-width:850px){
+    .page{grid-template-columns:1fr}
+    .brand-side{display:none}
+    .form-side{
+        min-height:100vh;
+        padding:24px;
+    }
+    .mobile-logo{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        margin-bottom:35px;
+        font-size:23px;
+        font-weight:900;
+    }
+    .form-box h2{font-size:28px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- IDENTIDADE VISUAL -->
+    <section class="brand-side">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <i data-lucide="users"></i>
+            </div>
+            FaceCrato
+        </div>
+
+        <div class="brand-content">
+            <h1>
+                Sua história.<br>
+                Suas conexões.<br>
+                <span>Seu espaço.</span>
+            </h1>
+
+            <p>
+                Crie sua conta e faça parte de uma comunidade
+                onde pessoas compartilham ideias, momentos
+                e experiências.
+            </p>
+        </div>
+
+        <div class="brand-footer">
+            FACECRATO © 2026 — UMA NOVA FORMA DE SE CONECTAR.
+        </div>
+
+    </section>
+
+    <!-- FORMULÁRIO -->
+    <section class="form-side">
+
+        <div class="form-box">
+
+            <div class="mobile-logo">
+                <div class="logo-icon">
+                    <i data-lucide="users"></i>
+                </div>
+                FaceCrato
+            </div>
+
+            <h2>Crie sua conta</h2>
+
+            <p class="subtitle">
+                Entre para a comunidade FaceCrato.
+            </p>
+
+            <form id="registerForm">
+
+                <div class="field-group">
+                    <label for="fullName">Nome completo</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="fullName"
+                            type="text"
+                            placeholder="Como você se chama?"
+                            autocomplete="name"
+                            maxlength="100"
+                            required
+                        >
+                        <i data-lucide="user" class="input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="username">Nome de usuário</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="username"
+                            type="text"
+                            placeholder="exemplo: welington123"
+                            autocomplete="username"
+                            maxlength="30"
+                            pattern="[a-z0-9_]{3,30}"
+                            required
+                        >
+                        <i data-lucide="at-sign" class="input-icon"></i>
+                    </div>
+
+                    <p class="password-hint">
+                        Use letras minúsculas, números e underline. De 3 a 30 caracteres.
+                    </p>
+                </div>
+
+                <div class="field-group">
+                    <label for="email">E-mail</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="seuemail@exemplo.com"
+                            autocomplete="email"
+                            required
+                        >
+                        <i data-lucide="mail" class="input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="password">Senha</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Crie uma senha"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            data-target="password"
+                            aria-label="Mostrar senha"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+
+                    <p class="password-hint">
+                        Mínimo de 8 caracteres.
+                    </p>
+                </div>
+
+                <div class="field-group">
+                    <label for="confirmPassword">Confirmar senha</label>
+
+                    <div class="input-wrap">
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="Digite a senha novamente"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            data-target="confirmPassword"
+                            aria-label="Mostrar confirmação"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="register-button"
+                >
+                    Criar minha conta
+                </button>
+
+                <div id="message" class="message"></div>
+
+            </form>
+
+            <div class="login-link">
+                Já tem uma conta?
+                <a href="./login.html">Entrar</a>
+            </div>
+
+            <div class="form-footer">
+                FaceCrato — Conectando pessoas.
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+lucide.createIcons();
+</script>
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+const form = document.getElementById("registerForm");
+const button = document.getElementById("registerButton");
+const message = document.getElementById("message");
+
+const fullName = document.getElementById("fullName");
+const username = document.getElementById("username");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirmPassword");
+
+// =====================================
+// MOSTRAR / OCULTAR SENHAS
+// =====================================
+
+document.querySelectorAll(".toggle-password").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        const input = document.getElementById(btn.dataset.target);
+        const showing = input.type === "text";
+
+        input.type = showing ? "password" : "text";
+
+        btn.innerHTML = showing
+            ? '<i data-lucide="eye"></i>'
+            : '<i data-lucide="eye-off"></i>';
+
+        lucide.createIcons();
+
+    });
+
+});
+
+// =====================================
+// MENSAGENS
+// =====================================
+
+function showMessage(text, type = "error") {
+
+    message.textContent = text;
+    message.className = "message " + type;
+
+}
+
+function normalizeUsername(value) {
+    return value.trim().toLowerCase();
+}
+
+// =====================================
+// VERIFICAR SESSÃO EXISTENTE
+// =====================================
+
+async function verificarSessao() {
+
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (data.session) {
+        window.location.replace("./feed.html");
+    }
+
+}
+
+verificarSessao();
+
+// =====================================
+// CADASTRO
+// =====================================
+
+form.addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    const nome = fullName.value.trim();
+    const usuario = normalizeUsername(username.value);
+    const emailValor = email.value.trim();
+    const senha = password.value;
+    const confirmacao = confirmPassword.value;
+
+    if (nome.length < 2) {
+        showMessage("Informe seu nome completo.");
+        return;
+    }
+
+    if (!/^[a-z0-9_]{3,30}$/.test(usuario)) {
+        showMessage("Nome de usuário inválido. Use letras minúsculas, números e underline.");
+        return;
+    }
+
+    if (senha.length < 8) {
+        showMessage("Sua senha precisa ter pelo menos 8 caracteres.");
+        return;
+    }
+
+    if (senha !== confirmacao) {
+        showMessage("As senhas não são iguais.");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Criando sua conta...";
+    message.className = "message";
+
+    try {
+
+        const { data, error } = await supabase.auth.signUp({
+
+            email: emailValor,
+            password: senha,
+
+            options: {
+                data: {
+                    full_name: nome,
+                    username: usuario
+                },
+
+                emailRedirectTo: window.location.origin +
+                    window.location.pathname.replace(
+                        /[^/]*$/,
+                        "login.html"
+                    )
+            }
+
+        });
+
+        if (error) throw error;
+
+        if (!data.user) {
+            throw new Error("O Supabase não retornou os dados do usuário.");
+        }
+
+        // Se já existir uma sessão, cadastro foi autenticado.
+        if (data.session) {
+
+            showMessage(
+                "Conta criada! Seu perfil está sendo preparado. Redirecionando...",
+                "success"
+            );
+
+            window.location.replace("./feed.html");
+
+        } else {
+
+            showMessage(
+                "Cadastro realizado! Verifique seu e-mail para confirmar a conta antes de entrar.",
+                "success"
+            );
+
+            form.reset();
+
+        }
+
+    } catch (error) {
+
+        console.error("Erro no cadastro:", error);
+
+        let texto = "Não foi possível criar sua conta.";
+
+        const erro = (error.message || "").toLowerCase();
+
+        if (
+            erro.includes("already registered") ||
+            erro.includes("user already registered")
+        ) {
+            texto = "Este e-mail já está cadastrado.";
+        } else if (erro.includes("username")) {
+            texto = "Não foi possível utilizar esse nome de usuário.";
+        } else if (erro.includes("password")) {
+            texto = "A senha não atende aos requisitos.";
+        } else if (erro.includes("email")) {
+            texto = "Verifique se o e-mail foi digitado corretamente.";
+        } else if (erro.includes("network")) {
+            texto = "Erro de conexão. Verifique sua internet.";
+        } else {
+            texto = error.message || texto;
+        }
+
+        showMessage(texto);
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Criar minha conta";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
