@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#ffffff">
 <title>Notificações | FaceCrato</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -15,94 +14,164 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  background:#080d18;
-  color:#f1f5f9;
-  font-family:Arial,sans-serif;
-}
-.glass{
-  background:rgba(17,24,39,.88);
-  border:1px solid rgba(148,163,184,.12);
+  background:#f8fafc;
+  color:#0f172a;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 .notification{transition:.2s}
-.notification:hover{background:rgba(59,130,246,.07)}
+.notification:hover{background:#f1f5f9}
 .unread{
-  border-left:3px solid #3b82f6;
-  background:rgba(59,130,246,.055);
+  border-left:3px solid #0891b2;
+  background:rgba(8,145,178,0.04);
 }
 .icon-box{
-  width:44px;height:44px;
+  width:40px;height:40px;
   display:flex;align-items:center;justify-content:center;
-  border-radius:14px;flex-shrink:0;
+  border-radius:12px;flex-shrink:0;
 }
 ::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-thumb{background:#334155;border-radius:10px}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
 </style>
 </head>
 
 <body class="min-h-screen">
 
-<header class="sticky top-0 z-40 glass">
-  <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <button onclick="history.back()" class="p-2 rounded-xl hover:bg-slate-800">
-        <i data-lucide="arrow-left"></i>
-      </button>
-      <div>
-        <h1 class="text-xl font-bold">Notificações</h1>
-        <p class="text-xs text-slate-400">Tudo que acontece na sua rede</p>
-      </div>
-    </div>
+<!-- TOPO -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
+        <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">F</div>
+            FaceCrato
+        </div>
 
-    <button onclick="markAllRead()" id="markAllBtn"
-      class="text-xs font-semibold text-blue-400 hover:text-blue-300">
-      Marcar todas como lidas
-    </button>
-  </div>
+        <div class="flex-1 max-w-md relative hidden sm:block">
+            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
+            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+        </div>
+
+        <div class="ml-auto flex items-center gap-2.5">
+            <button class="w-10 h-10 bg-cyan-50 border border-cyan-200 rounded-xl text-cyan-700 flex items-center justify-center shadow-sm" id="notificationsButton" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+            
+            <!-- BOTÃO SANDUÍCHE (Mobile) -->
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+        </div>
+    </div>
 </header>
 
-<main class="max-w-4xl mx-auto px-4 py-6">
+<!-- LAYOUT PRINCIPAL -->
+<main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-7 items-start relative">
 
-<section class="grid grid-cols-3 gap-2 mb-5">
-  <button onclick="setFilter('all')" id="filter-all"
-    class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-blue-400">
-    Todas
-  </button>
-  <button onclick="setFilter('unread')" id="filter-unread"
-    class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-slate-400">
-    Não lidas
-  </button>
-  <button onclick="setFilter('read')" id="filter-read"
-    class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-slate-400">
-    Lidas
-  </button>
-</section>
+    <!-- SIDEBAR ESQUERDA -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+        <div class="flex items-center gap-3.5 pb-5 border-b border-gray-100 mb-4">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
+            <div class="min-w-0">
+                <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
+            </div>
+        </div>
 
-<section class="glass rounded-2xl overflow-hidden">
-  <div class="flex justify-between items-center p-4 border-b border-slate-800">
-    <div>
-      <h2 class="font-bold">Suas atividades</h2>
-      <p class="text-xs text-slate-400" id="counter">Carregando...</p>
-    </div>
-    <button onclick="loadNotifications()" class="p-2 rounded-lg hover:bg-slate-800"
-      title="Atualizar">
-      <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-    </button>
-  </div>
+        <div class="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
+            <strong class="text-slate-800">FACECRATO</strong><br>
+            Conectando pessoas em alto estilo.
+        </div>
+    </aside>
 
-  <div id="notificationList">
-    <div class="p-10 text-center text-slate-400">
-      Carregando notificações...
-    </div>
-  </div>
+    <!-- CONTEÚDO CENTRAL (Notificações) -->
+    <section class="min-w-0">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Notificações</h1>
+                <p class="text-xs text-gray-500 mt-0.5">Tudo que acontece na sua rede</p>
+            </div>
+            <button onclick="markAllRead()" id="markAllBtn"
+                class="text-xs font-bold text-cyan-600 hover:text-cyan-700 bg-cyan-50 border border-cyan-200 px-4 py-2.5 rounded-xl transition shadow-sm">
+                Marcar todas como lidas
+            </button>
+        </div>
 
-  <div id="loadMoreArea" class="hidden p-4 border-t border-slate-800 text-center">
-    <button onclick="loadMore()" class="text-sm text-blue-400 font-semibold">
-      Carregar mais
-    </button>
-  </div>
-</section>
+        <div class="grid grid-cols-3 gap-2 mb-6">
+            <button onclick="setFilter('all')" id="filter-all"
+                class="filter-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-bold text-cyan-700 bg-cyan-50 border-cyan-200">
+                Todas
+            </button>
+            <button onclick="setFilter('unread')" id="filter-unread"
+                class="filter-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-gray-500 hover:text-slate-900">
+                Não lidas
+            </button>
+            <button onclick="setFilter('read')" id="filter-read"
+                class="filter-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-gray-500 hover:text-slate-900">
+                Lidas
+            </button>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="flex justify-between items-center p-5 border-b border-gray-100 bg-gray-50/50">
+                <div>
+                    <h2 class="font-bold text-sm text-slate-900">Suas atividades</h2>
+                    <p class="text-xs text-gray-500 mt-0.5" id="counter">Carregando...</p>
+                </div>
+                <button onclick="loadNotifications()" class="w-9 h-9 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition shadow-sm" title="Atualizar">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div id="notificationList">
+                <div class="p-12 text-center text-gray-400 text-sm">
+                    Carregando notificações...
+                </div>
+            </div>
+
+            <div id="loadMoreArea" class="hidden p-4 border-t border-gray-100 text-center">
+                <button onclick="loadMore()" class="text-xs text-cyan-600 font-bold hover:underline">
+                    Carregar mais
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIDEBAR DIREITA (Navegação & Logout) -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
+        <nav class="space-y-1 mb-5">
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
+        </nav>
+
+        <div class="h-px bg-gray-100 my-4"></div>
+
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sessão</h3>
+        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm transition" id="logoutButton"><i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta</button>
+
+        <div class="h-px bg-gray-100 my-4"></div>
+        <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
+    </aside>
 
 </main>
+
+<!-- MENU MOBILE DESLIZANTE -->
+<div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
+<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
+    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+        <h3 class="text-base font-black text-slate-900">Menu</h3>
+        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="menuCloseBtn"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+
+    <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
+    <nav class="space-y-1.5 mb-6">
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
+    </nav>
+
+    <div class="mt-auto pt-4 border-t border-gray-100">
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm transition" id="logoutButtonMobile"><i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta</button>
+    </div>
+</div>
 
 <script type="module">
 import { supabase } from "./supabase.js";
@@ -112,6 +181,7 @@ const counter = document.getElementById("counter");
 const loadMoreArea = document.getElementById("loadMoreArea");
 
 let currentUser = null;
+let currentProfile = null;
 let notifications = [];
 let filter = "all";
 let page = 0;
@@ -119,15 +189,35 @@ const PAGE_SIZE = 25;
 let channel = null;
 let loading = false;
 
+// Controle do Menu Sanduíche Mobile
+const menuToggleBtn = document.getElementById("menuToggleBtn");
+const menuCloseBtn = document.getElementById("menuCloseBtn");
+const mobileMenuDrawer = document.getElementById("mobileMenuDrawer");
+const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+
+function toggleMobileMenu(open) {
+    if (open) {
+        mobileMenuOverlay.classList.remove("hidden");
+        setTimeout(() => mobileMenuDrawer.classList.remove("translate-x-full"), 10);
+    } else {
+        mobileMenuDrawer.classList.add("translate-x-full");
+        setTimeout(() => mobileMenuOverlay.classList.add("hidden"), 300);
+    }
+}
+
+menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
+menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
+mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
+
 const icons = {
-  friend_request: ["user-plus","bg-blue-500/15 text-blue-400"],
-  friend_accepted: ["users","bg-green-500/15 text-green-400"],
-  friendship_accepted: ["users","bg-green-500/15 text-green-400"],
-  reaction: ["heart","bg-pink-500/15 text-pink-400"],
-  like: ["thumbs-up","bg-pink-500/15 text-pink-400"],
-  comment: ["message-circle","bg-purple-500/15 text-purple-400"],
-  share: ["share-2","bg-cyan-500/15 text-cyan-400"],
-  system: ["bell","bg-amber-500/15 text-amber-400"]
+  friend_request: ["user-plus","bg-cyan-50 text-cyan-700"],
+  friend_accepted: ["users","bg-emerald-50 text-emerald-700"],
+  friendship_accepted: ["users","bg-emerald-50 text-emerald-700"],
+  reaction: ["heart","bg-pink-50 text-pink-700"],
+  like: ["thumbs-up","bg-pink-50 text-pink-700"],
+  comment: ["message-circle","bg-violet-50 text-violet-700"],
+  share: ["share-2","bg-cyan-50 text-cyan-700"],
+  system: ["bell","bg-amber-50 text-amber-700"]
 };
 
 function escapeHTML(value){
@@ -138,6 +228,31 @@ function escapeHTML(value){
     '"':"&quot;",
     "'":"&#039;"
   })[char]);
+}
+
+function initials(name = "F") {
+    return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
+}
+
+function renderAvatar(profile, classes = "") {
+    const name = profile?.full_name || profile?.username || "U";
+    const avatar = profile?.avatar_url;
+
+    if (avatar && /^https?:\/\//i.test(avatar)) {
+        return `
+            <div class="${classes} overflow-hidden">
+                <img src="${escapeHTML(avatar)}"
+                     alt="${escapeHTML(name)}"
+                     class="w-full h-full object-cover">
+            </div>
+        `;
+    }
+
+    return `
+        <div class="${classes}">
+            ${escapeHTML(initials(name))}
+        </div>
+    `;
 }
 
 function getIcon(type){
@@ -193,11 +308,11 @@ function render(){
   if(!filtered.length){
     list.innerHTML = `
       <div class="p-12 text-center">
-        <div class="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto mb-4">
-          <i data-lucide="bell-off" class="w-7 h-7 text-slate-500"></i>
+        <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4 border border-gray-200">
+          <i data-lucide="bell-off" class="w-7 h-7 text-gray-400"></i>
         </div>
-        <h3 class="font-bold mb-1">Nada por aqui</h3>
-        <p class="text-sm text-slate-400">
+        <h3 class="font-bold text-slate-800 mb-1">Nada por aqui</h3>
+        <p class="text-xs text-gray-500">
           ${filter === "unread" ? "Você não tem notificações pendentes." :
           filter === "read" ? "Você ainda não tem notificações lidas." :
           "Suas notificações aparecerão aqui."}
@@ -217,44 +332,44 @@ function render(){
 
     return `
       <article class="notification ${!item.is_read ? "unread" : ""}
-        flex items-start gap-3 p-4 border-b border-slate-800/70">
+        flex items-start gap-3.5 p-4 border-b border-gray-100">
 
         <div class="icon-box ${color}">
           <i data-lucide="${icon}" class="w-5 h-5"></i>
         </div>
 
         <div class="flex-1 min-w-0">
-          <button class="text-left w-full"
+          <button class="text-left w-full cursor-pointer"
             onclick="openNotification('${item.id}')">
 
             <div class="flex items-center gap-2">
-              <strong class="text-sm">
+              <strong class="text-sm text-slate-900 capitalize">
                 ${escapeHTML(item.notification_type.replace(/_/g," "))}
               </strong>
               ${!item.is_read ?
-                '<span class="w-2 h-2 rounded-full bg-blue-500"></span>' : ""}
+                '<span class="w-2 h-2 rounded-full bg-cyan-600"></span>' : ""}
             </div>
 
-            <p class="text-sm text-slate-300 mt-1 break-words">${message}</p>
-            <span class="text-xs text-slate-500 mt-2 block">${date}</span>
+            <p class="text-xs text-slate-700 mt-1 break-words leading-relaxed">${message}</p>
+            <span class="text-[11px] text-gray-400 mt-1.5 block">${date}</span>
           </button>
 
           <div class="flex items-center gap-4 mt-3">
 
             ${!item.is_read ? `
               <button onclick="markRead('${item.id}')"
-                class="text-xs text-blue-400">
+                class="text-xs font-semibold text-cyan-600 hover:underline">
                 Marcar como lida
               </button>` : ""}
 
             ${target ? `
               <button onclick="goToNotification('${item.id}')"
-                class="text-xs text-slate-400 hover:text-white">
+                class="text-xs font-semibold text-gray-500 hover:text-slate-900">
                 Ver
               </button>` : ""}
 
             <button onclick="deleteNotification('${item.id}')"
-              class="text-xs text-slate-500 hover:text-red-400">
+              class="text-xs font-semibold text-gray-400 hover:text-red-600">
               Excluir
             </button>
 
@@ -293,9 +408,9 @@ async function loadNotifications(reset = true){
   if(error){
     console.error(error);
     list.innerHTML = `
-      <div class="p-8 text-center text-red-400">
+      <div class="p-8 text-center text-red-500 text-xs">
         Não foi possível carregar as notificações.
-        <p class="text-xs text-slate-500 mt-2">
+        <p class="text-[11px] text-gray-400 mt-2">
           ${escapeHTML(error.message)}
         </p>
       </div>`;
@@ -319,13 +434,13 @@ function setFilter(value){
   filter = value;
 
   document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.classList.remove("text-blue-400","border-blue-500");
-    btn.classList.add("text-slate-400");
+    btn.classList.remove("text-cyan-700","bg-cyan-50","border-cyan-200","font-bold");
+    btn.classList.add("text-gray-500","font-semibold");
   });
 
   const active = document.getElementById("filter-" + value);
-  active.classList.remove("text-slate-400");
-  active.classList.add("text-blue-400","border-blue-500");
+  active.classList.remove("text-gray-500","font-semibold");
+  active.classList.add("text-cyan-700","bg-cyan-50","border-cyan-200","font-bold");
 
   render();
 }
@@ -374,8 +489,6 @@ async function deleteNotification(id){
     showCancelButton:true,
     confirmButtonText:"Excluir",
     cancelButtonText:"Cancelar",
-    background:"#111827",
-    color:"#fff",
     confirmButtonColor:"#dc2626"
   });
 
@@ -433,15 +546,43 @@ async function init(){
   const {data,error} = await supabase.auth.getSession();
 
   if(error || !data.session){
-    window.location.href = "./login.html";
+    window.location.replace("./login.html");
     return;
   }
 
   currentUser = data.session.user;
 
+  const { data: profile } = await supabase.from("profiles").select("id,username,full_name,avatar_url").eq("id", currentUser.id).maybeSingle();
+  currentProfile = profile || { id: currentUser.id, username: currentUser.email?.split("@")[0] || "usuario", full_name: currentUser.email?.split("@")[0] || "Usuário" };
+
+  document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
+  document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
+  
+  document.getElementById("sideAvatar").innerHTML =
+      renderAvatar(currentProfile, "w-full h-full rounded-full flex items-center justify-center");
+
   await loadNotifications();
   subscribeNotifications();
 }
+
+// Navegação global dos botões
+document.querySelectorAll("[data-nav]").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
+        if (destinations[btn.dataset.nav]) window.location.href = destinations[btn.dataset.nav];
+    });
+});
+
+document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
+document.getElementById("notificationsButton").addEventListener("click", () => window.location.href = "./notificacoes.html");
+
+const handleLogout = async () => {
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
+    if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
+};
+
+document.getElementById("logoutButton").addEventListener("click", handleLogout);
+document.getElementById("logoutButtonMobile").addEventListener("click", handleLogout);
 
 window.setFilter = setFilter;
 window.loadNotifications = loadNotifications;
@@ -453,15 +594,6 @@ window.openNotification = openNotification;
 window.goToNotification = goToNotification;
 
 init();
-</script>
-
-<script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./service-worker.js")
-      .catch(error=>console.error("PWA:",error));
-  });
-}
 </script>
 
 </body>
