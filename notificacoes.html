@@ -23,12 +23,8 @@ body{
   background:rgba(17,24,39,.88);
   border:1px solid rgba(148,163,184,.12);
 }
-.notification{
-  transition:.2s;
-}
-.notification:hover{
-  background:rgba(59,130,246,.07);
-}
+.notification{transition:.2s}
+.notification:hover{background:rgba(59,130,246,.07)}
 .unread{
   border-left:3px solid #3b82f6;
   background:rgba(59,130,246,.055);
@@ -66,46 +62,45 @@ body{
 
 <main class="max-w-4xl mx-auto px-4 py-6">
 
-  <section class="grid grid-cols-3 gap-2 mb-5">
-    <button onclick="setFilter('all')" id="filter-all"
-      class="filter-btn rounded-xl p-3 glass text-sm font-semibold">
-      Todas
-    </button>
-    <button onclick="setFilter('unread')" id="filter-unread"
-      class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-slate-400">
-      Não lidas
-    </button>
-    <button onclick="setFilter('read')" id="filter-read"
-      class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-slate-400">
-      Lidas
-    </button>
-  </section>
+<section class="grid grid-cols-3 gap-2 mb-5">
+  <button onclick="setFilter('all')" id="filter-all"
+    class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-blue-400">
+    Todas
+  </button>
+  <button onclick="setFilter('unread')" id="filter-unread"
+    class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-slate-400">
+    Não lidas
+  </button>
+  <button onclick="setFilter('read')" id="filter-read"
+    class="filter-btn rounded-xl p-3 glass text-sm font-semibold text-slate-400">
+    Lidas
+  </button>
+</section>
 
-  <section class="glass rounded-2xl overflow-hidden">
-    <div class="flex justify-between items-center p-4 border-b border-slate-800">
-      <div>
-        <h2 class="font-bold">Suas atividades</h2>
-        <p class="text-xs text-slate-400" id="counter">Carregando...</p>
-      </div>
-      <button onclick="loadNotifications()" class="p-2 rounded-lg hover:bg-slate-800"
-        title="Atualizar">
-        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-      </button>
+<section class="glass rounded-2xl overflow-hidden">
+  <div class="flex justify-between items-center p-4 border-b border-slate-800">
+    <div>
+      <h2 class="font-bold">Suas atividades</h2>
+      <p class="text-xs text-slate-400" id="counter">Carregando...</p>
     </div>
+    <button onclick="loadNotifications()" class="p-2 rounded-lg hover:bg-slate-800"
+      title="Atualizar">
+      <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+    </button>
+  </div>
 
-    <div id="notificationList">
-      <div class="p-10 text-center text-slate-400">
-        <i data-lucide="loader-circle" class="animate-spin mx-auto mb-3"></i>
-        Carregando notificações...
-      </div>
+  <div id="notificationList">
+    <div class="p-10 text-center text-slate-400">
+      Carregando notificações...
     </div>
+  </div>
 
-    <div id="loadMoreArea" class="hidden p-4 border-t border-slate-800 text-center">
-      <button onclick="loadMore()" class="text-sm text-blue-400 font-semibold">
-        Carregar mais
-      </button>
-    </div>
-  </section>
+  <div id="loadMoreArea" class="hidden p-4 border-t border-slate-800 text-center">
+    <button onclick="loadMore()" class="text-sm text-blue-400 font-semibold">
+      Carregar mais
+    </button>
+  </div>
+</section>
 
 </main>
 
@@ -122,9 +117,11 @@ let filter = "all";
 let page = 0;
 const PAGE_SIZE = 25;
 let channel = null;
+let loading = false;
 
 const icons = {
   friend_request: ["user-plus","bg-blue-500/15 text-blue-400"],
+  friend_accepted: ["users","bg-green-500/15 text-green-400"],
   friendship_accepted: ["users","bg-green-500/15 text-green-400"],
   reaction: ["heart","bg-pink-500/15 text-pink-400"],
   like: ["thumbs-up","bg-pink-500/15 text-pink-400"],
@@ -150,6 +147,7 @@ function getIcon(type){
 function formatDate(date){
   const d = new Date(date);
   if(isNaN(d)) return "";
+
   return new Intl.DateTimeFormat("pt-BR",{
     day:"2-digit",
     month:"short",
@@ -159,10 +157,18 @@ function formatDate(date){
 }
 
 function getTarget(item){
-  const data = item.data || {};
-  return data.url || data.link || data.post_url ||
-    (data.post_id ? `./feed.html?post=${encodeURIComponent(data.post_id)}` : null) ||
-    (data.profile_id ? `./perfil.html?id=${encodeURIComponent(data.profile_id)}` : null);
+  if(item.post_id){
+    return `./feed.html?post=${encodeURIComponent(item.post_id)}`;
+  }
+
+  if(item.actor_id && (
+    item.notification_type === "friend_request" ||
+    item.notification_type === "friend_accepted"
+  )){
+    return `./perfil.html?id=${encodeURIComponent(item.actor_id)}`;
+  }
+
+  return null;
 }
 
 function render(){
@@ -170,11 +176,14 @@ function render(){
 
   if(filter === "unread"){
     filtered = notifications.filter(n => !n.is_read);
-  } else if(filter === "read"){
+  }
+
+  if(filter === "read"){
     filtered = notifications.filter(n => n.is_read);
   }
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
+
   counter.textContent =
     `${notifications.length} notificações · ${unreadCount} não lidas`;
 
@@ -194,16 +203,16 @@ function render(){
           "Suas notificações aparecerão aqui."}
         </p>
       </div>`;
+
     loadMoreArea.classList.add("hidden");
     lucide.createIcons();
     return;
   }
 
   list.innerHTML = filtered.map(item => {
-    const [icon, color] = getIcon(item.type);
+    const [icon,color] = getIcon(item.notification_type);
     const target = getTarget(item);
-    const title = escapeHTML(item.title || "Nova notificação");
-    const message = escapeHTML(item.message || "");
+    const message = escapeHTML(item.message || "Nova atividade");
     const date = formatDate(item.created_at);
 
     return `
@@ -215,69 +224,80 @@ function render(){
         </div>
 
         <div class="flex-1 min-w-0">
-          <button class="text-left w-full" onclick="openNotification('${item.id}')">
+          <button class="text-left w-full"
+            onclick="openNotification('${item.id}')">
+
             <div class="flex items-center gap-2">
-              <strong class="text-sm">${title}</strong>
-              ${!item.is_read ? '<span class="w-2 h-2 rounded-full bg-blue-500"></span>' : ""}
+              <strong class="text-sm">
+                ${escapeHTML(item.notification_type.replace(/_/g," "))}
+              </strong>
+              ${!item.is_read ?
+                '<span class="w-2 h-2 rounded-full bg-blue-500"></span>' : ""}
             </div>
+
             <p class="text-sm text-slate-300 mt-1 break-words">${message}</p>
             <span class="text-xs text-slate-500 mt-2 block">${date}</span>
           </button>
 
           <div class="flex items-center gap-4 mt-3">
+
             ${!item.is_read ? `
               <button onclick="markRead('${item.id}')"
-                class="text-xs text-blue-400 hover:text-blue-300">
+                class="text-xs text-blue-400">
                 Marcar como lida
               </button>` : ""}
 
             ${target ? `
               <button onclick="goToNotification('${item.id}')"
                 class="text-xs text-slate-400 hover:text-white">
-                Ver publicação
+                Ver
               </button>` : ""}
 
             <button onclick="deleteNotification('${item.id}')"
               class="text-xs text-slate-500 hover:text-red-400">
               Excluir
             </button>
+
           </div>
         </div>
       </article>`;
   }).join("");
 
-  loadMoreArea.classList.toggle("hidden", notifications.length < PAGE_SIZE * (page + 1));
+  loadMoreArea.classList.toggle(
+    "hidden",
+    notifications.length < PAGE_SIZE * (page + 1)
+  );
+
   lucide.createIcons();
 }
 
 async function loadNotifications(reset = true){
+  if(loading || !currentUser) return;
+
+  loading = true;
+
   if(reset) page = 0;
-
-  if(!currentUser) return;
-
-  list.innerHTML = `
-    <div class="p-10 text-center text-slate-400">
-      <i data-lucide="loader-circle" class="animate-spin mx-auto mb-3"></i>
-      Carregando...
-    </div>`;
-  lucide.createIcons();
 
   const from = page * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  const {data, error} = await supabase
+  const {data,error} = await supabase
     .from("notifications")
     .select("*")
-    .eq("user_id", currentUser.id)
-    .order("created_at", {ascending:false})
+    .eq("recipient_id",currentUser.id)
+    .order("created_at",{ascending:false})
     .range(from,to);
+
+  loading = false;
 
   if(error){
     console.error(error);
     list.innerHTML = `
       <div class="p-8 text-center text-red-400">
         Não foi possível carregar as notificações.
-        <p class="text-xs text-slate-500 mt-2">${escapeHTML(error.message)}</p>
+        <p class="text-xs text-slate-500 mt-2">
+          ${escapeHTML(error.message)}
+        </p>
       </div>`;
     return;
   }
@@ -289,25 +309,10 @@ async function loadNotifications(reset = true){
 }
 
 async function loadMore(){
+  if(loading) return;
+
   page++;
-  const from = page * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
-
-  const {data,error} = await supabase
-    .from("notifications")
-    .select("*")
-    .eq("user_id",currentUser.id)
-    .order("created_at",{ascending:false})
-    .range(from,to);
-
-  if(error){
-    page--;
-    Swal.fire("Erro",error.message,"error");
-    return;
-  }
-
-  notifications.push(...(data || []));
-  render();
+  await loadNotifications(false);
 }
 
 function setFilter(value){
@@ -330,11 +335,11 @@ async function markRead(id){
     .from("notifications")
     .update({is_read:true})
     .eq("id",id)
-    .eq("user_id",currentUser.id);
+    .eq("recipient_id",currentUser.id);
 
   if(error){
     Swal.fire("Erro",error.message,"error");
-    return;
+    return false;
   }
 
   notifications = notifications.map(n =>
@@ -342,13 +347,14 @@ async function markRead(id){
   );
 
   render();
+  return true;
 }
 
 async function markAllRead(){
   const {error} = await supabase
     .from("notifications")
     .update({is_read:true})
-    .eq("user_id",currentUser.id)
+    .eq("recipient_id",currentUser.id)
     .eq("is_read",false);
 
   if(error){
@@ -379,7 +385,7 @@ async function deleteNotification(id){
     .from("notifications")
     .delete()
     .eq("id",id)
-    .eq("user_id",currentUser.id);
+    .eq("recipient_id",currentUser.id);
 
   if(error){
     Swal.fire("Erro",error.message,"error");
@@ -394,7 +400,10 @@ async function openNotification(id){
   const item = notifications.find(n => n.id === id);
   if(!item) return;
 
-  if(!item.is_read) await markRead(id);
+  if(!item.is_read){
+    const success = await markRead(id);
+    if(!success) return;
+  }
 
   const target = getTarget(item);
   if(target) window.location.href = target;
@@ -413,7 +422,7 @@ function subscribeNotifications(){
       event:"*",
       schema:"public",
       table:"notifications",
-      filter:"user_id=eq." + currentUser.id
+      filter:"recipient_id=eq." + currentUser.id
     },async () => {
       await loadNotifications();
     })
