@@ -153,6 +153,61 @@
 
 </main>
 
+<!-- MODAL DE MÍDIA ESTILO REDE SOCIAL (IMERSIVO) -->
+<div id="mediaModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
+    <div class="bg-white w-full max-w-6xl h-[92vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
+        
+        <!-- Botão Fechar Modal -->
+        <button id="closeMediaModal" class="absolute top-3 right-3 z-30 w-10 h-10 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <!-- LADO ESQUERDO: MÍDIA COM SUPORTE A NAVEGAÇÃO LATERAL (CASO HAJA MAIS DE UMA) -->
+        <div class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
+            <div id="modalMediaContainer" class="w-full h-full flex items-center justify-center relative">
+                <!-- Injetado dinamicamente via JS -->
+            </div>
+            
+            <!-- Botões Laterais de Navegação de Mídia -->
+            <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <button id="nextMediaBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden">
+                <i data-lucide="chevron-right" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- LADO DIREITO: DETALHES, AUTOR E COMENTÁRIOS -->
+        <div class="w-full lg:w-[420px] bg-white flex flex-col h-[42vh] lg:h-full border-t lg:border-t-0 lg:border-l border-gray-200">
+            
+            <!-- Cabeçalho do Post no Modal -->
+            <div class="p-4 border-b border-gray-100 flex items-center gap-3" id="modalAuthorHeader">
+                <!-- Injetado via JS -->
+            </div>
+
+            <!-- Corpo/Legenda do Post -->
+            <div class="p-4 border-b border-gray-100 overflow-y-auto max-h-32 text-xs text-slate-800" id="modalPostContent">
+                <!-- Injetado via JS -->
+            </div>
+
+            <!-- Lista de Comentários -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 divide-y divide-gray-50" id="modalCommentsList">
+                <!-- Injetado via JS -->
+            </div>
+
+            <!-- Formulário para Comentar no Modal -->
+            <div class="p-3 border-t border-gray-100 bg-gray-50/50">
+                <form id="modalCommentForm" class="flex gap-2">
+                    <input type="text" id="modalCommentInput" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
+                    <button type="submit" class="bg-cyan-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-cyan-700 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
 <!-- MENU MOBILE DESLIZANTE -->
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
 <div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
@@ -215,6 +270,20 @@ const notifDropdown = document.getElementById("notifDropdown");
 const notifDropdownList = document.getElementById("notifDropdownList");
 const notifBadge = document.getElementById("notifBadge");
 
+// Elementos do Modal de Mídia
+const mediaModal = document.getElementById("mediaModal");
+const closeMediaModal = document.getElementById("closeMediaModal");
+const modalMediaContainer = document.getElementById("modalMediaContainer");
+const modalAuthorHeader = document.getElementById("modalAuthorHeader");
+const modalPostContent = document.getElementById("modalPostContent");
+const modalCommentsList = document.getElementById("modalCommentsList");
+const modalCommentForm = document.getElementById("modalCommentForm");
+const modalCommentInput = document.getElementById("modalCommentInput");
+const prevMediaBtn = document.getElementById("prevMediaBtn");
+const nextMediaBtn = document.getElementById("nextMediaBtn");
+
+let activeModalPost = null;
+let activeMediaIndex = 0;
 let notifsChannel = null;
 
 function toggleMobileMenu(open) {
@@ -249,6 +318,7 @@ let currentUser = null;
 let currentProfile = null;
 let currentFeed = "discover";
 let loadingFeed = false;
+let globalPostsCache = [];
 
 const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
 
@@ -467,6 +537,7 @@ async function loadFeed() {
             return { ...post, author: profileMap[post.user_id], media: signedMedia, reactions: reactionMap[post.id] || [], comments: commentsMap[post.id] || [], saved: saved.has(post.id) };
         }));
 
+        globalPostsCache = prepared;
         window.__faceCratoProfiles = profileMap;
         renderPosts(prepared);
     } catch (error) {
@@ -487,33 +558,31 @@ function renderPosts(posts) {
             post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
         ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
 
-        const mediaHTML = post.media.map(m => {
+        const mediaHTML = post.media.map((m, index) => {
             if (!m.signedUrl) return "";
-            if (m.media_type === "video") return `<video class="w-full max-h-[500px] object-cover rounded-xl bg-black mb-4 border border-gray-200" controls preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>`;
-            return `<img class="w-full max-h-[500px] object-cover rounded-xl bg-gray-100 mb-4 border border-gray-200" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">`;
+            if (m.media_type === "video") return `
+                <div class="relative w-full bg-black rounded-2xl overflow-hidden mb-4 border border-gray-200 shadow-inner group cursor-pointer" onclick="openMediaModal('${post.id}', ${index})">
+                    <video class="w-full max-h-[520px] object-contain mx-auto pointer-events-none" preload="metadata">
+                        <source src="${escapeHTML(m.signedUrl)}">
+                    </video>
+                    <div class="absolute inset-0 bg-black/20 hover:bg-black/0 transition flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full bg-black/60 text-white flex items-center justify-center shadow-lg"><i data-lucide="play" class="w-6 h-6 ml-0.5"></i></div>
+                    </div>
+                </div>`;
+            return `
+                <div class="overflow-hidden rounded-2xl mb-4 border border-gray-200 cursor-pointer group" onclick="openMediaModal('${post.id}', ${index})">
+                    <img class="w-full max-h-[520px] object-cover bg-gray-100 group-hover:scale-[1.01] transition duration-300" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">
+                </div>`;
         }).join("");
 
         const commentsHTML = post.comments.map(c => {
-            const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || {
-                full_name: "Usuário",
-                username: "usuario"
-            };
-
+            const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
             return `
                 <div class="flex gap-3 my-3">
-                    ${renderAvatar(
-                        commentAuthor,
-                        "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0 overflow-hidden"
-                    )}
-
+                    ${renderAvatar(commentAuthor, "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0 overflow-hidden")}
                     <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
-                        <strong class="block text-cyan-700 font-bold mb-1">
-                            ${escapeHTML(commentAuthor.full_name || "Usuário")}
-                        </strong>
-
-                        <p class="text-slate-800 leading-relaxed">
-                            ${formatRichText(c.content)}
-                        </p>
+                        <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                        <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
                     </div>
                 </div>
             `;
@@ -577,6 +646,139 @@ function renderPosts(posts) {
     }).join("");
     lucide.createIcons();
 }
+
+/* ==========================================
+   FUNÇÕES DO MODAL DE MÍDIA (FOTO/VÍDEO)
+   ========================================== */
+
+window.openMediaModal = function(postId, mediaIndex = 0) {
+    const post = globalPostsCache.find(p => p.id === postId);
+    if (!post || !post.media || post.media.length === 0) return;
+
+    activeModalPost = post;
+    activeMediaIndex = mediaIndex;
+
+    updateModalContent();
+    mediaModal.classList.remove("hidden");
+    mediaModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+}
+
+function updateModalContent() {
+    if (!activeModalPost) return;
+    const media = activeModalPost.media[activeMediaIndex];
+    const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
+
+    // Renderizar a mídia atual (Foto ou Vídeo com controles completos)
+    if (media.media_type === "video") {
+        modalMediaContainer.innerHTML = `
+            <video class="max-w-full max-h-full object-contain mx-auto" controls autoplay controlsList="nodownload">
+                <source src="${escapeHTML(media.signedUrl)}">
+                Seu navegador não suporta vídeos.
+            </video>`;
+    } else {
+        modalMediaContainer.innerHTML = `
+            <img class="max-w-full max-h-full object-contain mx-auto select-none" src="${escapeHTML(media.signedUrl)}" alt="Mídia ampliada">`;
+    }
+
+    // Exibir ou ocultar botões laterais caso haja mais de uma mídia no post
+    if (activeModalPost.media.length > 1) {
+        prevMediaBtn.classList.toggle("hidden", activeMediaIndex === 0);
+        nextMediaBtn.classList.toggle("hidden", activeMediaIndex === activeModalPost.media.length - 1);
+    } else {
+        prevMediaBtn.classList.add("hidden");
+        nextMediaBtn.classList.add("hidden");
+    }
+
+    // Autor do post no topo do modal
+    modalAuthorHeader.innerHTML = `
+        ${renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
+        <div class="flex-1 min-w-0">
+            <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+            <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(activeModalPost.created_at))}</small>
+        </div>
+    `;
+
+    // Legenda do post
+    modalPostContent.innerHTML = activeModalPost.content ? `<p class="text-slate-800 leading-relaxed whitespace-pre-wrap">${formatRichText(activeModalPost.content)}</p>` : `<span class="text-gray-400 italic">Sem legenda.</span>`;
+
+    renderModalComments();
+    lucide.createIcons();
+}
+
+function renderModalComments() {
+    if (!activeModalPost) return;
+    const comments = activeModalPost.comments || [];
+
+    if (comments.length === 0) {
+        modalCommentsList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhum comentário ainda. Seja o primeiro a comentar!</div>`;
+        return;
+    }
+
+    modalCommentsList.innerHTML = comments.map(c => {
+        const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
+        return `
+            <div class="flex gap-3 py-2">
+                ${renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0 overflow-hidden")}
+                <div class="flex-1 bg-gray-50 border border-gray-100 p-3 rounded-2xl text-xs">
+                    <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                    <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+// Navegação entre mídias do mesmo post
+prevMediaBtn.addEventListener("click", () => {
+    if (activeMediaIndex > 0) {
+        activeMediaIndex--;
+        updateModalContent();
+    }
+});
+
+nextMediaBtn.addEventListener("click", () => {
+    if (activeModalPost && activeMediaIndex < activeModalPost.media.length - 1) {
+        activeMediaIndex++;
+        updateModalContent();
+    }
+});
+
+// Fechar Modal
+closeMediaModal.addEventListener("click", closeModal);
+mediaModal.addEventListener("click", (e) => {
+    if (e.target === mediaModal) closeModal();
+});
+
+function closeModal() {
+    mediaModal.classList.add("hidden");
+    mediaModal.classList.remove("flex");
+    document.body.style.overflow = "auto";
+    modalMediaContainer.innerHTML = ""; // Para o vídeo parar de tocar ao fechar
+    activeModalPost = null;
+}
+
+// Enviar comentário direto pelo modal
+modalCommentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!activeModalPost) return;
+
+    const content = modalCommentInput.value.trim();
+    if (!content) return;
+
+    const { data, error } = await supabase.from("comments").insert({
+        post_id: activeModalPost.id,
+        user_id: currentUser.id,
+        content
+    }).select("id, post_id, user_id, content, created_at").single();
+
+    if (!error && data) {
+        activeModalPost.comments.push(data);
+        modalCommentInput.value = "";
+        renderModalComments();
+        await loadFeed(); // Atualiza feed de fundo também
+    }
+});
 
 mediaInput.addEventListener("change", () => {
     const file = mediaInput.files[0];
