@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -117,6 +116,7 @@ button{cursor:pointer}
     color:#cbd5e1;
     display:grid;
     place-items:center;
+    transition:.2s;
 }
 
 .icon-btn:hover,.nav-btn:hover{
@@ -136,12 +136,26 @@ button{cursor:pointer}
     font-weight:900;
     overflow:hidden;
     flex-shrink:0;
+    position:relative;
 }
 
 .avatar img{
     width:100%;
     height:100%;
     object-fit:cover;
+}
+
+/* Status Online no Avatar */
+.avatar.online::after{
+    content:"";
+    position:absolute;
+    bottom:2px;
+    right:2px;
+    width:10px;
+    height:10px;
+    background:#22c55e;
+    border:2px solid var(--panel);
+    border-radius:50%;
 }
 
 .layout{
@@ -198,6 +212,7 @@ button{cursor:pointer}
     text-align:left;
     margin:3px 0;
     font-size:14px;
+    transition:.15s;
 }
 
 .nav-btn.active{
@@ -247,6 +262,67 @@ button{cursor:pointer}
     height:39px;
     display:grid;
     place-items:center;
+    transition:.2s;
+}
+
+.refresh-btn:hover{background:#1e3150}
+
+/* STORIES CARROUSEL */
+.stories-container{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding:4px 2px 16px;
+    margin-bottom:16px;
+    scrollbar-width:none;
+}
+.stories-container::-webkit-scrollbar{display:none;}
+
+.story-card{
+    min-width:76px;
+    height:115px;
+    border-radius:14px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 6px;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:.2s;
+}
+.story-card:hover{transform:translateY(-2px);border-color:#3b82f6;}
+.story-ring{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    padding:2px;
+    background:linear-gradient(135deg,#2563eb,#ec4899);
+    display:grid;
+    place-items:center;
+}
+.story-avatar{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:#131f32;
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+    font-size:12px;
+    font-weight:bold;
+    color:white;
+}
+.story-avatar img{width:100%;height:100%;object-fit:cover;}
+.story-card span{
+    font-size:11px;
+    color:#cbd5e1;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    max-width:64px;
 }
 
 .tabs{
@@ -268,6 +344,7 @@ button{cursor:pointer}
     color:var(--muted);
     font-size:13px;
     font-weight:750;
+    transition:.15s;
 }
 
 .tab.active{
@@ -297,6 +374,7 @@ button{cursor:pointer}
     padding:13px;
     outline:none;
     font-size:14px;
+    transition:.2s;
 }
 
 .composer textarea:focus{
@@ -325,10 +403,10 @@ button{cursor:pointer}
     padding:9px 11px;
     color:#cbd5e1;
     font-size:12px;
+    transition:.15s;
 }
 
 .option-btn svg{width:16px}
-
 .option-btn:hover{background:#1e3150}
 
 .composer select{
@@ -340,6 +418,7 @@ button{cursor:pointer}
     padding:9px;
     font-size:12px;
     max-width:145px;
+    outline:none;
 }
 
 .publish-btn{
@@ -350,8 +429,9 @@ button{cursor:pointer}
     padding:10px 17px;
     font-size:12px;
     font-weight:850;
+    transition:.2s;
 }
-
+.publish-btn:hover{filter:brightness(1.1)}
 .publish-btn:disabled{
     opacity:.5;
     cursor:wait;
@@ -397,8 +477,10 @@ button{cursor:pointer}
     color:var(--muted);
     border:0;
     padding:7px;
+    border-radius:8px;
+    transition:.15s;
 }
-
+.post-menu:hover{background:#1b2a40;color:white;}
 .post-menu svg{width:18px}
 
 .post-content{
@@ -409,6 +491,12 @@ button{cursor:pointer}
     margin:16px 0;
     color:#e2e8f0;
 }
+
+/* PARSER STYLES */
+.post-content .hashtag{color:#60a5fa;font-weight:600;text-decoration:none;}
+.post-content .hashtag:hover{text-decoration:underline;}
+.post-content .mention{color:#38bdf8;font-weight:600;background:#0369a122;padding:2px 6px;border-radius:6px;}
+.post-content .post-link{color:#93c5fd;text-decoration:underline;}
 
 .post-media{
     width:100%;
@@ -433,6 +521,7 @@ button{cursor:pointer}
     grid-template-columns:repeat(3,1fr);
     gap:6px;
     padding-top:9px;
+    position:relative;
 }
 
 .action-btn{
@@ -446,18 +535,47 @@ button{cursor:pointer}
     padding:10px 4px;
     border-radius:9px;
     font-size:12px;
+    transition:.15s;
 }
 
 .action-btn svg{width:17px}
-
-.action-btn:hover{background:#1b2a40}
+.action-btn:hover{background:#1b2a40;color:#f1f5f9;}
 
 .action-btn.reacted{
     color:#60a5fa;
     font-weight:800;
 }
-
 .action-btn.saved{color:#c4b5fd}
+
+/* REACTION POPUP (ESTILO FACEBOOK) */
+.reaction-popup{
+    position:absolute;
+    bottom:48px;
+    left:0;
+    background:#17243a;
+    border:1px solid var(--border);
+    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    border-radius:30px;
+    padding:6px 10px;
+    display:flex;
+    gap:8px;
+    z-index:20;
+    animation: popUp .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popUp {
+    from { transform: scale(0.6) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.react-emoji-btn{
+    background:none;
+    border:0;
+    font-size:22px;
+    padding:4px;
+    border-radius:50%;
+    cursor:pointer;
+    transition:transform .15s;
+}
+.react-emoji-btn:hover{transform:scale(1.3);background:#263d61;}
 
 .comments-area{
     display:none;
@@ -465,7 +583,6 @@ button{cursor:pointer}
     margin-top:10px;
     padding-top:12px;
 }
-
 .comments-area.open{display:block}
 
 .comment-item{
@@ -479,12 +596,14 @@ button{cursor:pointer}
     padding:9px 12px;
     border-radius:12px;
     min-width:0;
+    flex:1;
 }
 
 .comment-bubble strong{
     font-size:11px;
     display:block;
     margin-bottom:4px;
+    color:#93c5fd;
 }
 
 .comment-bubble p{
@@ -519,8 +638,9 @@ button{cursor:pointer}
     border-radius:10px;
     padding:0 13px;
     color:white;
+    transition:.15s;
 }
-
+.comment-form button:hover{background:#1d4ed8;}
 .comment-form button svg{width:17px}
 
 .right-panel{
@@ -572,24 +692,24 @@ button{cursor:pointer}
     line-height:1.6;
 }
 
-.loading{
-    padding:30px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
+/* SKELETON LOADING (SHIMMER) */
+.skeleton-post {
+    padding: 17px;
+    margin-bottom: 15px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 17px;
 }
-
-.spinner{
-    width:25px;
-    height:25px;
-    border:3px solid #26364f;
-    border-top-color:#3b82f6;
-    border-radius:50%;
-    animation:spin .8s linear infinite;
-    margin:0 auto 12px;
+.skeleton-line {
+    background: linear-gradient(90deg, #17243a 25%, #22324c 50%, #17243a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 6px;
 }
-
-@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
 
 .mobile-nav{display:none}
 
@@ -685,7 +805,7 @@ button{cursor:pointer}
     <aside class="sidebar panel">
 
         <div class="profile-mini">
-            <div class="avatar" id="sideAvatar">F</div>
+            <div class="avatar online" id="sideAvatar">F</div>
             <div>
                 <strong id="sideName">Carregando...</strong>
                 <small id="sideUsername">@...</small>
@@ -733,6 +853,22 @@ button{cursor:pointer}
             </button>
         </div>
 
+        <!-- STORIES -->
+        <div class="stories-container" id="storiesContainer">
+            <div class="story-card" onclick="showError('Recurso de stories em breve!')">
+                <div class="story-ring">
+                    <div class="story-avatar" id="storyUserAvatar">+</div>
+                </div>
+                <span>Seu Story</span>
+            </div>
+            <div class="story-card" onclick="showError('Nenhum outro story ativo.')">
+                <div class="story-ring">
+                    <div class="story-avatar" style="background:#2563eb">FC</div>
+                </div>
+                <span>FaceCrato</span>
+            </div>
+        </div>
+
         <div class="tabs">
             <button class="tab active" data-feed="discover">
                 <i data-lucide="compass" style="width:15px;vertical-align:middle"></i>
@@ -754,7 +890,7 @@ button{cursor:pointer}
                 <textarea
                     id="postContent"
                     maxlength="5000"
-                    placeholder="Compartilhe alguma coisa..."
+                    placeholder="O que você está pensando? Use #hashtags..."
                 ></textarea>
             </div>
 
@@ -789,12 +925,15 @@ button{cursor:pointer}
 
         <!-- PUBLICAÇÕES -->
         <div id="postsContainer">
-
-            <div class="panel loading">
-                <div class="spinner"></div>
-                Carregando publicações...
+            <!-- Skeleton Inicial -->
+            <div class="skeleton-post">
+                <div style="display:flex;gap:11px;align-items:center;margin-bottom:14px;">
+                    <div class="skeleton-line" style="width:40px;height:40px;border-radius:50%;"></div>
+                    <div style="flex:1;"><div class="skeleton-line" style="width:120px;height:14px;margin-bottom:6px;"></div><div class="skeleton-line" style="width:80px;height:10px;"></div></div>
+                </div>
+                <div class="skeleton-line" style="width:100%;height:16px;margin-bottom:8px;"></div>
+                <div class="skeleton-line" style="width:70%;height:16px;"></div>
             </div>
-
         </div>
 
     </section>
@@ -854,10 +993,6 @@ button{cursor:pointer}
 
 import { supabase } from "./supabase.js";
 
-// ==========================================
-// ELEMENTOS
-// ==========================================
-
 const postsContainer = document.getElementById("postsContainer");
 const postContent = document.getElementById("postContent");
 const visibility = document.getElementById("visibility");
@@ -870,15 +1005,6 @@ let currentProfile = null;
 let currentFeed = "discover";
 let loadingFeed = false;
 
-const reactionTypes = [
-    "like",
-    "love",
-    "haha",
-    "wow",
-    "sad",
-    "angry"
-];
-
 const reactionIcons = {
     like: "👍",
     love: "❤️",
@@ -888,10 +1014,6 @@ const reactionIcons = {
     angry: "😡"
 };
 
-// ==========================================
-// UTILITÁRIOS
-// ==========================================
-
 function escapeHTML(value = "") {
     return String(value).replace(/[&<>"']/g, char => ({
         "&": "&amp;",
@@ -900,6 +1022,20 @@ function escapeHTML(value = "") {
         '"': "&quot;",
         "'": "&#039;"
     })[char]);
+}
+
+// FORMATAR TEXTO COM HASHTAGS, MENÇÕES E LINKS CLICÁVEIS
+function formatRichText(text = "") {
+    let safe = escapeHTML(text);
+
+    // Links
+    safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="post-link">$1</a>');
+    // Hashtags
+    safe = safe.replace(/#([a-zA-Z0-9_á-úÁ-Ú]+)/g, '<span class="hashtag">#$1</span>');
+    // Menções
+    safe = safe.replace(/@([a-zA-Z0-9_]+)/g, '<span class="mention">@$1</span>');
+
+    return safe;
 }
 
 function initials(name = "F") {
@@ -943,25 +1079,15 @@ function showSuccess(text) {
 }
 
 function setAvatar(element, profile) {
-
     if (!element) return;
-
     const name = profile?.full_name || profile?.username || "FaceCrato";
-
     element.textContent = initials(name);
-
     if (profile?.avatar_url) {
         element.innerHTML = `<img src="${escapeHTML(profile.avatar_url)}" alt="">`;
     }
-
 }
 
-// ==========================================
-// AUTENTICAÇÃO E PERFIL
-// ==========================================
-
 async function initialize() {
-
     const { data, error } = await supabase.auth.getSession();
 
     if (error || !data.session) {
@@ -971,15 +1097,11 @@ async function initialize() {
 
     currentUser = data.session.user;
 
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile } = await supabase
         .from("profiles")
         .select("id,username,full_name,avatar_url")
         .eq("id", currentUser.id)
         .maybeSingle();
-
-    if (profileError) {
-        console.error(profileError);
-    }
 
     currentProfile = profile || {
         id: currentUser.id,
@@ -987,25 +1109,17 @@ async function initialize() {
         full_name: currentUser.email?.split("@")[0] || "Usuário"
     };
 
-    document.getElementById("sideName").textContent =
-        currentProfile.full_name || "Usuário";
-
-    document.getElementById("sideUsername").textContent =
-        "@" + (currentProfile.username || "usuario");
+    document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
+    document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
 
     setAvatar(document.getElementById("sideAvatar"), currentProfile);
     setAvatar(document.getElementById("composerAvatar"), currentProfile);
+    setAvatar(document.getElementById("storyUserAvatar"), currentProfile);
 
     await loadFeed();
-
 }
 
-// ==========================================
-// OBTER AMIGOS
-// ==========================================
-
 async function getFriendIds() {
-
     const { data, error } = await supabase
         .from("friendships")
         .select("user_a,user_b")
@@ -1015,70 +1129,37 @@ async function getFriendIds() {
     if (error) throw error;
 
     const ids = new Set([currentUser.id]);
-
-    (data || []).forEach(friendship => {
-
-        ids.add(
-            friendship.user_a === currentUser.id
-                ? friendship.user_b
-                : friendship.user_a
-        );
-
+    (data || []).forEach(f => {
+        ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a);
     });
-
     return [...ids];
-
 }
 
-// ==========================================
-// CARREGAR PUBLICAÇÕES
-// ==========================================
-
 async function loadFeed() {
-
     if (loadingFeed) return;
-
     loadingFeed = true;
 
     postsContainer.innerHTML = `
-        <div class="panel loading">
-            <div class="spinner"></div>
-            Buscando publicações...
-        </div>
+        <div class="skeleton-post"><div style="display:flex;gap:11px;align-items:center;margin-bottom:14px;"><div class="skeleton-line" style="width:40px;height:40px;border-radius:50%;"></div><div style="flex:1;"><div class="skeleton-line" style="width:120px;height:14px;margin-bottom:6px;"></div><div class="skeleton-line" style="width:80px;height:10px;"></div></div></div><div class="skeleton-line" style="width:100%;height:16px;margin-bottom:8px;"></div><div class="skeleton-line" style="width:60%;height:16px;"></div></div>
+        <div class="skeleton-post"><div style="display:flex;gap:11px;align-items:center;margin-bottom:14px;"><div class="skeleton-line" style="width:40px;height:40px;border-radius:50%;"></div><div style="flex:1;"><div class="skeleton-line" style="width:140px;height:14px;margin-bottom:6px;"></div><div class="skeleton-line" style="width:90px;height:10px;"></div></div></div><div class="skeleton-line" style="width:100%;height:16px;margin-bottom:8px;"></div><div class="skeleton-line" style="width:80%;height:16px;"></div></div>
     `;
 
     try {
-
         let query = supabase
             .from("posts")
-            .select(`
-                id,
-                user_id,
-                content,
-                post_type,
-                visibility,
-                comments_permission,
-                created_at,
-                edited_at,
-                original_post_id
-            `)
+            .select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`)
             .order("created_at", { ascending:false })
             .limit(40);
 
         if (currentFeed === "friends") {
-
             const friendIds = await getFriendIds();
-
             query = query.in("user_id", friendIds);
-
         }
 
         const { data: posts, error } = await query;
-
         if (error) throw error;
 
         if (!posts || posts.length === 0) {
-
             postsContainer.innerHTML = `
                 <div class="panel empty-state">
                     <i data-lucide="messages-square"></i>
@@ -1086,264 +1167,125 @@ async function loadFeed() {
                     <p>Quando houver publicações disponíveis, elas aparecerão aqui.</p>
                 </div>
             `;
-
             lucide.createIcons();
             return;
-
         }
 
-        const postIds = posts.map(post => post.id);
-        const userIds = [...new Set(posts.map(post => post.user_id))];
+        const postIds = posts.map(p => p.id);
+        const userIds = [...new Set(posts.map(p => p.user_id))];
 
-        const [
-            profilesResult,
-            mediaResult,
-            reactionsResult,
-            commentsResult,
-            savedResult
-        ] = await Promise.all([
-
-            supabase
-                .from("profiles")
-                .select("id,username,full_name,avatar_url")
-                .in("id", userIds),
-
-            supabase
-                .from("post_media")
-                .select("id,post_id,media_url,media_type,position")
-                .in("post_id", postIds)
-                .order("position"),
-
-            supabase
-                .from("reactions")
-                .select("post_id,user_id,reaction_type")
-                .in("post_id", postIds),
-
-            supabase
-                .from("comments")
-                .select("id,post_id,user_id,content,created_at,parent_id")
-                .in("post_id", postIds)
-                .is("parent_id", null)
-                .order("created_at", { ascending:true }),
-
-            supabase
-                .from("saved_posts")
-                .select("post_id")
-                .eq("user_id", currentUser.id)
-                .in("post_id", postIds)
-
+        const [profilesRes, mediaRes, reactionsRes, commentsRes, savedRes] = await Promise.all([
+            supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", userIds),
+            supabase.from("post_media").select("id,post_id,media_url,media_type,position").in("post_id", postIds).order("position"),
+            supabase.from("reactions").select("post_id,user_id,reaction_type").in("post_id", postIds),
+            supabase.from("comments").select("id,post_id,user_id,content,created_at,parent_id").in("post_id", postIds).is("parent_id", null).order("created_at", { ascending:true }),
+            supabase.from("saved_posts").select("post_id").eq("user_id", currentUser.id).in("post_id", postIds)
         ]);
 
-        if (profilesResult.error) throw profilesResult.error;
-        if (mediaResult.error) throw mediaResult.error;
-        if (reactionsResult.error) throw reactionsResult.error;
-        if (commentsResult.error) throw commentsResult.error;
-        if (savedResult.error) throw savedResult.error;
-
-        const profiles = profilesResult.data || [];
-        const media = mediaResult.data || [];
-        const reactions = reactionsResult.data || [];
-        const comments = commentsResult.data || [];
-        const saved = new Set((savedResult.data || []).map(item => item.post_id));
-
-        const profileMap = Object.fromEntries(
-            profiles.map(profile => [profile.id, profile])
-        );
-
+        const profileMap = Object.fromEntries((profilesRes.data || []).map(p => [p.id, p]));
         const mediaMap = {};
-        media.forEach(item => {
-            if (!mediaMap[item.post_id]) mediaMap[item.post_id] = [];
-            mediaMap[item.post_id].push(item);
+        (mediaRes.data || []).forEach(m => {
+            if (!mediaMap[m.post_id]) mediaMap[m.post_id] = [];
+            mediaMap[m.post_id].push(m);
         });
-
         const commentsMap = {};
-        comments.forEach(item => {
-            if (!commentsMap[item.post_id]) commentsMap[item.post_id] = [];
-            commentsMap[item.post_id].push(item);
+        (commentsRes.data || []).forEach(c => {
+            if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
+            commentsMap[c.post_id].push(c);
         });
-
         const reactionMap = {};
-        reactions.forEach(item => {
-            if (!reactionMap[item.post_id]) reactionMap[item.post_id] = [];
-            reactionMap[item.post_id].push(item);
+        (reactionsRes.data || []).forEach(r => {
+            if (!reactionMap[r.post_id]) reactionMap[r.post_id] = [];
+            reactionMap[r.post_id].push(r);
         });
+        const saved = new Set((savedRes.data || []).map(s => s.post_id));
 
         const prepared = await Promise.all(posts.map(async post => {
-
             const postMedia = mediaMap[post.id] || [];
-
             const signedMedia = await Promise.all(postMedia.map(async item => {
-
-                const { data, error } = await supabase.storage
-                    .from("post-media")
-                    .createSignedUrl(item.media_url, 3600);
-
-                if (error) {
-                    console.error("Erro ao carregar mídia:", error);
-                    return {...item, signedUrl:null};
-                }
-
-                return {...item, signedUrl:data.signedUrl};
-
+                const { data } = await supabase.storage.from("post-media").createSignedUrl(item.media_url, 3600);
+                return {...item, signedUrl: data?.signedUrl || null};
             }));
 
             return {
                 ...post,
-                author:profileMap[post.user_id],
-                media:signedMedia,
-                reactions:reactionMap[post.id] || [],
-                comments:commentsMap[post.id] || [],
-                saved:saved.has(post.id)
+                author: profileMap[post.user_id],
+                media: signedMedia,
+                reactions: reactionMap[post.id] || [],
+                comments: commentsMap[post.id] || [],
+                saved: saved.has(post.id)
             };
-
         }));
 
         renderPosts(prepared);
 
     } catch (error) {
-
-        console.error("Erro ao carregar feed:", error);
-
+        console.error("Erro feed:", error);
         postsContainer.innerHTML = `
             <div class="panel empty-state">
                 <i data-lucide="alert-circle"></i>
-                <strong>Não foi possível carregar o feed</strong>
-                <p>${escapeHTML(error.message || "Verifique sua conexão e tente novamente.")}</p>
-                <button class="publish-btn" id="retryFeed">Tentar novamente</button>
+                <strong>Erro ao carregar feed</strong>
+                <p>${escapeHTML(error.message)}</p>
+                <button class="publish-btn" id="retryFeed" style="margin-top:12px;">Tentar novamente</button>
             </div>
         `;
-
         document.getElementById("retryFeed")?.addEventListener("click", loadFeed);
-
         lucide.createIcons();
-
     } finally {
-
         loadingFeed = false;
-
     }
-
 }
 
-// ==========================================
-// RENDERIZAR PUBLICAÇÕES
-// ==========================================
-
 function renderPosts(posts) {
-
     postsContainer.innerHTML = posts.map(post => {
-
-        const author = post.author || {
-            full_name:"Usuário",
-            username:"usuario"
-        };
-
-        const userReaction = post.reactions.find(
-            item => item.user_id === currentUser.id
-        );
-
+        const author = post.author || { full_name:"Usuário", username:"usuario" };
+        const userReaction = post.reactions.find(r => r.user_id === currentUser.id);
         const reactionCount = post.reactions.length;
         const commentCount = post.comments.length;
 
         const reactionSummary = Object.entries(
-            post.reactions.reduce((acc, item) => {
-                acc[item.reaction_type] = (acc[item.reaction_type] || 0) + 1;
+            post.reactions.reduce((acc, r) => {
+                acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1;
                 return acc;
             }, {})
-        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`)
-         .join(" ");
+        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
 
-        const mediaHTML = post.media.map(item => {
-
-            if (!item.signedUrl) {
-                return `<p class="password-hint">Não foi possível carregar esta mídia.</p>`;
+        const mediaHTML = post.media.map(m => {
+            if (!m.signedUrl) return "";
+            if (m.media_type === "video") {
+                return `<video class="post-media" controls preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>`;
             }
-
-            if (item.media_type === "video") {
-                return `
-                    <video class="post-media" controls preload="metadata">
-                        <source src="${escapeHTML(item.signedUrl)}">
-                    </video>
-                `;
-            }
-
-            return `
-                <img
-                    class="post-media"
-                    src="${escapeHTML(item.signedUrl)}"
-                    alt="Imagem da publicação"
-                    loading="lazy"
-                >
-            `;
-
+            return `<img class="post-media" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">`;
         }).join("");
 
-        const commentsHTML = post.comments.map(comment => {
-
-            const commentAuthor = comment.user_id === currentUser.id
-                ? currentProfile
-                : null;
-
+        const commentsHTML = post.comments.map(c => {
             return `
                 <div class="comment-item">
                     <div class="avatar" style="width:31px;height:31px;font-size:10px">
-                        ${escapeHTML(initials(commentAuthor?.full_name || "U"))}
+                        ${escapeHTML(initials(author.full_name || "U"))}
                     </div>
-
                     <div class="comment-bubble">
-                        <strong>
-                            ${escapeHTML(commentAuthor?.full_name || "Usuário")}
-                        </strong>
-                        <p>${escapeHTML(comment.content)}</p>
+                        <strong>${escapeHTML(author.full_name || "Usuário")}</strong>
+                        <p>${formatRichText(c.content)}</p>
                     </div>
                 </div>
             `;
-
         }).join("");
 
-        const canComment = post.comments_permission !== "nobody";
-
-        const visibilityLabel = {
-            public:"Público",
-            friends:"Amigos",
-            private:"Privado"
-        }[post.visibility] || "Publicação";
+        const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
         return `
             <article class="post panel" data-post-id="${post.id}">
-
                 <div class="post-header">
-
-                    <div class="avatar">
-                        ${escapeHTML(initials(author.full_name || author.username))}
-                    </div>
-
+                    <div class="avatar online">${escapeHTML(initials(author.full_name || author.username))}</div>
                     <div class="post-author">
                         <strong>${escapeHTML(author.full_name || "Usuário")}</strong>
-                        <small>
-                            @${escapeHTML(author.username || "usuario")}
-                            · ${escapeHTML(formatDate(post.created_at))}
-                            · ${visibilityLabel}
-                            ${post.edited_at ? " · Editado" : ""}
-                        </small>
+                        <small>@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
                     </div>
-
-                    ${
-                        post.user_id === currentUser.id
-                        ? `<button class="post-menu" data-action="delete-post" title="Excluir publicação">
-                               <i data-lucide="trash-2"></i>
-                           </button>`
-                        : ""
-                    }
-
+                    ${post.user_id === currentUser.id ? `<button class="post-menu" data-action="delete-post" title="Excluir"><i data-lucide="trash-2"></i></button>` : ""}
                 </div>
 
-                ${
-                    post.content
-                    ? `<div class="post-content">${escapeHTML(post.content)}</div>`
-                    : ""
-                }
-
+                ${post.content ? `<div class="post-content">${formatRichText(post.content)}</div>` : ""}
                 ${mediaHTML}
 
                 <div class="post-stats">
@@ -1351,531 +1293,226 @@ function renderPosts(posts) {
                     <span>${commentCount} comentário(s)</span>
                 </div>
 
-                <div class="post-actions">
-
-                    <button
-                        class="action-btn ${userReaction ? "reacted" : ""}"
-                        data-action="reaction"
-                        data-reaction="${userReaction?.reaction_type || "like"}"
-                    >
+                <div class="post-actions" id="actions-${post.id}">
+                    <button class="action-btn ${userReaction ? "reacted" : ""}" data-action="react-trigger">
                         <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
                         ${userReaction ? "Reagiu" : "Curtir"} (${reactionCount})
                     </button>
 
                     <button class="action-btn" data-action="toggle-comments">
-                        <i data-lucide="message-circle"></i>
-                        Comentar
+                        <i data-lucide="message-circle"></i> Comentar
                     </button>
 
-                    <button
-                        class="action-btn ${post.saved ? "saved" : ""}"
-                        data-action="save-post"
-                    >
-                        <i data-lucide="bookmark"></i>
-                        ${post.saved ? "Salvo" : "Salvar"}
+                    <button class="action-btn ${post.saved ? "saved" : ""}" data-action="save-post">
+                        <i data-lucide="bookmark"></i> ${post.saved ? "Salvo" : "Salvar"}
                     </button>
 
+                    <!-- BALÃO FLUTUANTE DE REAÇÕES -->
+                    <div class="reaction-popup" id="popup-${post.id}" style="display:none;">
+                        <button class="react-emoji-btn" data-reaction="like" data-post-id="${post.id}">👍</button>
+                        <button class="react-emoji-btn" data-reaction="love" data-post-id="${post.id}">❤️</button>
+                        <button class="react-emoji-btn" data-reaction="haha" data-post-id="${post.id}">😂</button>
+                        <button class="react-emoji-btn" data-reaction="wow" data-post-id="${post.id}">😮</button>
+                        <button class="react-emoji-btn" data-reaction="sad" data-post-id="${post.id}">😢</button>
+                        <button class="react-emoji-btn" data-reaction="angry" data-post-id="${post.id}">😡</button>
+                    </div>
                 </div>
 
                 <div class="comments-area" id="comments-${post.id}">
-
-                    ${commentsHTML || `
-                        <p style="font-size:12px;color:#94a3b8">
-                            Nenhum comentário ainda.
-                        </p>
-                    `}
-
-                    ${
-                        canComment
-                        ? `
-                            <form class="comment-form" data-post-id="${post.id}">
-                                <input
-                                    type="text"
-                                    name="comment"
-                                    placeholder="Escreva um comentário..."
-                                    maxlength="2000"
-                                    required
-                                >
-                                <button type="submit" title="Enviar comentário">
-                                    <i data-lucide="send"></i>
-                                </button>
-                            </form>
-                        `
-                        : `
-                            <p style="font-size:12px;color:#94a3b8">
-                                Comentários desativados nesta publicação.
-                            </p>
-                        `
-                    }
-
+                    ${commentsHTML || `<p style="font-size:12px;color:#94a3b8">Nenhum comentário ainda.</p>`}
+                    <form class="comment-form" data-post-id="${post.id}">
+                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required>
+                        <button type="submit"><i data-lucide="send"></i></button>
+                    </form>
                 </div>
-
             </article>
         `;
-
     }).join("");
 
     lucide.createIcons();
-
 }
 
-// ==========================================
-// ESCOLHA DE ARQUIVO
-// ==========================================
-
+// ARQUIVO SELECIONADO PREVIEW
 mediaInput.addEventListener("change", () => {
-
     const file = mediaInput.files[0];
-
-    if (!file) {
-        filePreview.style.display = "none";
-        return;
-    }
-
-    const allowed = [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "video/mp4",
-        "video/webm"
-    ];
-
-    if (!allowed.includes(file.type)) {
-        mediaInput.value = "";
-        filePreview.style.display = "none";
-        showError("Formato não permitido. Use JPG, PNG, WEBP, MP4 ou WEBM.");
-        return;
-    }
-
-    const maxSize = file.type.startsWith("video/")
-        ? 100 * 1024 * 1024
-        : 5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
-        mediaInput.value = "";
-        filePreview.style.display = "none";
-        showError("Arquivo acima do limite permitido para esta publicação.");
-        return;
-    }
-
+    if (!file) { filePreview.style.display = "none"; return; }
     filePreview.style.display = "block";
-    filePreview.textContent =
-        `Arquivo selecionado: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
-
+    filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 });
 
-// ==========================================
 // PUBLICAR
-// ==========================================
-
 publishButton.addEventListener("click", async () => {
-
     const content = postContent.value.trim();
     const file = mediaInput.files[0];
 
     if (!content && !file) {
-        showError("Escreva alguma coisa ou selecione uma foto/vídeo.");
+        showError("Escreva alguma coisa ou escolha um arquivo.");
         return;
     }
 
     publishButton.disabled = true;
     publishButton.textContent = "Publicando...";
 
-    let createdPost = null;
-
     try {
+        const postType = file ? (file.type.startsWith("video/") ? "video" : "photo") : "text";
+        const { data: post, error: postErr } = await supabase.from("posts").insert({
+            user_id: currentUser.id,
+            content,
+            post_type: postType,
+            visibility: visibility.value,
+            comments_permission: "everyone"
+        }).select("id").single();
 
-        const postType = file
-            ? (file.type.startsWith("video/") ? "video" : "photo")
-            : "text";
-
-        const { data: post, error: postError } = await supabase
-            .from("posts")
-            .insert({
-                user_id:currentUser.id,
-                content,
-                post_type:postType,
-                visibility:visibility.value,
-                comments_permission:"everyone"
-            })
-            .select("id")
-            .single();
-
-        if (postError) throw postError;
-
-        createdPost = post;
+        if (postErr) throw postErr;
 
         if (file) {
+            const ext = file.name.split(".").pop();
+            const filePath = `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
+            const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, file, { contentType: file.type });
+            if (upErr) throw upErr;
 
-            const extension = file.name.split(".").pop().toLowerCase();
-            const filePath =
-                `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${extension}`;
-
-            const { error: uploadError } = await supabase.storage
-                .from("post-media")
-                .upload(filePath, file, {
-                    contentType:file.type,
-                    upsert:false
-                });
-
-            if (uploadError) throw uploadError;
-
-            const { error: mediaError } = await supabase
-                .from("post_media")
-                .insert({
-                    post_id:post.id,
-                    media_url:filePath,
-                    media_type:file.type.startsWith("video/") ? "video" : "image",
-                    position:0
-                });
-
-            if (mediaError) throw mediaError;
-
+            await supabase.from("post_media").insert({
+                post_id: post.id,
+                media_url: filePath,
+                media_type: file.type.startsWith("video/") ? "video" : "image",
+                position: 0
+            });
         }
 
         postContent.value = "";
         mediaInput.value = "";
         filePreview.style.display = "none";
-
         showSuccess("Publicação criada!");
-
-        currentFeed = "discover";
-        updateTabs();
         await loadFeed();
-
-    } catch (error) {
-
-        console.error("Erro ao publicar:", error);
-
-        showError(
-            "Não foi possível publicar. " +
-            (error.message || "Verifique as permissões do banco e do Storage.")
-        );
-
-        // Se a publicação foi criada mas a mídia falhou,
-        // tenta remover a publicação incompleta.
-        if (createdPost) {
-
-            await supabase
-                .from("posts")
-                .delete()
-                .eq("id", createdPost.id);
-
-        }
-
+    } catch (err) {
+        showError(err.message || "Erro ao publicar.");
     } finally {
-
         publishButton.disabled = false;
         publishButton.textContent = "Publicar";
-
     }
-
 });
 
-// ==========================================
-// AÇÕES DAS PUBLICAÇÕES
-// ==========================================
-
+// EVENTOS DE CLIQUE NO FEED
 postsContainer.addEventListener("click", async event => {
+    const target = event.target;
+    const button = target.closest("[data-action]");
+    const postElement = target.closest("[data-post-id]");
+    
+    // Clique nos emojis do popover
+    if (target.classList.contains("react-emoji-btn")) {
+        const postId = target.dataset.postId;
+        const reactionType = target.dataset.reaction;
+        await applyReaction(postId, reactionType);
+        return;
+    }
 
-    const button = event.target.closest("[data-action]");
-
-    if (!button) return;
-
-    const postElement = button.closest("[data-post-id]");
-    if (!postElement) return;
-
+    if (!button || !postElement) return;
     const postId = postElement.dataset.postId;
     const action = button.dataset.action;
 
-    // REAÇÕES
-    if (action === "reaction") {
-
-        const currentReaction = button.dataset.reaction;
-
-        const { data: existing, error: readError } = await supabase
-            .from("reactions")
-            .select("id,reaction_type")
-            .eq("post_id", postId)
-            .eq("user_id", currentUser.id)
-            .maybeSingle();
-
-        if (readError) {
-            showError(readError.message);
-            return;
-        }
-
-        let result;
-
-        if (existing) {
-
-            result = await supabase
-                .from("reactions")
-                .delete()
-                .eq("post_id", postId)
-                .eq("user_id", currentUser.id);
-
-        } else {
-
-            result = await supabase
-                .from("reactions")
-                .insert({
-                    post_id:postId,
-                    user_id:currentUser.id,
-                    reaction_type:"like"
-                });
-
-        }
-
-        if (result.error) {
-            showError(result.error.message);
-            return;
-        }
-
-        await loadFeed();
+    // ABRIR/FECHAR POPUP DE REAÇÃO (ESTILO FACEBOOK)
+    if (action === "react-trigger") {
+        const popup = document.getElementById(`popup-${postId}`);
+        const isVisible = popup.style.display === "flex";
+        // Fecha todos os outros popups abertos
+        document.querySelectorAll(".reaction-popup").forEach(p => p.style.display = "none");
+        popup.style.display = isVisible ? "none" : "flex";
+        return;
     }
 
     // COMENTÁRIOS
     if (action === "toggle-comments") {
-
-        const area = document.getElementById(`comments-${postId}`);
-        area?.classList.toggle("open");
-
+        document.getElementById(`comments-${postId}`)?.classList.toggle("open");
     }
 
-    // SALVAR PUBLICAÇÃO
+    // SALVAR
     if (action === "save-post") {
-
-        const { data: existing, error: readError } = await supabase
-            .from("saved_posts")
-            .select("post_id")
-            .eq("post_id", postId)
-            .eq("user_id", currentUser.id)
-            .maybeSingle();
-
-        if (readError) {
-            showError(readError.message);
-            return;
-        }
-
-        let result;
-
+        const { data: existing } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
         if (existing) {
-
-            result = await supabase
-                .from("saved_posts")
-                .delete()
-                .eq("post_id", postId)
-                .eq("user_id", currentUser.id);
-
+            await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id);
         } else {
-
-            result = await supabase
-                .from("saved_posts")
-                .insert({
-                    post_id:postId,
-                    user_id:currentUser.id
-                });
-
+            await supabase.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id });
         }
-
-        if (result.error) {
-            showError(result.error.message);
-            return;
-        }
-
         await loadFeed();
     }
 
-    // EXCLUIR PUBLICAÇÃO
+    // EXCLUIR
     if (action === "delete-post") {
-
-        const confirmation = await Swal.fire({
-            title:"Excluir publicação?",
-            text:"Essa ação não poderá ser desfeita.",
-            icon:"warning",
-            showCancelButton:true,
-            confirmButtonText:"Excluir",
-            cancelButtonText:"Cancelar",
-            confirmButtonColor:"#dc2626",
-            background:"#111c2e",
-            color:"#f8fafc"
-        });
-
-        if (!confirmation.isConfirmed) return;
-
-        const { error } = await supabase
-            .from("posts")
-            .delete()
-            .eq("id", postId)
-            .eq("user_id", currentUser.id);
-
-        if (error) {
-            showError(error.message);
-            return;
-        }
-
-        showSuccess("Publicação excluída.");
+        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626", background:"#111c2e", color:"#f8fafc" });
+        if (!confirm.isConfirmed) return;
+        await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
+        showSuccess("Excluído com sucesso.");
         await loadFeed();
-
     }
-
 });
 
-// ==========================================
+// APLICAR REAÇÃO
+async function applyReaction(postId, reactionType) {
+    document.querySelectorAll(".reaction-popup").forEach(p => p.style.display = "none");
+    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+
+    if (existing) {
+        if (existing.reaction_type === reactionType) {
+            await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
+        } else {
+            await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
+        }
+    } else {
+        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
+    }
+    await loadFeed();
+}
+
 // ENVIAR COMENTÁRIO
-// ==========================================
-
 postsContainer.addEventListener("submit", async event => {
-
     const form = event.target.closest(".comment-form");
-
     if (!form) return;
-
     event.preventDefault();
 
     const postId = form.dataset.postId;
     const input = form.querySelector("input[name='comment']");
     const content = input.value.trim();
-
     if (!content) return;
 
-    const sendButton = form.querySelector("button");
-    sendButton.disabled = true;
-
-    const { error } = await supabase
-        .from("comments")
-        .insert({
-            post_id:postId,
-            user_id:currentUser.id,
-            content
-        });
-
-    sendButton.disabled = false;
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
+    await supabase.from("comments").insert({ post_id: postId, user_id: currentUser.id, content });
     await loadFeed();
-
     document.getElementById(`comments-${postId}`)?.classList.add("open");
-
 });
 
-// ==========================================
-// ABAS
-// ==========================================
-
-function updateTabs() {
-
-    document.querySelectorAll("[data-feed]").forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.dataset.feed === currentFeed
-        );
-    });
-
-}
-
-document.querySelectorAll("[data-feed]").forEach(button => {
-
-    button.addEventListener("click", async () => {
-
-        currentFeed = button.dataset.feed;
-        updateTabs();
+// ABAS E NAVEGAÇÃO
+document.querySelectorAll("[data-feed]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+        currentFeed = btn.dataset.feed;
+        document.querySelectorAll("[data-feed]").forEach(b => b.classList.toggle("active", b === btn));
         await loadFeed();
-
     });
-
 });
 
-// ==========================================
-// NAVEGAÇÃO
-// ==========================================
-
-function navigate(section) {
-
-    const destinations = {
-        feed:"./feed.html",
-        friends:"./amigos.html",
-        notifications:"./notificacoes.html",
-        profile:"./perfil.html"
-    };
-
-    if (destinations[section] && section !== "feed") {
-        window.location.href = destinations[section];
-    }
-
-}
-
-document.querySelectorAll("[data-nav]").forEach(button => {
-
-    button.addEventListener("click", () => {
-        navigate(button.dataset.nav);
+document.querySelectorAll("[data-nav]").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
+        if (destinations[btn.dataset.nav]) window.location.href = destinations[btn.dataset.nav];
     });
-
 });
 
-document.getElementById("profileButton").addEventListener("click", () => {
-    navigate("profile");
-});
-
-document.getElementById("notificationsButton").addEventListener("click", () => {
-    navigate("notifications");
-});
-
-// ==========================================
-// ATUALIZAR FEED
-// ==========================================
-
+document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
+document.getElementById("notificationsButton").addEventListener("click", () => window.location.href = "./notificacoes.html");
 document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
-// ==========================================
-// SAIR
-// ==========================================
-
 document.getElementById("logoutButton").addEventListener("click", async () => {
-
-    const confirmation = await Swal.fire({
-        title:"Sair da conta?",
-        icon:"question",
-        showCancelButton:true,
-        confirmButtonText:"Sair",
-        cancelButtonText:"Cancelar",
-        confirmButtonColor:"#2563eb",
-        background:"#111c2e",
-        color:"#f8fafc"
-    });
-
-    if (!confirmation.isConfirmed) return;
-
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-        showError(error.message);
-        return;
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#2563eb", background:"#111c2e", color:"#f8fafc" });
+    if (confirm.isConfirmed) {
+        await supabase.auth.signOut();
+        window.location.replace("./login.html");
     }
-
-    window.location.replace("./login.html");
-
 });
 
-// ==========================================
-// INICIALIZAÇÃO
-// ==========================================
-
 initialize();
-
 </script>
 
 <script>
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-            .catch(error => console.error("Erro PWA:", error));
-    });
+    window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
 }
 </script>
 
