@@ -14,7 +14,7 @@
 
 <body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
-<!-- TOPO (Sem o botão de logout e sem o menu antigo) -->
+<!-- TOPO -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
     <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-6">
         <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900">
@@ -111,8 +111,8 @@
         </div>
     </section>
 
-    <!-- SIDEBAR DIREITA (Com o Menu de Navegação e Botão de Sair) -->
-    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+    <!-- SIDEBAR DIREITA -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm block">
         <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
         <nav class="space-y-1 mb-5">
             <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
@@ -133,7 +133,6 @@
 </main>
 
 <style>
-/* Estilo customizado para os popups de reação no Tailwind */
 .reaction-wrapper { position: relative; display: flex; justify-content: center; }
 .reaction-popup {
     position: absolute; bottom: 52px; left: 50%;
@@ -186,19 +185,33 @@ function initials(name = "F") {
     return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
+function renderAvatar(profile, classes = "") {
+    const name = profile?.full_name || profile?.username || "U";
+    const avatar = profile?.avatar_url;
+
+    if (avatar && /^https?:\/\//i.test(avatar)) {
+        return `
+            <div class="${classes} overflow-hidden">
+                <img src="${escapeHTML(avatar)}"
+                     alt="${escapeHTML(name)}"
+                     class="w-full h-full object-cover">
+            </div>
+        `;
+    }
+
+    return `
+        <div class="${classes}">
+            ${escapeHTML(initials(name))}
+        </div>
+    `;
+}
+
 function formatDate(date) {
     return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(new Date(date));
 }
 
 function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
 function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
-
-function setAvatar(element, profile) {
-    if (!element) return;
-    const name = profile?.full_name || profile?.username || "FaceCrato";
-    element.textContent = initials(name);
-    if (profile?.avatar_url) { element.innerHTML = `<img src="${escapeHTML(profile.avatar_url)}" alt="" class="w-full h-full object-cover">`; }
-}
 
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
@@ -210,8 +223,12 @@ async function initialize() {
 
     document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
-    setAvatar(document.getElementById("sideAvatar"), currentProfile);
-    setAvatar(document.getElementById("composerAvatar"), currentProfile);
+    
+    document.getElementById("sideAvatar").innerHTML =
+        renderAvatar(currentProfile, "w-full h-full rounded-full flex items-center justify-center");
+    
+    document.getElementById("composerAvatar").innerHTML =
+        renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm");
 
     await loadFeed();
 }
@@ -294,7 +311,7 @@ function renderPosts(posts) {
 
         const commentsHTML = post.comments.map(c => `
             <div class="flex gap-3 my-3">
-                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0">${escapeHTML(initials(author.full_name || "U"))}</div>
+                ${renderAvatar(author, "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0 overflow-hidden")}
                 <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
                     <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(author.full_name || "Usuário")}</strong>
                     <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
@@ -307,7 +324,7 @@ function renderPosts(posts) {
         return `
             <article class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
                 <div class="flex items-center gap-3.5 mb-4">
-                    <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center">${escapeHTML(initials(author.full_name || author.username))}</div>
+                    ${renderAvatar(author, "w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
                     <div class="flex-1 min-w-0">
                         <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
                         <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
