@@ -7,8 +7,6 @@
 
 <title>Feed | FaceCrato</title>
 
-<link rel="manifest" href="./manifest.json">
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -1195,7 +1193,7 @@ postsContainer.addEventListener("click", async event => {
 
     if (action === "delete-post") {
         const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626", background:"#0d1220", color:"#f8fafc" });
-        if nos(!confirm.isConfirmed) return;
+        if (!confirm.isConfirmed) return;
         await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
         showSuccess("Excluído com sucesso.");
         await loadFeed();
@@ -1261,12 +1259,6 @@ document.getElementById("logoutButton").addEventListener("click", async () => {
 });
 
 initialize();
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
-}
 </script>
 
 </body>
