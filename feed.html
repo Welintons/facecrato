@@ -17,10 +17,13 @@
 <!-- TOPO -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
     <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">F</div>
+        <!-- LOGO / BOTÃO HOME -->
+        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
+                <i data-lucide="home" class="w-5 h-5"></i>
+            </div>
             FaceCrato
-        </div>
+        </a>
 
         <div class="flex-1 max-w-md relative hidden sm:block">
             <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
@@ -38,7 +41,7 @@
                 </button>
 
                 <!-- MODAL DROPDOWN DE NOTIFICAÇÕES -->
-                <div id="notifDropdown" class="absolute right-0 mt-3 w-80 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-50 overflow-hidden">
+                <div id="notifDropdown" class="absolute right-0 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 mt-3 w-[calc(100vw-32px)] sm:w-96 max-w-sm bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-50 overflow-hidden">
                     <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
                         <h3 class="font-bold text-sm text-slate-900">Notificações</h3>
                         <button onclick="markAllReadFromDropdown()" class="text-xs font-bold text-cyan-600 hover:underline">Marcar lidas</button>
@@ -217,7 +220,6 @@ const menuCloseBtn = document.getElementById("menuCloseBtn");
 const mobileMenuDrawer = document.getElementById("mobileMenuDrawer");
 const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
 
-// Elementos do Modal de Notificações
 const notificationsButton = document.getElementById("notificationsButton");
 const notifDropdown = document.getElementById("notifDropdown");
 const notifDropdownList = document.getElementById("notifDropdownList");
@@ -225,6 +227,15 @@ const notifBadge = document.getElementById("notifBadge");
 
 let notifsChannel = null;
 
+// ==========================================
+// DESCRIÇÃO DAS FUNÇÕES DO SCRIPT
+// ==========================================
+
+/*
+  1. toggleMobileMenu(open)
+  Controla a abertura e o fechamento do menu sanduíche (gaveta lateral) em dispositivos móveis, 
+  alternando a visibilidade do fundo escurecido (overlay) e o deslizamento da gaveta.
+*/
 function toggleMobileMenu(open) {
     if (open) {
         mobileMenuOverlay.classList.remove("hidden");
@@ -239,7 +250,6 @@ menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
 menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
 mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
-// Abrir/Fechar Modal de Notificações ao clicar no sino
 notificationsButton.addEventListener("click", (e) => {
     e.stopPropagation();
     notifDropdown.classList.toggle("hidden");
@@ -248,7 +258,6 @@ notificationsButton.addEventListener("click", (e) => {
     }
 });
 
-// Fechar modal ao clicar fora
 document.addEventListener("click", (e) => {
     if (!notifDropdown.contains(e.target) && !notificationsButton.contains(e.target)) {
         notifDropdown.classList.add("hidden");
@@ -262,10 +271,18 @@ let loadingFeed = false;
 
 const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
 
+/*
+  2. escapeHTML(value)
+  Neutraliza caracteres perigosos em textos inseridos por usuários para evitar ataques de XSS (injeção de código malicioso).
+*/
 function escapeHTML(value = "") {
     return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 }
 
+/*
+  3. formatRichText(text)
+  Analisa o texto do post e converte URLs em links clicáveis, hashtags (#) em marcações estilizadas e menções (@) em tags coloridas.
+*/
 function formatRichText(text = "") {
     let safe = escapeHTML(text);
     safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="text-cyan-600 underline font-semibold">$1</a>');
@@ -274,10 +291,18 @@ function formatRichText(text = "") {
     return safe;
 }
 
+/*
+  4. initials(name)
+  Extrai as iniciais do nome do usuário (até 2 palavras) para serem exibidas caso ele não tenha foto de perfil cadastrada.
+*/
 function initials(name = "F") {
     return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
+/*
+  5. renderAvatar(profile, classes)
+  Função reutilizável que retorna o HTML formatado da foto de perfil (se houver link válido) ou as iniciais do usuário estilizadas com as classes CSS passadas.
+*/
 function renderAvatar(profile, classes = "") {
     const name = profile?.full_name || profile?.username || "U";
     const avatar = profile?.avatar_url;
@@ -299,6 +324,10 @@ function renderAvatar(profile, classes = "") {
     `;
 }
 
+/*
+  6. formatDate(date)
+  Formata datas brutas em um padrão amigável ao usuário no formato brasileiro (ex: 15 abr, 14:30).
+*/
 function formatDate(date) {
     const d = new Date(date);
     if(isNaN(d)) return "";
@@ -308,6 +337,10 @@ function formatDate(date) {
 function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
 function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
 
+/*
+  7. initialize()
+  Verifica a sessão ativa do usuário no Supabase, busca os dados do perfil logado, injeta o avatar e o nome na barra lateral e dispara o carregamento inicial do feed e notificações.
+*/
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
     if (error || !data.session) { window.location.replace("./login.html"); return; }
@@ -330,7 +363,10 @@ async function initialize() {
     subscribeDropdownNotifications();
 }
 
-// Funções do Modal Dropdown de Notificações
+/*
+  8. checkUnreadCount()
+  Conta quantas notificações o usuário possui pendentes (não lidas) para atualizar o contador vermelho no ícone do sino.
+*/
 async function checkUnreadCount() {
     const { count, error } = await supabase
         .from("notifications")
@@ -346,6 +382,10 @@ async function checkUnreadCount() {
     }
 }
 
+/*
+  9. fetchDropdownNotifications()
+  Busca as últimas notificações do usuário no Supabase para preencher o conteúdo do modal dropdown flutuante no topo.
+*/
 async function fetchDropdownNotifications() {
     notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Carregando...</div>`;
 
@@ -379,17 +419,29 @@ async function fetchDropdownNotifications() {
     }).join("");
 }
 
+/*
+  10. markOneReadModal(id)
+  Marca uma notificação específica como lida ao ser clicada no dropdown e atualiza o contador.
+*/
 window.markOneReadModal = async function(id) {
     await supabase.from("notifications").update({ is_read: true }).eq("id", id).eq("recipient_id", currentUser.id);
     await checkUnreadCount();
 }
 
+/*
+  11. markAllReadFromDropdown()
+  Marca todas as notificações não lidas como lidas de uma vez só direto pelo modal do feed.
+*/
 window.markAllReadFromDropdown = async function() {
     await supabase.from("notifications").update({ is_read: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
     await checkUnreadCount();
     await fetchDropdownNotifications();
 }
 
+/*
+  12. subscribeDropdownNotifications()
+  Conecta o canal em tempo real (Realtime) do Supabase para escutar novas notificações e atualizar o feed instantaneamente.
+*/
 function subscribeDropdownNotifications() {
     if (notifsChannel) supabase.removeChannel(notifsChannel);
 
@@ -409,6 +461,10 @@ function subscribeDropdownNotifications() {
         .subscribe();
 }
 
+/*
+  13. getFriendIds()
+  Busca os IDs de todos os amigos com quem o usuário possui amizade aceita para filtrar o feed de "Amigos".
+*/
 async function getFriendIds() {
     const { data, error } = await supabase.from("friendships").select("user_a,user_b").eq("status", "accepted").or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
     if (error) throw error;
@@ -417,6 +473,10 @@ async function getFriendIds() {
     return [...ids];
 }
 
+/*
+  14. loadFeed()
+  Busca os posts recentes no banco de dados (seja da aba "Para você" ou "Amigos"), juntamente com perfis, mídias, reações e comentários correspondentes.
+*/
 async function loadFeed() {
     if (loadingFeed) return;
     loadingFeed = true;
@@ -468,6 +528,10 @@ async function loadFeed() {
     }
 }
 
+/*
+  15. renderPosts(posts)
+  Gera dinamicamente o HTML de cada post carregado (cabeçalho com avatar usando renderAvatar, texto formatado, imagens/vídeos, botões de reação, salvamento e área de comentários).
+*/
 function renderPosts(posts) {
     postsContainer.innerHTML = posts.map(post => {
         const author = post.author || { full_name:"Usuário", username:"usuario" };
@@ -561,6 +625,10 @@ mediaInput.addEventListener("change", () => {
     filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 });
 
+/*
+  16. Event listener do botão Publicar
+  Envia o conteúdo do post e o arquivo de mídia (caso exista) para o banco de dados e bucket do Supabase.
+*/
 publishButton.addEventListener("click", async () => {
     const content = postContent.value.trim();
     const file = mediaInput.files[0];
@@ -593,6 +661,10 @@ publishButton.addEventListener("click", async () => {
     }
 });
 
+/*
+  17. Gerenciador de cliques do feed (postsContainer)
+  Gerencia interações nos posts como exibir o seletor de reações, abrir/fechar comentários, salvar post ou excluir publicação.
+*/
 postsContainer.addEventListener("click", async event => {
     const target = event.target;
     const button = target.closest("[data-action]");
@@ -637,6 +709,10 @@ postsContainer.addEventListener("click", async event => {
     }
 });
 
+/*
+  18. applyReaction(postId, reactionType)
+  Adiciona, altera ou remove a reação em emoji de um usuário em um post específico no banco de dados.
+*/
 async function applyReaction(postId, reactionType) {
     document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
     const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
@@ -650,6 +726,10 @@ async function applyReaction(postId, reactionType) {
     await loadFeed();
 }
 
+/*
+  19. Envio de comentários
+  Captura o texto digitado no formulário de comentário de um post e salva no Supabase.
+*/
 postsContainer.addEventListener("submit", async event => {
     const form = event.target.closest("form");
     if (!form || !form.dataset.postId) return;
@@ -665,6 +745,7 @@ postsContainer.addEventListener("submit", async event => {
     document.getElementById(`comments-${postId}`)?.classList.add("open");
 });
 
+// Alternância entre abas de Feed ("Para você" e "Amigos")
 document.querySelectorAll("[data-feed]").forEach(btn => {
     btn.addEventListener("click", async () => {
         currentFeed = btn.dataset.feed;
@@ -680,6 +761,7 @@ document.querySelectorAll("[data-feed]").forEach(btn => {
     });
 });
 
+// Navegação global por botões de menu lateral e mobile
 document.querySelectorAll("[data-nav]").forEach(btn => {
     btn.addEventListener("click", () => {
         const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
@@ -690,6 +772,10 @@ document.querySelectorAll("[data-nav]").forEach(btn => {
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
+/*
+  20. handleLogout
+  Encerra a sessão ativa do usuário no Supabase e o redireciona de volta para a tela de login.
+*/
 const handleLogout = async () => {
     const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
     if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
