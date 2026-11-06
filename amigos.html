@@ -1,0 +1,1363 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1120">
+
+<title>Amigos | FaceCrato</title>
+
+<link rel="manifest" href="./manifest.json">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#0b1120;
+    color:#f1f5f9;
+    font-family:Inter,system-ui,sans-serif;
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+:root{
+    --panel:#111c2e;
+    --panel2:#17243a;
+    --border:#26364f;
+    --muted:#94a3b8;
+}
+
+.topbar{
+    height:66px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:#0b1120ed;
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+}
+
+.topbar-inner{
+    max-width:1100px;
+    height:100%;
+    margin:auto;
+    padding:0 18px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:950;
+    letter-spacing:-1px;
+}
+
+.logo-mark{
+    width:37px;
+    height:37px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#2563eb,#6366f1);
+}
+
+.top-actions{
+    margin-left:auto;
+    display:flex;
+    gap:9px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel);
+    color:#cbd5e1;
+    display:grid;
+    place-items:center;
+}
+
+.icon-btn svg{width:19px}
+
+.page{
+    max-width:1050px;
+    margin:auto;
+    padding:27px 16px 100px;
+}
+
+.page-title{
+    margin-bottom:23px;
+}
+
+.page-title h1{
+    font-size:27px;
+    font-weight:950;
+    letter-spacing:-1px;
+    margin:0;
+}
+
+.page-title p{
+    font-size:13px;
+    color:var(--muted);
+    margin:6px 0 0;
+}
+
+.panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+}
+
+.search-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 16px;
+    margin-bottom:20px;
+}
+
+.search-box svg{
+    color:var(--muted);
+    width:20px;
+    flex-shrink:0;
+}
+
+.search-box input{
+    background:transparent;
+    border:0;
+    outline:none;
+    width:100%;
+    color:white;
+    font-size:14px;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:5px;
+    margin-bottom:20px;
+}
+
+.tab{
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:#94a3b8;
+    padding:11px 15px;
+    border-radius:11px;
+    white-space:nowrap;
+    font-size:12px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.tab.active{
+    background:#1d3b68;
+    border-color:#3b82f6;
+    color:white;
+}
+
+.count{
+    background:#263b59;
+    padding:2px 7px;
+    border-radius:20px;
+    font-size:10px;
+}
+
+.section-title{
+    font-size:17px;
+    font-weight:900;
+    margin:0 0 14px;
+}
+
+.people-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:13px;
+}
+
+.person-card{
+    padding:17px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    min-width:0;
+}
+
+.avatar{
+    width:54px;
+    height:54px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#8b5cf6);
+    display:grid;
+    place-items:center;
+    font-size:18px;
+    font-weight:900;
+    overflow:hidden;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.person-info{
+    flex:1;
+    min-width:0;
+}
+
+.person-info strong{
+    display:block;
+    font-size:13px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.person-info small{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.person-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:12px;
+}
+
+.btn{
+    border:1px solid var(--border);
+    background:var(--panel2);
+    color:#dbeafe;
+    padding:9px 12px;
+    border-radius:9px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.btn svg{width:15px;height:15px}
+
+.btn-primary{
+    background:linear-gradient(100deg,#2563eb,#4f46e5);
+    border:0;
+    color:white;
+}
+
+.btn-danger{
+    color:#fca5a5;
+}
+
+.btn:hover{filter:brightness(1.12)}
+
+.empty-state{
+    padding:50px 20px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.empty-state svg{
+    width:38px;
+    height:38px;
+    margin:0 auto 14px;
+}
+
+.empty-state strong{
+    display:block;
+    color:#cbd5e1;
+    margin-bottom:7px;
+}
+
+.empty-state p{
+    font-size:12px;
+    line-height:1.6;
+}
+
+.loading{
+    padding:35px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.spinner{
+    width:25px;
+    height:25px;
+    border:3px solid #26364f;
+    border-top-color:#3b82f6;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.badge{
+    display:inline-block;
+    font-size:10px;
+    color:#93c5fd;
+    background:#1e3a5f;
+    padding:4px 8px;
+    border-radius:20px;
+    margin-top:7px;
+}
+
+.search-results{
+    margin-bottom:22px;
+}
+
+.search-results:empty{display:none}
+
+.mobile-nav{
+    display:none;
+}
+
+@media(max-width:650px){
+
+    .topbar-inner{padding:0 13px}
+    .logo{font-size:19px}
+
+    .page{padding:20px 11px 100px}
+
+    .page-title h1{font-size:24px}
+
+    .people-grid{grid-template-columns:1fr}
+
+    .person-card{
+        padding:14px;
+    }
+
+    .mobile-nav{
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        z-index:60;
+        display:flex;
+        justify-content:space-around;
+        padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+        background:#101a2bed;
+        border-top:1px solid var(--border);
+        backdrop-filter:blur(15px);
+    }
+
+    .mobile-nav button{
+        border:0;
+        background:none;
+        color:#94a3b8;
+        display:grid;
+        justify-items:center;
+        gap:4px;
+        font-size:10px;
+    }
+
+    .mobile-nav svg{width:20px;height:20px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+
+        <div class="logo">
+            <div class="logo-mark">F</div>
+            FaceCrato
+        </div>
+
+        <div class="top-actions">
+
+            <button class="icon-btn" onclick="location.href='./feed.html'" title="Feed">
+                <i data-lucide="house"></i>
+            </button>
+
+            <button class="icon-btn" onclick="location.href='./notificacoes.html'" title="Notificações">
+                <i data-lucide="bell"></i>
+            </button>
+
+            <button class="icon-btn" id="logoutButton" title="Sair">
+                <i data-lucide="log-out"></i>
+            </button>
+
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="page-title">
+        <h1>Amigos</h1>
+        <p>Encontre pessoas e gerencie suas amizades.</p>
+    </div>
+
+    <!-- PESQUISA -->
+    <div class="panel search-box">
+        <i data-lucide="search"></i>
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="Pesquisar pessoas pelo nome ou @username..."
+            autocomplete="off"
+        >
+    </div>
+
+    <!-- RESULTADOS DA PESQUISA -->
+    <section class="search-results" id="searchResults"></section>
+
+    <!-- ABAS -->
+    <div class="tabs">
+
+        <button class="tab active" data-tab="friends">
+            <i data-lucide="users"></i>
+            Meus amigos
+            <span class="count" id="friendsCount">0</span>
+        </button>
+
+        <button class="tab" data-tab="received">
+            <i data-lucide="user-plus"></i>
+            Recebidas
+            <span class="count" id="receivedCount">0</span>
+        </button>
+
+        <button class="tab" data-tab="sent">
+            <i data-lucide="send"></i>
+            Enviadas
+            <span class="count" id="sentCount">0</span>
+        </button>
+
+    </div>
+
+    <!-- CONTEÚDO -->
+    <section id="content">
+
+        <div class="panel loading">
+            <div class="spinner"></div>
+            Carregando amizades...
+        </div>
+
+    </section>
+
+</main>
+
+<nav class="mobile-nav">
+
+    <button onclick="location.href='./feed.html'">
+        <i data-lucide="house"></i>
+        Feed
+    </button>
+
+    <button>
+        <i data-lucide="users"></i>
+        Amigos
+    </button>
+
+    <button onclick="location.href='./notificacoes.html'">
+        <i data-lucide="bell"></i>
+        Alertas
+    </button>
+
+    <button onclick="location.href='./perfil.html'">
+        <i data-lucide="user-round"></i>
+        Perfil
+    </button>
+
+</nav>
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+// =====================================
+// ESTADO
+// =====================================
+
+let currentUser = null;
+let friendships = [];
+let profiles = {};
+let activeTab = "friends";
+let searchTimer = null;
+
+const content = document.getElementById("content");
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+// =====================================
+// UTILITÁRIOS
+// =====================================
+
+function escapeHTML(value = "") {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+    })[char]);
+}
+
+function initials(name = "F") {
+    return name.trim().split(/\s+/).slice(0,2)
+        .map(part => part[0] || "")
+        .join("")
+        .toUpperCase();
+}
+
+function notify(message, icon = "success") {
+    Swal.fire({
+        toast:true,
+        position:"top",
+        icon,
+        title:message,
+        showConfirmButton:false,
+        timer:2300,
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+}
+
+function showError(message) {
+    Swal.fire({
+        icon:"error",
+        title:"Não foi possível concluir",
+        text:message,
+        background:"#111c2e",
+        color:"#f8fafc",
+        confirmButtonColor:"#2563eb"
+    });
+}
+
+function getOtherUser(friendship) {
+    return friendship.user_a === currentUser.id
+        ? friendship.user_b
+        : friendship.user_a;
+}
+
+function profileUrl(id) {
+    return `./perfil.html?id=${encodeURIComponent(id)}`;
+}
+
+function renderAvatar(profile) {
+
+    const name = profile?.full_name || "Usuário";
+
+    // O bucket avatars é privado. A imagem é carregada
+    // posteriormente por URL assinada.
+    return `
+        <div class="avatar" data-avatar-user="${escapeHTML(profile?.id || "")}">
+            ${escapeHTML(initials(name))}
+        </div>
+    `;
+
+}
+
+async function loadAvatarImages() {
+
+    const elements = document.querySelectorAll("[data-avatar-user]");
+
+    for (const element of elements) {
+
+        const id = element.dataset.avatarUser;
+        const profile = profiles[id];
+
+        if (!profile?.avatar_url) continue;
+
+        const { data, error } = await supabase.storage
+            .from("avatars")
+            .createSignedUrl(profile.avatar_url,3600);
+
+        if (error || !data?.signedUrl) continue;
+
+        const img = document.createElement("img");
+        img.src = data.signedUrl;
+        img.alt = "Foto de perfil";
+
+        element.replaceChildren(img);
+
+    }
+
+}
+
+// =====================================
+// AUTENTICAÇÃO
+// =====================================
+
+async function initialize() {
+
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error || !data.session) {
+        location.replace("./login.html");
+        return;
+    }
+
+    currentUser = data.session.user;
+
+    await loadFriendships();
+
+}
+
+supabase.auth.onAuthStateChange((event,session) => {
+
+    if (event === "SIGNED_OUT" || !session) {
+        location.replace("./login.html");
+    }
+
+});
+
+// =====================================
+// CARREGAR AMIZADES
+// =====================================
+
+async function loadFriendships() {
+
+    content.innerHTML = `
+        <div class="panel loading">
+            <div class="spinner"></div>
+            Atualizando amizades...
+        </div>
+    `;
+
+    const { data, error } = await supabase
+        .from("friendships")
+        .select("id,user_a,user_b,requested_by,status,created_at")
+        .or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`)
+        .in("status",["pending","accepted"])
+        .order("created_at",{ascending:false});
+
+    if (error) {
+        console.error(error);
+        content.innerHTML = `
+            <div class="panel empty-state">
+                <i data-lucide="alert-circle"></i>
+                <strong>Erro ao carregar amizades</strong>
+                <p>${escapeHTML(error.message)}</p>
+            </div>
+        `;
+        lucide.createIcons();
+        return;
+    }
+
+    friendships = data || [];
+
+    await loadProfiles();
+
+    updateCounts();
+    renderTab();
+
+}
+
+// =====================================
+// CARREGAR PERFIS
+// =====================================
+
+async function loadProfiles() {
+
+    const ids = [...new Set(friendships.map(getOtherUser))];
+
+    if (ids.length === 0) {
+        profiles = {};
+        return;
+    }
+
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("id,full_name,username,avatar_url,city,state")
+        .in("id",ids);
+
+    if (error) {
+        console.error("Erro ao carregar perfis:",error);
+        return;
+    }
+
+    profiles = {};
+
+    for (const profile of data || []) {
+        profiles[profile.id] = profile;
+    }
+
+}
+
+// =====================================
+// CONTADORES
+// =====================================
+
+function getFriends() {
+    return friendships.filter(item => item.status === "accepted");
+}
+
+function getReceived() {
+    return friendships.filter(item =>
+        item.status === "pending" &&
+        item.requested_by !== currentUser.id
+    );
+}
+
+function getSent() {
+    return friendships.filter(item =>
+        item.status === "pending" &&
+        item.requested_by === currentUser.id
+    );
+}
+
+function updateCounts() {
+
+    document.getElementById("friendsCount").textContent =
+        getFriends().length;
+
+    document.getElementById("receivedCount").textContent =
+        getReceived().length;
+
+    document.getElementById("sentCount").textContent =
+        getSent().length;
+
+}
+
+// =====================================
+// ABAS
+// =====================================
+
+document.querySelectorAll(".tab").forEach(button => {
+
+    button.addEventListener("click",() => {
+
+        activeTab = button.dataset.tab;
+
+        document.querySelectorAll(".tab").forEach(tab => {
+            tab.classList.toggle("active",tab === button);
+        });
+
+        renderTab();
+
+    });
+
+});
+
+function renderTab() {
+
+    let list = [];
+
+    if (activeTab === "friends") list = getFriends();
+    if (activeTab === "received") list = getReceived();
+    if (activeTab === "sent") list = getSent();
+
+    const titles = {
+        friends:"Seus amigos",
+        received:"Solicitações recebidas",
+        sent:"Solicitações enviadas"
+    };
+
+    if (list.length === 0) {
+
+        const messages = {
+            friends:"Você ainda não tem amigos adicionados.",
+            received:"Você não tem solicitações pendentes.",
+            sent:"Você não enviou solicitações de amizade."
+        };
+
+        content.innerHTML = `
+            <div class="panel empty-state">
+                <i data-lucide="users"></i>
+                <strong>${titles[activeTab]}</strong>
+                <p>${messages[activeTab]}</p>
+            </div>
+        `;
+
+        lucide.createIcons();
+        return;
+
+    }
+
+    content.innerHTML = `
+        <h2 class="section-title">${titles[activeTab]}</h2>
+        <div class="people-grid">
+            ${list.map(item => renderPersonCard(item)).join("")}
+        </div>
+    `;
+
+    attachCardEvents();
+    loadAvatarImages();
+
+}
+
+function renderPersonCard(friendship) {
+
+    const id = getOtherUser(friendship);
+    const profile = profiles[id];
+
+    if (!profile) {
+        return `
+            <article class="panel person-card">
+                <div class="person-info">
+                    <strong>Perfil indisponível</strong>
+                    <small>Não foi possível carregar este usuário.</small>
+                </div>
+            </article>
+        `;
+    }
+
+    const name = profile.full_name || "Usuário";
+    const username = profile.username || "usuario";
+
+    const location = [profile.city,profile.state]
+        .filter(Boolean).join(" - ");
+
+    let actions = "";
+
+    if (activeTab === "friends") {
+
+        actions = `
+            <button class="btn" data-action="profile" data-id="${id}">
+                <i data-lucide="user-round"></i>
+                Ver perfil
+            </button>
+
+            <button class="btn btn-danger" data-action="remove" data-id="${id}">
+                <i data-lucide="user-minus"></i>
+                Remover
+            </button>
+        `;
+
+    } else if (activeTab === "received") {
+
+        actions = `
+            <button class="btn btn-primary" data-action="accept" data-id="${id}">
+                <i data-lucide="check"></i>
+                Aceitar
+            </button>
+
+            <button class="btn btn-danger" data-action="decline" data-id="${id}">
+                <i data-lucide="x"></i>
+                Recusar
+            </button>
+
+            <button class="btn" data-action="profile" data-id="${id}">
+                Ver perfil
+            </button>
+        `;
+
+    } else {
+
+        actions = `
+            <button class="btn" data-action="profile" data-id="${id}">
+                <i data-lucide="user-round"></i>
+                Ver perfil
+            </button>
+
+            <button class="btn btn-danger" data-action="cancel" data-id="${id}">
+                <i data-lucide="x"></i>
+                Cancelar
+            </button>
+        `;
+
+    }
+
+    return `
+        <article class="panel person-card">
+
+            ${renderAvatar(profile)}
+
+            <div class="person-info">
+                <strong>${escapeHTML(name)}</strong>
+                <small>@${escapeHTML(username)}</small>
+
+                ${location ? `<small>${escapeHTML(location)}</small>` : ""}
+
+                <div class="person-actions">
+                    ${actions}
+                </div>
+            </div>
+
+        </article>
+    `;
+
+}
+
+// =====================================
+// AÇÕES DOS CARDS
+// =====================================
+
+function attachCardEvents() {
+
+    content.querySelectorAll("[data-action]").forEach(button => {
+
+        button.addEventListener("click",async () => {
+
+            const action = button.dataset.action;
+            const userId = button.dataset.id;
+
+            const friendship = friendships.find(item =>
+                getOtherUser(item) === userId
+            );
+
+            if (!friendship) return;
+
+            if (action === "profile") {
+                location.href = profileUrl(userId);
+                return;
+            }
+
+            if (action === "accept") {
+                await acceptRequest(friendship);
+                return;
+            }
+
+            if (action === "decline") {
+                await declineRequest(friendship);
+                return;
+            }
+
+            if (action === "cancel") {
+                await cancelRequest(friendship);
+                return;
+            }
+
+            if (action === "remove") {
+                await removeFriend(friendship);
+                return;
+            }
+
+        });
+
+    });
+
+    lucide.createIcons();
+
+}
+
+// =====================================
+// ACEITAR SOLICITAÇÃO
+// =====================================
+
+async function acceptRequest(friendship) {
+
+    const { error } = await supabase.rpc("respond_friend_request",{
+        p_friendship_id:friendship.id,
+        p_accept:true
+    });
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    notify("Amizade confirmada!");
+    await loadFriendships();
+
+}
+
+// =====================================
+// RECUSAR SOLICITAÇÃO
+// =====================================
+
+async function declineRequest(friendship) {
+
+    const confirmation = await Swal.fire({
+        title:"Recusar solicitação?",
+        text:"A solicitação será recusada.",
+        icon:"question",
+        showCancelButton:true,
+        confirmButtonText:"Recusar",
+        cancelButtonText:"Voltar",
+        confirmButtonColor:"#dc2626",
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+
+    if (!confirmation.isConfirmed) return;
+
+    const { error } = await supabase.rpc("respond_friend_request",{
+        p_friendship_id:friendship.id,
+        p_accept:false
+    });
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    notify("Solicitação recusada.");
+    await loadFriendships();
+
+}
+
+// =====================================
+// CANCELAR SOLICITAÇÃO
+// =====================================
+
+async function cancelRequest(friendship) {
+
+    const confirmation = await Swal.fire({
+        title:"Cancelar solicitação?",
+        icon:"question",
+        showCancelButton:true,
+        confirmButtonText:"Cancelar solicitação",
+        cancelButtonText:"Voltar",
+        confirmButtonColor:"#dc2626",
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+
+    if (!confirmation.isConfirmed) return;
+
+    const { error } = await supabase.rpc("cancel_friend_request",{
+        p_friendship_id:friendship.id
+    });
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    notify("Solicitação cancelada.");
+    await loadFriendships();
+
+}
+
+// =====================================
+// REMOVER AMIZADE
+// =====================================
+
+async function removeFriend(friendship) {
+
+    const confirmation = await Swal.fire({
+        title:"Remover amizade?",
+        text:"Vocês deixarão de aparecer na lista de amigos um do outro.",
+        icon:"warning",
+        showCancelButton:true,
+        confirmButtonText:"Remover amizade",
+        cancelButtonText:"Manter amizade",
+        confirmButtonColor:"#dc2626",
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+
+    if (!confirmation.isConfirmed) return;
+
+    const { error } = await supabase.rpc("remove_friendship",{
+        p_friendship_id:friendship.id
+    });
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    notify("Amizade removida.");
+    await loadFriendships();
+
+}
+
+// =====================================
+// PESQUISAR PESSOAS
+// =====================================
+
+searchInput.addEventListener("input",() => {
+
+    clearTimeout(searchTimer);
+
+    const term = searchInput.value.trim();
+
+    if (term.length < 2) {
+        searchResults.innerHTML = "";
+        return;
+    }
+
+    searchResults.innerHTML = `
+        <div class="panel loading">
+            <div class="spinner"></div>
+            Pesquisando pessoas...
+        </div>
+    `;
+
+    searchTimer = setTimeout(() => {
+        searchPeople(term);
+    },450);
+
+});
+
+async function searchPeople(term) {
+
+    const cleanTerm = term.replace(/^@/,"");
+
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("id,full_name,username,avatar_url,city,state")
+        .neq("id",currentUser.id)
+        .or(`full_name.ilike.%${cleanTerm}%,username.ilike.%${cleanTerm}%`)
+        .limit(20);
+
+    if (error) {
+
+        console.error(error);
+
+        searchResults.innerHTML = `
+            <div class="panel empty-state">
+                <strong>Erro na pesquisa</strong>
+                <p>${escapeHTML(error.message)}</p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    if (!data || data.length === 0) {
+
+        searchResults.innerHTML = `
+            <div class="panel empty-state">
+                <i data-lucide="search-x"></i>
+                <strong>Nenhuma pessoa encontrada</strong>
+                <p>Tente outro nome ou username.</p>
+            </div>
+        `;
+
+        lucide.createIcons();
+        return;
+
+    }
+
+    const friendshipMap = {};
+
+    for (const item of friendships) {
+        friendshipMap[getOtherUser(item)] = item;
+    }
+
+    searchResults.innerHTML = `
+        <h2 class="section-title">Resultados da pesquisa</h2>
+
+        <div class="people-grid">
+            ${data.map(profile => {
+
+                const relation = friendshipMap[profile.id];
+
+                let action = `
+                    <button
+                        class="btn btn-primary"
+                        data-search-action="add"
+                        data-id="${profile.id}">
+                        <i data-lucide="user-plus"></i>
+                        Adicionar
+                    </button>
+                `;
+
+                if (relation?.status === "accepted") {
+                    action = `
+                        <button
+                            class="btn"
+                            data-search-action="profile"
+                            data-id="${profile.id}">
+                            <i data-lucide="user-check"></i>
+                            Amigos
+                        </button>
+                    `;
+                } else if (relation?.status === "pending") {
+
+                    const sent = relation.requested_by === currentUser.id;
+
+                    action = `
+                        <button
+                            class="btn"
+                            data-search-action="profile"
+                            data-id="${profile.id}">
+                            ${sent ? "Solicitação enviada" : "Responder solicitação"}
+                        </button>
+                    `;
+
+                }
+
+                const place = [profile.city,profile.state]
+                    .filter(Boolean).join(" - ");
+
+                return `
+                    <article class="panel person-card">
+
+                        ${renderAvatar(profile)}
+
+                        <div class="person-info">
+                            <strong>${escapeHTML(profile.full_name || "Usuário")}</strong>
+                            <small>@${escapeHTML(profile.username || "usuario")}</small>
+                            ${place ? `<small>${escapeHTML(place)}</small>` : ""}
+
+                            <div class="person-actions">
+                                <button
+                                    class="btn"
+                                    data-search-action="profile"
+                                    data-id="${profile.id}">
+                                    Ver perfil
+                                </button>
+                                ${action}
+                            </div>
+                        </div>
+
+                    </article>
+                `;
+
+            }).join("")}
+        </div>
+    `;
+
+    // Atualiza o cache local dos perfis encontrados.
+    for (const profile of data) {
+        profiles[profile.id] = profile;
+    }
+
+    searchResults.querySelectorAll("[data-search-action]").forEach(button => {
+
+        button.addEventListener("click",async () => {
+
+            const action = button.dataset.searchAction;
+            const id = button.dataset.id;
+
+            if (action === "profile") {
+                location.href = profileUrl(id);
+                return;
+            }
+
+            if (action === "add") {
+                await sendFriendRequest(id);
+            }
+
+        });
+
+    });
+
+    loadAvatarImages();
+    lucide.createIcons();
+
+}
+
+// =====================================
+// ENVIAR SOLICITAÇÃO
+// =====================================
+
+async function sendFriendRequest(targetId) {
+
+    if (targetId === currentUser.id) return;
+
+    const existing = friendships.find(item =>
+        getOtherUser(item) === targetId &&
+        ["pending","accepted"].includes(item.status)
+    );
+
+    if (existing) {
+        notify("Já existe uma relação de amizade.", "info");
+        return;
+    }
+
+    const [userA,userB] = [currentUser.id,targetId].sort();
+
+    const { error } = await supabase
+        .from("friendships")
+        .insert({
+            user_a:userA,
+            user_b:userB,
+            requested_by:currentUser.id,
+            status:"pending"
+        });
+
+    if (error) {
+
+        console.error(error);
+
+        if (error.code === "23505") {
+            notify("Já existe uma solicitação entre vocês.","info");
+        } else {
+            showError(error.message);
+        }
+
+        return;
+
+    }
+
+    notify("Solicitação enviada!");
+
+    await loadFriendships();
+
+    // Atualiza a pesquisa para refletir o novo estado.
+    const term = searchInput.value.trim();
+
+    if (term.length >= 2) {
+        await searchPeople(term);
+    }
+
+}
+
+// =====================================
+// SAIR
+// =====================================
+
+document.getElementById("logoutButton").addEventListener("click",async () => {
+
+    const confirmation = await Swal.fire({
+        title:"Sair da conta?",
+        icon:"question",
+        showCancelButton:true,
+        confirmButtonText:"Sair",
+        cancelButtonText:"Cancelar",
+        confirmButtonColor:"#2563eb",
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+
+    if (!confirmation.isConfirmed) return;
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    location.replace("./login.html");
+
+});
+
+// =====================================
+// INICIALIZAÇÃO
+// =====================================
+
+initialize().catch(error => {
+    console.error(error);
+    showError(error.message || "Erro ao iniciar a página.");
+});
+
+lucide.createIcons();
+
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load",() => {
+        navigator.serviceWorker.register("./service-worker.js")
+            .catch(error => console.error("Erro PWA:",error));
+    });
+}
+</script>
+
+</body>
+</html>
