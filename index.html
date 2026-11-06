@@ -130,55 +130,51 @@ const retryButton = document.getElementById("retryButton");
 let direcionando = false;
 
 function mostrarErro(mensagem) {
-
     loader.style.display = "none";
     status.textContent = "Não foi possível continuar.";
     errorBox.textContent = mensagem;
     errorBox.style.display = "block";
     retryButton.style.display = "block";
-
 }
 
 async function iniciar() {
-
     try {
-
         status.textContent = "Verificando sua sessão...";
 
-        const { data, error } = await supabase.auth.getSession();
+        // Cria uma promessa de timeout de 8 segundos para evitar travamentos
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error("O tempo limite de conexão foi excedido.")), 8000)
+        );
+
+        // Dispara o getSession competindo com o timeout
+        const sessionPromise = supabase.auth.getSession();
+
+        const { data, error } = await Promise.race([sessionPromise, timeoutPromise]);
 
         if (error) throw error;
 
-        const destino = data.session
-            ? "./feed.html"
-            : "./login.html";
+        const destino = data.session ? "./feed.html" : "./login.html";
 
         direcionando = true;
 
-        status.textContent = data.session
-            ? "Bem-vindo de volta!"
-            : "Vamos começar...";
+        status.textContent = data.session ? "Bem-vindo de volta!" : "Vamos começar...";
 
         window.location.replace(destino);
 
     } catch (error) {
-
         console.error("Erro de inicialização:", error);
 
         mostrarErro(
             "Verifique sua conexão com a internet e tente novamente. " +
-            (error.message || "")
+            (error.message ? `(${error.message})` : "")
         );
-
     }
-
 }
 
 iniciar();
 
 // Mantém a sessão sincronizada caso ela mude em outra aba.
 supabase.auth.onAuthStateChange((event, session) => {
-
     if (direcionando) return;
 
     if (event === "SIGNED_IN") {
@@ -190,7 +186,6 @@ supabase.auth.onAuthStateChange((event, session) => {
         direcionando = true;
         window.location.replace("./login.html");
     }
-
 });
 
 </script>
