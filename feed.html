@@ -1,0 +1,1883 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+
+<title>Feed | FaceCrato</title>
+
+<link rel="manifest" href="./manifest.json">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#0b1120;
+    color:#f1f5f9;
+    font-family:Inter,system-ui,sans-serif;
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+:root{
+    --panel:#111c2e;
+    --panel2:#17243a;
+    --border:#26364f;
+    --muted:#94a3b8;
+    --blue:#3b82f6;
+}
+
+.topbar{
+    height:66px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:#0b1120ed;
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+}
+
+.topbar-inner{
+    max-width:1250px;
+    height:100%;
+    margin:auto;
+    padding:0 20px;
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:950;
+    letter-spacing:-1px;
+    white-space:nowrap;
+}
+
+.logo-mark{
+    width:37px;
+    height:37px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#2563eb,#6366f1);
+    color:white;
+    font-size:20px;
+}
+
+.search-box{
+    flex:1;
+    max-width:430px;
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+    height:40px;
+    padding:0 15px 0 40px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#131f32;
+    color:white;
+    outline:none;
+}
+
+.search-box i{
+    position:absolute;
+    left:13px;
+    top:12px;
+    color:var(--muted);
+    width:17px;
+}
+
+.top-actions{
+    margin-left:auto;
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel);
+    color:#cbd5e1;
+    display:grid;
+    place-items:center;
+}
+
+.icon-btn:hover,.nav-btn:hover{
+    background:#1e3150;
+}
+
+.icon-btn svg{width:19px}
+
+.avatar{
+    width:39px;
+    height:39px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#8b5cf6);
+    display:grid;
+    place-items:center;
+    color:white;
+    font-weight:900;
+    overflow:hidden;
+    flex-shrink:0;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.layout{
+    max-width:1250px;
+    margin:25px auto;
+    padding:0 20px;
+    display:grid;
+    grid-template-columns:245px minmax(0,650px) 260px;
+    gap:24px;
+    align-items:start;
+}
+
+.panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:17px;
+}
+
+.sidebar{
+    position:sticky;
+    top:88px;
+    padding:17px;
+}
+
+.profile-mini{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:14px;
+}
+
+.profile-mini strong{
+    display:block;
+    font-size:14px;
+}
+
+.profile-mini small{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.nav-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:12px;
+    color:#cbd5e1;
+    border:0;
+    background:transparent;
+    border-radius:11px;
+    text-align:left;
+    margin:3px 0;
+    font-size:14px;
+}
+
+.nav-btn.active{
+    background:#1d3760;
+    color:#93c5fd;
+    font-weight:800;
+}
+
+.nav-btn svg{width:19px}
+
+.sidebar-note{
+    margin-top:20px;
+    padding:13px;
+    border-radius:12px;
+    background:#17243a;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+}
+
+.feed-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:0 0 17px;
+}
+
+.feed-header h1{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:-.8px;
+    margin:0;
+}
+
+.feed-header p{
+    color:var(--muted);
+    font-size:12px;
+    margin:4px 0 0;
+}
+
+.refresh-btn{
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:#cbd5e1;
+    border-radius:10px;
+    width:39px;
+    height:39px;
+    display:grid;
+    place-items:center;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    padding:5px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:13px;
+    margin-bottom:16px;
+}
+
+.tab{
+    flex:1;
+    border:0;
+    padding:11px;
+    border-radius:9px;
+    background:transparent;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:750;
+}
+
+.tab.active{
+    color:white;
+    background:#263d61;
+}
+
+.composer{
+    padding:17px;
+    margin-bottom:17px;
+}
+
+.composer-top{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.composer textarea{
+    width:100%;
+    min-height:75px;
+    resize:vertical;
+    border:1px solid transparent;
+    border-radius:10px;
+    background:#17243a;
+    color:white;
+    padding:13px;
+    outline:none;
+    font-size:14px;
+}
+
+.composer textarea:focus{
+    border-color:#3b82f6;
+}
+
+.composer textarea::placeholder{color:#8291a8}
+
+.composer-options{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:13px;
+    padding-top:13px;
+    border-top:1px solid var(--border);
+}
+
+.option-btn{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    background:transparent;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:9px 11px;
+    color:#cbd5e1;
+    font-size:12px;
+}
+
+.option-btn svg{width:16px}
+
+.option-btn:hover{background:#1e3150}
+
+.composer select{
+    margin-left:auto;
+    background:#17243a;
+    border:1px solid var(--border);
+    color:#cbd5e1;
+    border-radius:9px;
+    padding:9px;
+    font-size:12px;
+    max-width:145px;
+}
+
+.publish-btn{
+    background:linear-gradient(100deg,#2563eb,#4f46e5);
+    color:white;
+    border:0;
+    border-radius:9px;
+    padding:10px 17px;
+    font-size:12px;
+    font-weight:850;
+}
+
+.publish-btn:disabled{
+    opacity:.5;
+    cursor:wait;
+}
+
+.file-preview{
+    display:none;
+    margin:12px 0 0 51px;
+    color:#93c5fd;
+    font-size:12px;
+}
+
+.post{
+    padding:17px;
+    margin-bottom:15px;
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.post-author{
+    flex:1;
+    min-width:0;
+}
+
+.post-author strong{
+    display:block;
+    font-size:14px;
+}
+
+.post-author small{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.post-menu{
+    background:none;
+    color:var(--muted);
+    border:0;
+    padding:7px;
+}
+
+.post-menu svg{width:18px}
+
+.post-content{
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    line-height:1.65;
+    font-size:14px;
+    margin:16px 0;
+    color:#e2e8f0;
+}
+
+.post-media{
+    width:100%;
+    max-height:470px;
+    object-fit:contain;
+    border-radius:12px;
+    background:#080d18;
+    margin-bottom:12px;
+}
+
+.post-stats{
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:11px;
+    padding:10px 2px;
+    border-bottom:1px solid var(--border);
+}
+
+.post-actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    padding-top:9px;
+}
+
+.action-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    background:transparent;
+    border:0;
+    color:#94a3b8;
+    padding:10px 4px;
+    border-radius:9px;
+    font-size:12px;
+}
+
+.action-btn svg{width:17px}
+
+.action-btn:hover{background:#1b2a40}
+
+.action-btn.reacted{
+    color:#60a5fa;
+    font-weight:800;
+}
+
+.action-btn.saved{color:#c4b5fd}
+
+.comments-area{
+    display:none;
+    border-top:1px solid var(--border);
+    margin-top:10px;
+    padding-top:12px;
+}
+
+.comments-area.open{display:block}
+
+.comment-item{
+    display:flex;
+    gap:9px;
+    margin:12px 0;
+}
+
+.comment-bubble{
+    background:#1a2940;
+    padding:9px 12px;
+    border-radius:12px;
+    min-width:0;
+}
+
+.comment-bubble strong{
+    font-size:11px;
+    display:block;
+    margin-bottom:4px;
+}
+
+.comment-bubble p{
+    font-size:12px;
+    margin:0;
+    color:#dbeafe;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
+
+.comment-form{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.comment-form input{
+    flex:1;
+    min-width:0;
+    background:#17243a;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:11px;
+    outline:none;
+    color:white;
+    font-size:12px;
+}
+
+.comment-form button{
+    background:#2563eb;
+    border:0;
+    border-radius:10px;
+    padding:0 13px;
+    color:white;
+}
+
+.comment-form button svg{width:17px}
+
+.right-panel{
+    position:sticky;
+    top:88px;
+    padding:17px;
+}
+
+.right-panel h3{
+    font-size:14px;
+    font-weight:850;
+    margin:0 0 13px;
+}
+
+.right-panel p{
+    font-size:12px;
+    line-height:1.7;
+    color:var(--muted);
+}
+
+.right-separator{
+    height:1px;
+    background:var(--border);
+    margin:17px 0;
+}
+
+.empty-state{
+    padding:45px 20px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.empty-state svg{
+    width:35px;
+    height:35px;
+    margin:0 auto 12px;
+    color:#64748b;
+}
+
+.empty-state strong{
+    display:block;
+    color:#cbd5e1;
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.empty-state p{
+    font-size:12px;
+    line-height:1.6;
+}
+
+.loading{
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.spinner{
+    width:25px;
+    height:25px;
+    border:3px solid #26364f;
+    border-top-color:#3b82f6;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.mobile-nav{display:none}
+
+@media(max-width:1050px){
+    .layout{
+        grid-template-columns:210px minmax(0,650px);
+        max-width:900px;
+    }
+    .right-panel{display:none}
+}
+
+@media(max-width:700px){
+    .topbar-inner{padding:0 13px;gap:12px}
+    .logo{font-size:19px}
+    .logo-mark{width:34px;height:34px}
+    .search-box{display:none}
+    .layout{
+        display:block;
+        padding:0 12px;
+        margin:17px auto 90px;
+    }
+    .sidebar{display:none}
+    .feed-header h1{font-size:21px}
+    .composer,.post{padding:14px}
+    .composer select{margin-left:0;flex:1}
+    .publish-btn{flex:1}
+    .option-btn{padding:9px}
+    .mobile-nav{
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        z-index:60;
+        display:flex;
+        justify-content:space-around;
+        padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+        background:#101a2bed;
+        border-top:1px solid var(--border);
+        backdrop-filter:blur(15px);
+    }
+    .mobile-nav button{
+        border:0;
+        background:none;
+        color:#94a3b8;
+        display:grid;
+        justify-items:center;
+        gap:4px;
+        font-size:10px;
+    }
+    .mobile-nav button.active{color:#60a5fa}
+    .mobile-nav svg{width:20px;height:20px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOPO -->
+<header class="topbar">
+    <div class="topbar-inner">
+
+        <div class="logo">
+            <div class="logo-mark">F</div>
+            FaceCrato
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled>
+        </div>
+
+        <div class="top-actions">
+            <button class="icon-btn" id="notificationsButton" title="Notificações">
+                <i data-lucide="bell"></i>
+            </button>
+
+            <button class="icon-btn" id="profileButton" title="Meu perfil">
+                <i data-lucide="user-round"></i>
+            </button>
+
+            <button class="icon-btn" id="logoutButton" title="Sair">
+                <i data-lucide="log-out"></i>
+            </button>
+        </div>
+
+    </div>
+</header>
+
+<!-- LAYOUT -->
+<main class="layout">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar panel">
+
+        <div class="profile-mini">
+            <div class="avatar" id="sideAvatar">F</div>
+            <div>
+                <strong id="sideName">Carregando...</strong>
+                <small id="sideUsername">@...</small>
+            </div>
+        </div>
+
+        <button class="nav-btn active" data-nav="feed">
+            <i data-lucide="house"></i>
+            Feed
+        </button>
+
+        <button class="nav-btn" data-nav="friends">
+            <i data-lucide="users"></i>
+            Amigos
+        </button>
+
+        <button class="nav-btn" data-nav="notifications">
+            <i data-lucide="bell"></i>
+            Notificações
+        </button>
+
+        <button class="nav-btn" data-nav="profile">
+            <i data-lucide="user-round"></i>
+            Meu perfil
+        </button>
+
+        <div class="sidebar-note">
+            <strong>FACECRATO</strong><br>
+            Uma rede independente para conectar pessoas e compartilhar momentos.
+        </div>
+
+    </aside>
+
+    <!-- FEED PRINCIPAL -->
+    <section>
+
+        <div class="feed-header">
+            <div>
+                <h1>Seu feed</h1>
+                <p>O que está acontecendo por aí?</p>
+            </div>
+
+            <button class="refresh-btn" id="refreshButton" title="Atualizar feed">
+                <i data-lucide="refresh-cw"></i>
+            </button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-feed="discover">
+                <i data-lucide="compass" style="width:15px;vertical-align:middle"></i>
+                Para você
+            </button>
+
+            <button class="tab" data-feed="friends">
+                <i data-lucide="users" style="width:15px;vertical-align:middle"></i>
+                Amigos
+            </button>
+        </div>
+
+        <!-- CRIAR PUBLICAÇÃO -->
+        <div class="composer panel">
+
+            <div class="composer-top">
+                <div class="avatar" id="composerAvatar">F</div>
+
+                <textarea
+                    id="postContent"
+                    maxlength="5000"
+                    placeholder="Compartilhe alguma coisa..."
+                ></textarea>
+            </div>
+
+            <div class="file-preview" id="filePreview"></div>
+
+            <div class="composer-options">
+
+                <label class="option-btn" for="mediaInput">
+                    <i data-lucide="image"></i>
+                    Foto/vídeo
+                </label>
+
+                <input
+                    id="mediaInput"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+                    hidden
+                >
+
+                <select id="visibility">
+                    <option value="public">Público</option>
+                    <option value="friends">Amigos</option>
+                    <option value="private">Privado</option>
+                </select>
+
+                <button class="publish-btn" id="publishButton">
+                    Publicar
+                </button>
+
+            </div>
+        </div>
+
+        <!-- PUBLICAÇÕES -->
+        <div id="postsContainer">
+
+            <div class="panel loading">
+                <div class="spinner"></div>
+                Carregando publicações...
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LATERAL DIREITA -->
+    <aside class="right-panel panel">
+
+        <h3>Sobre o FaceCrato</h3>
+
+        <p>
+            Uma rede social independente, criada para aproximar pessoas,
+            compartilhar experiências e fortalecer conexões.
+        </p>
+
+        <div class="right-separator"></div>
+
+        <h3>Comunidade</h3>
+
+        <p>
+            As comunidades e os eventos estão previstos para uma próxima versão.
+        </p>
+
+        <div class="right-separator"></div>
+
+        <p>FaceCrato © 2026</p>
+
+    </aside>
+
+</main>
+
+<!-- NAVEGAÇÃO MOBILE -->
+<nav class="mobile-nav">
+
+    <button class="active" data-nav="feed">
+        <i data-lucide="house"></i>
+        Feed
+    </button>
+
+    <button data-nav="friends">
+        <i data-lucide="users"></i>
+        Amigos
+    </button>
+
+    <button data-nav="notifications">
+        <i data-lucide="bell"></i>
+        Alertas
+    </button>
+
+    <button data-nav="profile">
+        <i data-lucide="user-round"></i>
+        Perfil
+    </button>
+
+</nav>
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+// ==========================================
+// ELEMENTOS
+// ==========================================
+
+const postsContainer = document.getElementById("postsContainer");
+const postContent = document.getElementById("postContent");
+const visibility = document.getElementById("visibility");
+const mediaInput = document.getElementById("mediaInput");
+const filePreview = document.getElementById("filePreview");
+const publishButton = document.getElementById("publishButton");
+
+let currentUser = null;
+let currentProfile = null;
+let currentFeed = "discover";
+let loadingFeed = false;
+
+const reactionTypes = [
+    "like",
+    "love",
+    "haha",
+    "wow",
+    "sad",
+    "angry"
+];
+
+const reactionIcons = {
+    like: "👍",
+    love: "❤️",
+    haha: "😂",
+    wow: "😮",
+    sad: "😢",
+    angry: "😡"
+};
+
+// ==========================================
+// UTILITÁRIOS
+// ==========================================
+
+function escapeHTML(value = "") {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[char]);
+}
+
+function initials(name = "F") {
+    return name.trim().split(/\s+/).slice(0,2)
+        .map(part => part[0] || "")
+        .join("")
+        .toUpperCase();
+}
+
+function formatDate(date) {
+    return new Intl.DateTimeFormat("pt-BR", {
+        day:"2-digit",
+        month:"short",
+        hour:"2-digit",
+        minute:"2-digit"
+    }).format(new Date(date));
+}
+
+function showError(text) {
+    Swal.fire({
+        icon:"error",
+        title:"Ops!",
+        text,
+        background:"#111c2e",
+        color:"#f8fafc",
+        confirmButtonColor:"#2563eb"
+    });
+}
+
+function showSuccess(text) {
+    Swal.fire({
+        toast:true,
+        position:"top",
+        icon:"success",
+        title:text,
+        showConfirmButton:false,
+        timer:2200,
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+}
+
+function setAvatar(element, profile) {
+
+    if (!element) return;
+
+    const name = profile?.full_name || profile?.username || "FaceCrato";
+
+    element.textContent = initials(name);
+
+    if (profile?.avatar_url) {
+        element.innerHTML = `<img src="${escapeHTML(profile.avatar_url)}" alt="">`;
+    }
+
+}
+
+// ==========================================
+// AUTENTICAÇÃO E PERFIL
+// ==========================================
+
+async function initialize() {
+
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error || !data.session) {
+        window.location.replace("./login.html");
+        return;
+    }
+
+    currentUser = data.session.user;
+
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("id,username,full_name,avatar_url")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+    if (profileError) {
+        console.error(profileError);
+    }
+
+    currentProfile = profile || {
+        id: currentUser.id,
+        username: currentUser.email?.split("@")[0] || "usuario",
+        full_name: currentUser.email?.split("@")[0] || "Usuário"
+    };
+
+    document.getElementById("sideName").textContent =
+        currentProfile.full_name || "Usuário";
+
+    document.getElementById("sideUsername").textContent =
+        "@" + (currentProfile.username || "usuario");
+
+    setAvatar(document.getElementById("sideAvatar"), currentProfile);
+    setAvatar(document.getElementById("composerAvatar"), currentProfile);
+
+    await loadFeed();
+
+}
+
+// ==========================================
+// OBTER AMIGOS
+// ==========================================
+
+async function getFriendIds() {
+
+    const { data, error } = await supabase
+        .from("friendships")
+        .select("user_a,user_b")
+        .eq("status", "accepted")
+        .or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
+
+    if (error) throw error;
+
+    const ids = new Set([currentUser.id]);
+
+    (data || []).forEach(friendship => {
+
+        ids.add(
+            friendship.user_a === currentUser.id
+                ? friendship.user_b
+                : friendship.user_a
+        );
+
+    });
+
+    return [...ids];
+
+}
+
+// ==========================================
+// CARREGAR PUBLICAÇÕES
+// ==========================================
+
+async function loadFeed() {
+
+    if (loadingFeed) return;
+
+    loadingFeed = true;
+
+    postsContainer.innerHTML = `
+        <div class="panel loading">
+            <div class="spinner"></div>
+            Buscando publicações...
+        </div>
+    `;
+
+    try {
+
+        let query = supabase
+            .from("posts")
+            .select(`
+                id,
+                user_id,
+                content,
+                post_type,
+                visibility,
+                comments_permission,
+                created_at,
+                edited_at,
+                original_post_id
+            `)
+            .order("created_at", { ascending:false })
+            .limit(40);
+
+        if (currentFeed === "friends") {
+
+            const friendIds = await getFriendIds();
+
+            query = query.in("user_id", friendIds);
+
+        }
+
+        const { data: posts, error } = await query;
+
+        if (error) throw error;
+
+        if (!posts || posts.length === 0) {
+
+            postsContainer.innerHTML = `
+                <div class="panel empty-state">
+                    <i data-lucide="messages-square"></i>
+                    <strong>Nenhuma publicação por aqui</strong>
+                    <p>Quando houver publicações disponíveis, elas aparecerão aqui.</p>
+                </div>
+            `;
+
+            lucide.createIcons();
+            return;
+
+        }
+
+        const postIds = posts.map(post => post.id);
+        const userIds = [...new Set(posts.map(post => post.user_id))];
+
+        const [
+            profilesResult,
+            mediaResult,
+            reactionsResult,
+            commentsResult,
+            savedResult
+        ] = await Promise.all([
+
+            supabase
+                .from("profiles")
+                .select("id,username,full_name,avatar_url")
+                .in("id", userIds),
+
+            supabase
+                .from("post_media")
+                .select("id,post_id,media_url,media_type,position")
+                .in("post_id", postIds)
+                .order("position"),
+
+            supabase
+                .from("reactions")
+                .select("post_id,user_id,reaction_type")
+                .in("post_id", postIds),
+
+            supabase
+                .from("comments")
+                .select("id,post_id,user_id,content,created_at,parent_id")
+                .in("post_id", postIds)
+                .is("parent_id", null)
+                .order("created_at", { ascending:true }),
+
+            supabase
+                .from("saved_posts")
+                .select("post_id")
+                .eq("user_id", currentUser.id)
+                .in("post_id", postIds)
+
+        ]);
+
+        if (profilesResult.error) throw profilesResult.error;
+        if (mediaResult.error) throw mediaResult.error;
+        if (reactionsResult.error) throw reactionsResult.error;
+        if (commentsResult.error) throw commentsResult.error;
+        if (savedResult.error) throw savedResult.error;
+
+        const profiles = profilesResult.data || [];
+        const media = mediaResult.data || [];
+        const reactions = reactionsResult.data || [];
+        const comments = commentsResult.data || [];
+        const saved = new Set((savedResult.data || []).map(item => item.post_id));
+
+        const profileMap = Object.fromEntries(
+            profiles.map(profile => [profile.id, profile])
+        );
+
+        const mediaMap = {};
+        media.forEach(item => {
+            if (!mediaMap[item.post_id]) mediaMap[item.post_id] = [];
+            mediaMap[item.post_id].push(item);
+        });
+
+        const commentsMap = {};
+        comments.forEach(item => {
+            if (!commentsMap[item.post_id]) commentsMap[item.post_id] = [];
+            commentsMap[item.post_id].push(item);
+        });
+
+        const reactionMap = {};
+        reactions.forEach(item => {
+            if (!reactionMap[item.post_id]) reactionMap[item.post_id] = [];
+            reactionMap[item.post_id].push(item);
+        });
+
+        const prepared = await Promise.all(posts.map(async post => {
+
+            const postMedia = mediaMap[post.id] || [];
+
+            const signedMedia = await Promise.all(postMedia.map(async item => {
+
+                const { data, error } = await supabase.storage
+                    .from("post-media")
+                    .createSignedUrl(item.media_url, 3600);
+
+                if (error) {
+                    console.error("Erro ao carregar mídia:", error);
+                    return {...item, signedUrl:null};
+                }
+
+                return {...item, signedUrl:data.signedUrl};
+
+            }));
+
+            return {
+                ...post,
+                author:profileMap[post.user_id],
+                media:signedMedia,
+                reactions:reactionMap[post.id] || [],
+                comments:commentsMap[post.id] || [],
+                saved:saved.has(post.id)
+            };
+
+        }));
+
+        renderPosts(prepared);
+
+    } catch (error) {
+
+        console.error("Erro ao carregar feed:", error);
+
+        postsContainer.innerHTML = `
+            <div class="panel empty-state">
+                <i data-lucide="alert-circle"></i>
+                <strong>Não foi possível carregar o feed</strong>
+                <p>${escapeHTML(error.message || "Verifique sua conexão e tente novamente.")}</p>
+                <button class="publish-btn" id="retryFeed">Tentar novamente</button>
+            </div>
+        `;
+
+        document.getElementById("retryFeed")?.addEventListener("click", loadFeed);
+
+        lucide.createIcons();
+
+    } finally {
+
+        loadingFeed = false;
+
+    }
+
+}
+
+// ==========================================
+// RENDERIZAR PUBLICAÇÕES
+// ==========================================
+
+function renderPosts(posts) {
+
+    postsContainer.innerHTML = posts.map(post => {
+
+        const author = post.author || {
+            full_name:"Usuário",
+            username:"usuario"
+        };
+
+        const userReaction = post.reactions.find(
+            item => item.user_id === currentUser.id
+        );
+
+        const reactionCount = post.reactions.length;
+        const commentCount = post.comments.length;
+
+        const reactionSummary = Object.entries(
+            post.reactions.reduce((acc, item) => {
+                acc[item.reaction_type] = (acc[item.reaction_type] || 0) + 1;
+                return acc;
+            }, {})
+        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`)
+         .join(" ");
+
+        const mediaHTML = post.media.map(item => {
+
+            if (!item.signedUrl) {
+                return `<p class="password-hint">Não foi possível carregar esta mídia.</p>`;
+            }
+
+            if (item.media_type === "video") {
+                return `
+                    <video class="post-media" controls preload="metadata">
+                        <source src="${escapeHTML(item.signedUrl)}">
+                    </video>
+                `;
+            }
+
+            return `
+                <img
+                    class="post-media"
+                    src="${escapeHTML(item.signedUrl)}"
+                    alt="Imagem da publicação"
+                    loading="lazy"
+                >
+            `;
+
+        }).join("");
+
+        const commentsHTML = post.comments.map(comment => {
+
+            const commentAuthor = comment.user_id === currentUser.id
+                ? currentProfile
+                : null;
+
+            return `
+                <div class="comment-item">
+                    <div class="avatar" style="width:31px;height:31px;font-size:10px">
+                        ${escapeHTML(initials(commentAuthor?.full_name || "U"))}
+                    </div>
+
+                    <div class="comment-bubble">
+                        <strong>
+                            ${escapeHTML(commentAuthor?.full_name || "Usuário")}
+                        </strong>
+                        <p>${escapeHTML(comment.content)}</p>
+                    </div>
+                </div>
+            `;
+
+        }).join("");
+
+        const canComment = post.comments_permission !== "nobody";
+
+        const visibilityLabel = {
+            public:"Público",
+            friends:"Amigos",
+            private:"Privado"
+        }[post.visibility] || "Publicação";
+
+        return `
+            <article class="post panel" data-post-id="${post.id}">
+
+                <div class="post-header">
+
+                    <div class="avatar">
+                        ${escapeHTML(initials(author.full_name || author.username))}
+                    </div>
+
+                    <div class="post-author">
+                        <strong>${escapeHTML(author.full_name || "Usuário")}</strong>
+                        <small>
+                            @${escapeHTML(author.username || "usuario")}
+                            · ${escapeHTML(formatDate(post.created_at))}
+                            · ${visibilityLabel}
+                            ${post.edited_at ? " · Editado" : ""}
+                        </small>
+                    </div>
+
+                    ${
+                        post.user_id === currentUser.id
+                        ? `<button class="post-menu" data-action="delete-post" title="Excluir publicação">
+                               <i data-lucide="trash-2"></i>
+                           </button>`
+                        : ""
+                    }
+
+                </div>
+
+                ${
+                    post.content
+                    ? `<div class="post-content">${escapeHTML(post.content)}</div>`
+                    : ""
+                }
+
+                ${mediaHTML}
+
+                <div class="post-stats">
+                    <span>${reactionSummary || " "}</span>
+                    <span>${commentCount} comentário(s)</span>
+                </div>
+
+                <div class="post-actions">
+
+                    <button
+                        class="action-btn ${userReaction ? "reacted" : ""}"
+                        data-action="reaction"
+                        data-reaction="${userReaction?.reaction_type || "like"}"
+                    >
+                        <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
+                        ${userReaction ? "Reagiu" : "Curtir"} (${reactionCount})
+                    </button>
+
+                    <button class="action-btn" data-action="toggle-comments">
+                        <i data-lucide="message-circle"></i>
+                        Comentar
+                    </button>
+
+                    <button
+                        class="action-btn ${post.saved ? "saved" : ""}"
+                        data-action="save-post"
+                    >
+                        <i data-lucide="bookmark"></i>
+                        ${post.saved ? "Salvo" : "Salvar"}
+                    </button>
+
+                </div>
+
+                <div class="comments-area" id="comments-${post.id}">
+
+                    ${commentsHTML || `
+                        <p style="font-size:12px;color:#94a3b8">
+                            Nenhum comentário ainda.
+                        </p>
+                    `}
+
+                    ${
+                        canComment
+                        ? `
+                            <form class="comment-form" data-post-id="${post.id}">
+                                <input
+                                    type="text"
+                                    name="comment"
+                                    placeholder="Escreva um comentário..."
+                                    maxlength="2000"
+                                    required
+                                >
+                                <button type="submit" title="Enviar comentário">
+                                    <i data-lucide="send"></i>
+                                </button>
+                            </form>
+                        `
+                        : `
+                            <p style="font-size:12px;color:#94a3b8">
+                                Comentários desativados nesta publicação.
+                            </p>
+                        `
+                    }
+
+                </div>
+
+            </article>
+        `;
+
+    }).join("");
+
+    lucide.createIcons();
+
+}
+
+// ==========================================
+// ESCOLHA DE ARQUIVO
+// ==========================================
+
+mediaInput.addEventListener("change", () => {
+
+    const file = mediaInput.files[0];
+
+    if (!file) {
+        filePreview.style.display = "none";
+        return;
+    }
+
+    const allowed = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "video/mp4",
+        "video/webm"
+    ];
+
+    if (!allowed.includes(file.type)) {
+        mediaInput.value = "";
+        filePreview.style.display = "none";
+        showError("Formato não permitido. Use JPG, PNG, WEBP, MP4 ou WEBM.");
+        return;
+    }
+
+    const maxSize = file.type.startsWith("video/")
+        ? 100 * 1024 * 1024
+        : 5 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+        mediaInput.value = "";
+        filePreview.style.display = "none";
+        showError("Arquivo acima do limite permitido para esta publicação.");
+        return;
+    }
+
+    filePreview.style.display = "block";
+    filePreview.textContent =
+        `Arquivo selecionado: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+
+});
+
+// ==========================================
+// PUBLICAR
+// ==========================================
+
+publishButton.addEventListener("click", async () => {
+
+    const content = postContent.value.trim();
+    const file = mediaInput.files[0];
+
+    if (!content && !file) {
+        showError("Escreva alguma coisa ou selecione uma foto/vídeo.");
+        return;
+    }
+
+    publishButton.disabled = true;
+    publishButton.textContent = "Publicando...";
+
+    let createdPost = null;
+
+    try {
+
+        const postType = file
+            ? (file.type.startsWith("video/") ? "video" : "photo")
+            : "text";
+
+        const { data: post, error: postError } = await supabase
+            .from("posts")
+            .insert({
+                user_id:currentUser.id,
+                content,
+                post_type:postType,
+                visibility:visibility.value,
+                comments_permission:"everyone"
+            })
+            .select("id")
+            .single();
+
+        if (postError) throw postError;
+
+        createdPost = post;
+
+        if (file) {
+
+            const extension = file.name.split(".").pop().toLowerCase();
+            const filePath =
+                `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${extension}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from("post-media")
+                .upload(filePath, file, {
+                    contentType:file.type,
+                    upsert:false
+                });
+
+            if (uploadError) throw uploadError;
+
+            const { error: mediaError } = await supabase
+                .from("post_media")
+                .insert({
+                    post_id:post.id,
+                    media_url:filePath,
+                    media_type:file.type.startsWith("video/") ? "video" : "image",
+                    position:0
+                });
+
+            if (mediaError) throw mediaError;
+
+        }
+
+        postContent.value = "";
+        mediaInput.value = "";
+        filePreview.style.display = "none";
+
+        showSuccess("Publicação criada!");
+
+        currentFeed = "discover";
+        updateTabs();
+        await loadFeed();
+
+    } catch (error) {
+
+        console.error("Erro ao publicar:", error);
+
+        showError(
+            "Não foi possível publicar. " +
+            (error.message || "Verifique as permissões do banco e do Storage.")
+        );
+
+        // Se a publicação foi criada mas a mídia falhou,
+        // tenta remover a publicação incompleta.
+        if (createdPost) {
+
+            await supabase
+                .from("posts")
+                .delete()
+                .eq("id", createdPost.id);
+
+        }
+
+    } finally {
+
+        publishButton.disabled = false;
+        publishButton.textContent = "Publicar";
+
+    }
+
+});
+
+// ==========================================
+// AÇÕES DAS PUBLICAÇÕES
+// ==========================================
+
+postsContainer.addEventListener("click", async event => {
+
+    const button = event.target.closest("[data-action]");
+
+    if (!button) return;
+
+    const postElement = button.closest("[data-post-id]");
+    if (!postElement) return;
+
+    const postId = postElement.dataset.postId;
+    const action = button.dataset.action;
+
+    // REAÇÕES
+    if (action === "reaction") {
+
+        const currentReaction = button.dataset.reaction;
+
+        const { data: existing, error: readError } = await supabase
+            .from("reactions")
+            .select("id,reaction_type")
+            .eq("post_id", postId)
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (readError) {
+            showError(readError.message);
+            return;
+        }
+
+        let result;
+
+        if (existing) {
+
+            result = await supabase
+                .from("reactions")
+                .delete()
+                .eq("post_id", postId)
+                .eq("user_id", currentUser.id);
+
+        } else {
+
+            result = await supabase
+                .from("reactions")
+                .insert({
+                    post_id:postId,
+                    user_id:currentUser.id,
+                    reaction_type:"like"
+                });
+
+        }
+
+        if (result.error) {
+            showError(result.error.message);
+            return;
+        }
+
+        await loadFeed();
+    }
+
+    // COMENTÁRIOS
+    if (action === "toggle-comments") {
+
+        const area = document.getElementById(`comments-${postId}`);
+        area?.classList.toggle("open");
+
+    }
+
+    // SALVAR PUBLICAÇÃO
+    if (action === "save-post") {
+
+        const { data: existing, error: readError } = await supabase
+            .from("saved_posts")
+            .select("post_id")
+            .eq("post_id", postId)
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (readError) {
+            showError(readError.message);
+            return;
+        }
+
+        let result;
+
+        if (existing) {
+
+            result = await supabase
+                .from("saved_posts")
+                .delete()
+                .eq("post_id", postId)
+                .eq("user_id", currentUser.id);
+
+        } else {
+
+            result = await supabase
+                .from("saved_posts")
+                .insert({
+                    post_id:postId,
+                    user_id:currentUser.id
+                });
+
+        }
+
+        if (result.error) {
+            showError(result.error.message);
+            return;
+        }
+
+        await loadFeed();
+    }
+
+    // EXCLUIR PUBLICAÇÃO
+    if (action === "delete-post") {
+
+        const confirmation = await Swal.fire({
+            title:"Excluir publicação?",
+            text:"Essa ação não poderá ser desfeita.",
+            icon:"warning",
+            showCancelButton:true,
+            confirmButtonText:"Excluir",
+            cancelButtonText:"Cancelar",
+            confirmButtonColor:"#dc2626",
+            background:"#111c2e",
+            color:"#f8fafc"
+        });
+
+        if (!confirmation.isConfirmed) return;
+
+        const { error } = await supabase
+            .from("posts")
+            .delete()
+            .eq("id", postId)
+            .eq("user_id", currentUser.id);
+
+        if (error) {
+            showError(error.message);
+            return;
+        }
+
+        showSuccess("Publicação excluída.");
+        await loadFeed();
+
+    }
+
+});
+
+// ==========================================
+// ENVIAR COMENTÁRIO
+// ==========================================
+
+postsContainer.addEventListener("submit", async event => {
+
+    const form = event.target.closest(".comment-form");
+
+    if (!form) return;
+
+    event.preventDefault();
+
+    const postId = form.dataset.postId;
+    const input = form.querySelector("input[name='comment']");
+    const content = input.value.trim();
+
+    if (!content) return;
+
+    const sendButton = form.querySelector("button");
+    sendButton.disabled = true;
+
+    const { error } = await supabase
+        .from("comments")
+        .insert({
+            post_id:postId,
+            user_id:currentUser.id,
+            content
+        });
+
+    sendButton.disabled = false;
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    await loadFeed();
+
+    document.getElementById(`comments-${postId}`)?.classList.add("open");
+
+});
+
+// ==========================================
+// ABAS
+// ==========================================
+
+function updateTabs() {
+
+    document.querySelectorAll("[data-feed]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.feed === currentFeed
+        );
+    });
+
+}
+
+document.querySelectorAll("[data-feed]").forEach(button => {
+
+    button.addEventListener("click", async () => {
+
+        currentFeed = button.dataset.feed;
+        updateTabs();
+        await loadFeed();
+
+    });
+
+});
+
+// ==========================================
+// NAVEGAÇÃO
+// ==========================================
+
+function navigate(section) {
+
+    const destinations = {
+        feed:"./feed.html",
+        friends:"./amigos.html",
+        notifications:"./notificacoes.html",
+        profile:"./perfil.html"
+    };
+
+    if (destinations[section] && section !== "feed") {
+        window.location.href = destinations[section];
+    }
+
+}
+
+document.querySelectorAll("[data-nav]").forEach(button => {
+
+    button.addEventListener("click", () => {
+        navigate(button.dataset.nav);
+    });
+
+});
+
+document.getElementById("profileButton").addEventListener("click", () => {
+    navigate("profile");
+});
+
+document.getElementById("notificationsButton").addEventListener("click", () => {
+    navigate("notifications");
+});
+
+// ==========================================
+// ATUALIZAR FEED
+// ==========================================
+
+document.getElementById("refreshButton").addEventListener("click", loadFeed);
+
+// ==========================================
+// SAIR
+// ==========================================
+
+document.getElementById("logoutButton").addEventListener("click", async () => {
+
+    const confirmation = await Swal.fire({
+        title:"Sair da conta?",
+        icon:"question",
+        showCancelButton:true,
+        confirmButtonText:"Sair",
+        cancelButtonText:"Cancelar",
+        confirmButtonColor:"#2563eb",
+        background:"#111c2e",
+        color:"#f8fafc"
+    });
+
+    if (!confirmation.isConfirmed) return;
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+        showError(error.message);
+        return;
+    }
+
+    window.location.replace("./login.html");
+
+});
+
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
+
+initialize();
+
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+            .catch(error => console.error("Erro PWA:", error));
+    });
+}
+</script>
+
+</body>
+</html>
