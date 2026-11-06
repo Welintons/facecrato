@@ -1,213 +1,164 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101827">
+<meta name="theme-color" content="#ffffff">
 <title>Perfil | FaceCrato</title>
 
 <link rel="manifest" href="./manifest.json">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b1120;color:#f1f5f9;font-family:Inter,system-ui,sans-serif}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-:root{--panel:#111c2e;--panel2:#17243a;--border:#26364f;--muted:#94a3b8}
-.topbar{height:66px;position:sticky;top:0;z-index:50;background:#0b1120ed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.topbar-inner{max-width:1150px;height:100%;margin:auto;padding:0 20px;display:flex;align-items:center;gap:20px}
-.logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:950;letter-spacing:-1px}
-.logo-mark{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#2563eb,#6366f1);color:white}
-.top-actions{margin-left:auto;display:flex;gap:9px}
-.icon-btn{width:40px;height:40px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:#cbd5e1;display:grid;place-items:center}
-.icon-btn svg{width:19px}
-.page{max-width:950px;padding:25px 16px 100px;margin:auto}
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:17px}
-.cover{height:260px;position:relative;border-radius:17px 17px 0 0;overflow:hidden;background:radial-gradient(circle at 20% 20%,#2563eb99,transparent 40%),radial-gradient(circle at 80% 70%,#7c3aed88,transparent 45%),#17243a;background-size:cover;background-position:center}
-.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,#0b112055);pointer-events:none}
-.cover-edit{position:absolute;right:16px;top:16px;z-index:2}
-.profile-info{padding:0 25px 22px}
-.profile-main{display:flex;align-items:flex-end;gap:18px;margin-top:-62px;position:relative;z-index:3}
-.avatar-wrap{width:130px;height:130px;border:5px solid var(--panel);border-radius:50%;position:relative;flex-shrink:0;background:linear-gradient(135deg,#2563eb,#8b5cf6)}
-.avatar-wrap img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.avatar-placeholder{width:100%;height:100%;display:grid;place-items:center;font-size:40px;font-weight:900}
-.avatar-edit{position:absolute;right:0;bottom:3px;z-index:4;width:35px;height:35px;border-radius:50%;border:3px solid var(--panel);background:#263d61;color:white;display:grid;place-items:center}
-.avatar-edit svg{width:15px}
-.identity{padding-bottom:9px;min-width:0;flex:1}
-.identity h1{font-size:25px;font-weight:950;letter-spacing:-1px;margin:0;overflow-wrap:anywhere}
-.identity p{color:var(--muted);font-size:13px;margin:5px 0 0}
-.profile-bio{color:#cbd5e1;font-size:14px;line-height:1.65;margin:18px 0 12px;white-space:pre-wrap;overflow-wrap:anywhere}
-.profile-meta{display:flex;flex-wrap:wrap;gap:15px;color:var(--muted);font-size:12px}
-.profile-meta span{display:flex;align-items:center;gap:6px}
-.profile-meta svg{width:15px}
-.profile-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:19px}
-.btn{border:1px solid var(--border);background:#17243a;color:#dbeafe;padding:10px 15px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:800}
-.btn svg{width:16px}
-.btn-primary{background:linear-gradient(100deg,#2563eb,#4f46e5);border:0;color:white}
-.btn-danger{color:#fca5a5}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn:hover{filter:brightness(1.12)}
-.section-heading{display:flex;align-items:center;justify-content:space-between;margin:24px 0 13px}
-.section-heading h2{font-size:18px;font-weight:900;margin:0}
-.posts-grid{display:grid;grid-template-columns:1fr;gap:14px}
-.post{padding:17px}
-.post-header{display:flex;align-items:center;gap:10px}
-.post-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#2563eb,#8b5cf6);font-size:13px;font-weight:900;overflow:hidden}
-.post-avatar img{width:100%;height:100%;object-fit:cover}
-.post-author{flex:1;min-width:0}
-.post-author strong{display:block;font-size:13px}
-.post-author small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.post-content{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.7;margin:16px 0}
-.post-media{display:block;width:100%;max-height:450px;object-fit:contain;background:#080d18;border-radius:12px;margin-top:12px}
-.post-footer{border-top:1px solid var(--border);padding-top:12px;margin-top:13px;color:var(--muted);font-size:11px}
-.empty-state{padding:45px 20px;text-align:center;color:var(--muted)}
-.empty-state svg{width:35px;height:35px;margin:0 auto 12px}
-.empty-state strong{display:block;color:#cbd5e1;margin-bottom:7px}
-.empty-state p{font-size:12px;line-height:1.6}
-.loading{padding:35px;text-align:center;color:var(--muted)}
-.spinner{width:25px;height:25px;border:3px solid #26364f;border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.modal-backdrop{display:none;position:fixed;inset:0;z-index:100;background:#020617bb;backdrop-filter:blur(5px);padding:20px;align-items:center;justify-content:center}
-.modal-backdrop.show{display:flex}
-.modal{width:100%;max-width:480px;max-height:90vh;overflow:auto;padding:22px;background:#111c2e;border:1px solid var(--border);border-radius:18px}
-.modal h2{margin:0 0 20px;font-size:20px;font-weight:900}
-.field{margin-bottom:15px}
-.field label{display:block;font-size:12px;font-weight:750;color:#cbd5e1;margin-bottom:7px}
-.field input,.field textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);outline:none;background:#17243a;color:white;font-size:13px}
-.field textarea{min-height:95px;resize:vertical}
-.field input:focus,.field textarea:focus{border-color:#3b82f6}
-.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
-.mobile-nav{display:none}
-@media(max-width:650px){
-.topbar-inner{padding:0 13px}.logo{font-size:19px}
-.page{padding:14px 10px 100px}
-.cover{height:190px}
-.profile-info{padding:0 15px 18px}
-.profile-main{align-items:flex-end;gap:10px;margin-top:-48px}
-.avatar-wrap{width:100px;height:100px;border-width:4px}
-.avatar-placeholder{font-size:31px}
-.identity h1{font-size:20px}.identity p{font-size:11px}
-.profile-actions .btn{flex:1}
-.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));background:#101a2bed;border-top:1px solid var(--border);backdrop-filter:blur(15px)}
-.mobile-nav button{border:0;background:none;color:#94a3b8;display:grid;justify-items:center;gap:4px;font-size:10px}
-.mobile-nav svg{width:20px;height:20px}
-}
-</style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
-<header class="topbar">
-<div class="topbar-inner">
-<div class="logo"><div class="logo-mark">F</div>FaceCrato</div>
-<div class="top-actions">
-<button class="icon-btn" onclick="location.href='./feed.html'" title="Feed"><i data-lucide="house"></i></button>
-<button class="icon-btn" onclick="location.href='./notificacoes.html'" title="Notificações"><i data-lucide="bell"></i></button>
-<button class="icon-btn" id="logoutButton" title="Sair"><i data-lucide="log-out"></i></button>
-</div>
-</div>
+<!-- TOPO -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
+        <!-- LOGO / BOTÃO HOME -->
+        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
+                <i data-lucide="home" class="w-5 h-5"></i>
+            </div>
+            FaceCrato
+        </a>
+
+        <div class="flex-1 max-w-md relative hidden sm:block">
+            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
+            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+        </div>
+
+        <div class="ml-auto flex items-center gap-2.5">
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" onclick="location.href='./notificacoes.html'" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-cyan-50 border border-cyan-200 rounded-xl text-cyan-700 flex items-center justify-center shadow-sm" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+
+            <!-- BOTÃO SANDUÍCHE (Mobile) -->
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+        </div>
+    </div>
 </header>
 
-<main class="page">
+<!-- LAYOUT PRINCIPAL -->
+<main class="max-w-4xl mx-auto px-6 py-8">
 
-<section class="panel">
-<div class="cover" id="cover">
-<button class="btn cover-edit" id="changeCoverButton" hidden>
-<i data-lucide="camera"></i> Alterar capa
-</button>
-</div>
+    <!-- CARTÃO DO PERFIL -->
+    <section class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mb-8">
+        <!-- CAPA -->
+        <div class="h-64 sm:h-72 relative bg-gradient-to-r from-cyan-600 to-violet-600 bg-cover bg-center" id="cover">
+            <button class="absolute right-4 top-4 bg-black/40 hover:bg-black/60 text-white px-3.5 py-2 rounded-xl text-xs font-semibold backdrop-blur-md flex items-center gap-2 transition" id="changeCoverButton" hidden>
+                <i data-lucide="camera" class="w-4 h-4"></i> Alterar capa
+            </button>
+        </div>
 
-<div class="profile-info">
-<div class="profile-main">
-<div class="avatar-wrap">
-<div class="avatar-placeholder" id="avatarPlaceholder">F</div>
-<img id="avatarImage" alt="Foto de perfil" hidden>
-<button class="avatar-edit" id="changeAvatarButton" hidden title="Alterar foto">
-<i data-lucide="camera"></i>
-</button>
-</div>
+        <div class="px-6 sm:px-8 pb-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 sm:-mt-20 relative z-10 mb-6">
+                <!-- AVATAR -->
+                <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-4 border-white bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black text-4xl flex items-center justify-center overflow-hidden relative shadow-md">
+                    <div id="avatarPlaceholder" class="w-full h-full flex items-center justify-center">F</div>
+                    <img id="avatarImage" alt="Foto de perfil" class="w-full h-full object-cover" hidden>
+                    <button class="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-slate-900 text-white border-2 border-white flex items-center justify-center shadow hover:bg-slate-800 transition" id="changeAvatarButton" hidden title="Alterar foto">
+                        <i data-lucide="camera" class="w-4 h-4"></i>
+                    </button>
+                </div>
 
-<div class="identity">
-<h1 id="profileName">Carregando perfil...</h1>
-<p id="profileUsername">@...</p>
-</div>
-</div>
+                <!-- AÇÕES DO PERFIL -->
+                <div class="flex items-center gap-2.5" id="profileActions"></div>
+            </div>
 
-<div class="profile-bio" id="profileBio"></div>
+            <!-- IDENTIDADE -->
+            <div class="mb-4">
+                <h1 id="profileName" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Carregando perfil...</h1>
+                <p id="profileUsername" class="text-xs sm:text-sm text-gray-500 mt-0.5">@...</p>
+            </div>
 
-<div class="profile-meta">
-<span id="profileLocation" hidden>
-<i data-lucide="map-pin"></i><span></span>
-</span>
-<span id="profileDate">
-<i data-lucide="calendar-days"></i>No FaceCrato
-</span>
-<span id="privacyLabel">
-<i data-lucide="globe"></i>Perfil público
-</span>
-</div>
+            <div class="text-slate-700 text-sm leading-relaxed mb-6 whitespace-pre-wrap break-words" id="profileBio"></div>
 
-<div class="profile-actions" id="profileActions"></div>
-</div>
-</section>
+            <div class="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-4 border-t border-gray-100">
+                <span id="profileLocation" hidden class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i><span></span></span>
+                <span id="profileDate" class="flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>No FaceCrato</span>
+                <span id="privacyLabel" class="flex items-center gap-1.5"><i data-lucide="globe" class="w-4 h-4 text-gray-400"></i>Perfil público</span>
+            </div>
+        </div>
+    </section>
 
-<div class="section-heading">
-<h2>Publicações</h2>
-<button class="btn" id="refreshButton">
-<i data-lucide="refresh-cw"></i>Atualizar
-</button>
-</div>
+    <!-- CABEÇALHO PUBLICAÇÕES -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-black text-slate-900 tracking-tight">Publicações</h2>
+        <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-sm" id="refreshButton" title="Atualizar">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+    </div>
 
-<section class="posts-grid" id="postsContainer">
-<div class="panel loading">
-<div class="spinner"></div>Carregando publicações...
-</div>
-</section>
+    <!-- FEED DO PERFIL -->
+    <section class="space-y-6" id="postsContainer">
+        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
+            Carregando publicações...
+        </div>
+    </section>
 
 </main>
 
-<nav class="mobile-nav">
-<button onclick="location.href='./feed.html'"><i data-lucide="house"></i>Feed</button>
-<button onclick="location.href='./amigos.html'"><i data-lucide="users"></i>Amigos</button>
-<button onclick="location.href='./notificacoes.html'"><i data-lucide="bell"></i>Alertas</button>
-<button><i data-lucide="user-round"></i>Perfil</button>
-</nav>
+<!-- MENU MOBILE DESLIZANTE -->
+<div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
+<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
+    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+        <h3 class="text-base font-black text-slate-900">Menu</h3>
+        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="menuCloseBtn"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
 
-<div class="modal-backdrop" id="editModal">
-<div class="modal">
-<h2>Editar perfil</h2>
-<form id="editForm">
-<div class="field">
-<label for="editName">Nome completo</label>
-<input id="editName" maxlength="100" required>
+    <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
+    <nav class="space-y-1.5 mb-6">
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" onclick="location.href='./feed.html'"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" onclick="location.href='./amigos.html'"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" onclick="location.href='./notificacoes.html'"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" onclick="location.href='./perfil.html'"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
+    </nav>
+
+    <div class="mt-auto pt-4 border-t border-gray-100">
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm transition" id="logoutButtonMobile"><i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta</button>
+    </div>
 </div>
-<div class="field">
-<label for="editUsername">Nome de usuário</label>
-<input id="editUsername" maxlength="30" required>
-<small style="color:#94a3b8;font-size:11px">Letras minúsculas, números e underline.</small>
-</div>
-<div class="field">
-<label for="editBio">Biografia</label>
-<textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você..."></textarea>
-</div>
-<div class="field">
-<label for="editCity">Cidade</label>
-<input id="editCity" maxlength="100">
-</div>
-<div class="field">
-<label for="editState">Estado (UF)</label>
-<input id="editState" maxlength="2" placeholder="CE">
-</div>
-<div class="modal-actions">
-<button type="button" class="btn" id="cancelEdit">Cancelar</button>
-<button type="submit" class="btn btn-primary" id="saveProfileButton">Salvar alterações</button>
-</div>
-</form>
-</div>
+
+<!-- MODAL DE EDIÇÃO -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden items-center justify-center p-4" id="editModal">
+    <div class="bg-white border border-gray-200 rounded-2xl w-full max-w-lg p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-center pb-4 border-b border-gray-100 mb-5">
+            <h3 class="font-black text-base text-slate-900">Editar perfil</h3>
+            <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="cancelEditX"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+
+        <form id="editForm" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editName">Nome completo</label>
+                <input id="editName" maxlength="100" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editUsername">Nome de usuário</label>
+                <input id="editUsername" maxlength="30" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+                <small class="text-[11px] text-gray-400 mt-1 block">Letras minúsculas, números e underline.</small>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editBio">Biografia</label>
+                <textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você..." class="w-full min-h-[90px] resize-y bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editCity">Cidade</label>
+                    <input id="editCity" maxlength="100" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editState">Estado (UF)</label>
+                    <input id="editState" maxlength="2" placeholder="CE" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2.5 pt-4 border-t border-gray-100 mt-6">
+                <button type="button" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-bold transition" id="cancelEdit">Cancelar</button>
+                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition" id="saveProfileButton">Salvar alterações</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
@@ -216,10 +167,6 @@ button{cursor:pointer}
 <script type="module">
 import { supabase } from "./supabase.js";
 
-// =====================================
-// ESTADO
-// =====================================
-
 const params = new URLSearchParams(location.search);
 const requestedId = params.get("id");
 
@@ -227,13 +174,29 @@ let currentUser = null;
 let currentProfile = null;
 let profileId = null;
 let isOwnProfile = false;
+let friendship = null;
 
 const $ = id => document.getElementById(id);
 const postsContainer = $("postsContainer");
 
-// =====================================
-// UTILITÁRIOS
-// =====================================
+const menuToggleBtn = $("menuToggleBtn");
+const menuCloseBtn = $("menuCloseBtn");
+const mobileMenuDrawer = $("mobileMenuDrawer");
+const mobileMenuOverlay = $("mobileMenuOverlay");
+
+function toggleMobileMenu(open) {
+    if (open) {
+        mobileMenuOverlay.classList.remove("hidden");
+        setTimeout(() => mobileMenuDrawer.classList.remove("translate-x-full"), 10);
+    } else {
+        mobileMenuDrawer.classList.add("translate-x-full");
+        setTimeout(() => mobileMenuOverlay.classList.add("hidden"), 300);
+    }
+}
+
+menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
+menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
+mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
 function escapeHTML(value = "") {
     return String(value).replace(/[&<>"']/g, char => ({
@@ -246,9 +209,7 @@ function escapeHTML(value = "") {
 }
 
 function initials(name = "F") {
-    return name.trim().split(/\s+/).slice(0,2)
-        .map(part => part[0] || "")
-        .join("").toUpperCase();
+    return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
 function notify(text, icon = "success") {
@@ -258,33 +219,21 @@ function notify(text, icon = "success") {
         icon,
         title:text,
         showConfirmButton:false,
-        timer:2500,
-        background:"#111c2e",
-        color:"#fff"
+        timer:2200
     });
 }
 
 function errorMessage(text) {
-    Swal.fire({
-        icon:"error",
-        title:"Não foi possível concluir",
-        text,
-        background:"#111c2e",
-        color:"#fff",
-        confirmButtonColor:"#2563eb"
-    });
+    Swal.fire({ icon:"error", title:"Ops!", text });
 }
 
 function formatDate(value) {
     if (!value) return "data indisponível";
-
     const date = new Date(value);
-
     if (Number.isNaN(date.getTime())) return "data indisponível";
-
     return new Intl.DateTimeFormat("pt-BR", {
         day:"2-digit",
-        month:"long",
+        month:"short",
         year:"numeric"
     }).format(date);
 }
@@ -296,97 +245,54 @@ function showIcons() {
 function showProfileError(message) {
     $("profileName").textContent = "Erro ao carregar perfil";
     $("profileUsername").textContent = message;
-
     postsContainer.innerHTML = `
-        <div class="panel empty-state">
-            <strong>Não foi possível carregar.</strong>
-            <p>${escapeHTML(message)}</p>
-            <button class="btn btn-primary" onclick="location.reload()">
-                Tentar novamente
-            </button>
+        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-sm">
+            ${escapeHTML(message)}
         </div>
     `;
-
     showIcons();
 }
 
-// =====================================
-// STORAGE
-// =====================================
-
 async function storageUrl(bucket, path) {
     if (!path) return null;
-
     if (/^https?:\/\//i.test(path)) return path;
 
-    const {data,error} = await supabase.storage
+    const { data, error } = await supabase.storage
         .from(bucket)
-        .createSignedUrl(path,3600);
+        .createSignedUrl(path, 3600);
 
-    if (error) {
-        console.error("Storage:",error);
-        return null;
-    }
-
+    if (error) return null;
     return data?.signedUrl || null;
 }
 
-// =====================================
-// INICIALIZAÇÃO
-// =====================================
-
+// 1. INICIALIZAÇÃO
 async function initialize() {
-    const {data,error} = await supabase.auth.getSession();
+    const { data, error } = await supabase.auth.getSession();
 
-    if (error) throw error;
-
-    if (!data.session) {
+    if (error || !data.session) {
         location.replace("./login.html");
         return;
     }
 
     currentUser = data.session.user;
-
     profileId = requestedId || currentUser.id;
     isOwnProfile = profileId === currentUser.id;
 
     await loadProfile();
 }
 
-// =====================================
-// CARREGAR PERFIL
-// =====================================
-
+// 2. CARREGAR PERFIL
 async function loadProfile() {
-    const {data,error} = await supabase
+    const { data, error } = await supabase
         .from("profiles")
-        .select(`
-            id,
-            username,
-            full_name,
-            bio,
-            avatar_url,
-            cover_url,
-            city,
-            state,
-            is_private,
-            created_at
-        `)
-        .eq("id",profileId)
+        .select("id,username,full_name,bio,avatar_url,cover_url,city,state,is_private,created_at")
+        .eq("id", profileId)
         .maybeSingle();
 
     if (error) throw error;
 
     if (!data) {
-        $("profileName").textContent = "Perfil indisponível";
-        $("profileUsername").textContent = "Perfil não encontrado.";
-
-        postsContainer.innerHTML = `
-            <div class="panel empty-state">
-                <strong>Perfil não encontrado</strong>
-                <p>Este perfil não está disponível.</p>
-            </div>
-        `;
+        showProfileError("Perfil não encontrado.");
         return;
     }
 
@@ -396,16 +302,233 @@ async function loadProfile() {
     await loadUserPosts();
 }
 
-// =====================================
-// RENDERIZAR PERFIL
-// =====================================
+// 3. VERIFICAR AMIZADE
+async function loadFriendship() {
+    friendship = null;
 
+    if (isOwnProfile) return;
+
+    const { data, error } = await supabase
+        .from("friendships")
+        .select("id,user_a,user_b,requested_by,status,created_at")
+        .or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`)
+        .in("status", ["pending", "accepted"]);
+
+    if (error) throw error;
+
+    friendship = (data || []).find(item =>
+        item.user_a === profileId || item.user_b === profileId
+    ) || null;
+}
+
+// 4. BOTÃO DE AMIZADE
+function renderFriendButton() {
+    const button = $("friendButton");
+    if (!button) return;
+
+    let html = "";
+
+    if (!friendship) {
+        html = `
+            <button class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition flex items-center gap-2" id="friendAction">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                Adicionar amigo
+            </button>
+        `;
+    } else if (friendship.status === "accepted") {
+        html = `
+            <button class="px-4 py-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-xs font-bold flex items-center gap-2" id="friendAction">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Amigos
+            </button>
+        `;
+    } else if (friendship.status === "pending") {
+        if (friendship.requested_by === currentUser.id) {
+            html = `
+                <button class="px-4 py-2.5 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl text-xs font-bold flex items-center gap-2" id="friendAction">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    Solicitação enviada
+                </button>
+            `;
+        } else {
+            html = `
+                <button class="px-4 py-2.5 bg-cyan-600 text-white rounded-xl text-xs font-bold flex items-center gap-2" id="friendAction">
+                    <i data-lucide="user-check" class="w-4 h-4"></i>
+                    Aceitar solicitação
+                </button>
+            `;
+        }
+    }
+
+    $("profileActions").innerHTML = html;
+    $("friendAction").onclick = handleFriendAction;
+    showIcons();
+}
+
+// 5. AÇÃO PRINCIPAL
+async function handleFriendAction() {
+    if (!friendship) {
+        await sendFriendRequest();
+        return;
+    }
+
+    if (friendship.status === "accepted") {
+        await removeFriendship();
+        return;
+    }
+
+    if (friendship.requested_by === currentUser.id) {
+        await cancelFriendRequest();
+        return;
+    }
+
+    await respondFriendRequest(true);
+}
+
+// 6. ENVIAR SOLICITAÇÃO
+async function sendFriendRequest() {
+    const button = $("friendAction");
+    if (button) button.disabled = true;
+
+    try {
+        const [userA, userB] = [currentUser.id, profileId].sort();
+
+        const { error } = await supabase
+            .from("friendships")
+            .insert({
+                user_a: userA,
+                user_b: userB,
+                requested_by: currentUser.id,
+                status: "pending"
+            });
+
+        if (error) throw error;
+
+        await supabase.from("notifications").insert({
+            recipient_id: profileId,
+            actor_id: currentUser.id,
+            notification_type: "friend_request",
+            message: `${currentProfile.full_name || "Alguém"} enviou uma solicitação de amizade.`
+        });
+
+        notify("Solicitação enviada!");
+
+        await loadFriendship();
+        renderFriendButton();
+
+    } catch (error) {
+        errorMessage(error.message);
+        if (button) button.disabled = false;
+    }
+}
+
+// 7. ACEITAR OU RECUSAR
+async function respondFriendRequest(accept) {
+    if (!friendship) return;
+
+    const confirm = await Swal.fire({
+        title: accept ? "Aceitar amizade?" : "Recusar solicitação?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: accept ? "Aceitar" : "Recusar",
+        cancelButtonText: "Voltar",
+        confirmButtonColor: accept ? "#0891b2" : "#dc2626"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+        const { error } = await supabase.rpc("respond_friend_request", {
+            p_friendship_id: friendship.id,
+            p_accept: accept
+        });
+
+        if (error) throw error;
+
+        if (accept) {
+            await supabase.from("notifications").insert({
+                recipient_id: profileId,
+                actor_id: currentUser.id,
+                notification_type: "friend_accepted",
+                message: `${currentProfile.full_name || "Alguém"} aceitou sua solicitação de amizade.`
+            });
+
+            notify("Agora vocês são amigos!");
+        } else {
+            notify("Solicitação recusada.");
+        }
+
+        await loadFriendship();
+        renderFriendButton();
+
+    } catch (error) {
+        errorMessage(error.message);
+    }
+}
+
+// 8. CANCELAR SOLICITAÇÃO
+async function cancelFriendRequest() {
+    const confirm = await Swal.fire({
+        title: "Cancelar solicitação?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#dc2626"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+        const { error } = await supabase.rpc("cancel_friend_request", {
+            p_friendship_id: friendship.id
+        });
+
+        if (error) throw error;
+
+        notify("Solicitação cancelada.");
+        await loadFriendship();
+        renderFriendButton();
+
+    } catch (error) {
+        errorMessage(error.message);
+    }
+}
+
+// 9. REMOVER AMIZADE
+async function removeFriendship() {
+    const confirm = await Swal.fire({
+        title: "Remover amizade?",
+        text: "Vocês deixarão de ser amigos.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc2626",
+        confirmButtonText: "Remover",
+        cancelButtonText: "Cancelar"
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+        const { error } = await supabase.rpc("remove_friendship", {
+            p_friendship_id: friendship.id
+        });
+
+        if (error) throw error;
+
+        notify("Amizade removida.");
+        await loadFriendship();
+        renderFriendButton();
+
+    } catch (error) {
+        errorMessage(error.message);
+    }
+}
+
+// 10. RENDERIZAR PERFIL
 async function renderProfile() {
     const name = currentProfile.full_name || "Usuário";
     const username = currentProfile.username || "usuario";
 
     document.title = `${name} | FaceCrato`;
-
     $("profileName").textContent = name;
     $("profileUsername").textContent = "@" + username;
 
@@ -413,13 +536,10 @@ async function renderProfile() {
         currentProfile.bio ||
         (isOwnProfile ? "Adicione uma biografia para contar um pouco sobre você." : "");
 
-    const locationText = [
-        currentProfile.city,
-        currentProfile.state
-    ].filter(Boolean).join(" - ");
+    const locationText = [currentProfile.city, currentProfile.state]
+        .filter(Boolean).join(" - ");
 
     const locationElement = $("profileLocation");
-
     locationElement.hidden = !locationText;
 
     if (locationText) {
@@ -427,16 +547,16 @@ async function renderProfile() {
     }
 
     $("profileDate").innerHTML = `
-        <i data-lucide="calendar-days"></i>
+        <i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>
         No FaceCrato desde ${escapeHTML(formatDate(currentProfile.created_at))}
     `;
 
     $("privacyLabel").innerHTML = currentProfile.is_private
-        ? '<i data-lucide="lock"></i> Perfil privado'
-        : '<i data-lucide="globe"></i> Perfil público';
+        ? '<i data-lucide="lock" class="w-4 h-4 text-gray-400"></i> Perfil privado'
+        : '<i data-lucide="globe" class="w-4 h-4 text-gray-400"></i> Perfil público';
 
-    const avatar = await storageUrl("avatars",currentProfile.avatar_url);
-    const cover = await storageUrl("covers",currentProfile.cover_url);
+    const avatar = await storageUrl("avatars", currentProfile.avatar_url);
+    const cover = await storageUrl("covers", currentProfile.cover_url);
 
     const avatarImage = $("avatarImage");
     const placeholder = $("avatarPlaceholder");
@@ -452,8 +572,9 @@ async function renderProfile() {
     }
 
     if (cover) {
-        $("cover").style.backgroundImage =
-            `url("${cover.replace(/"/g,"%22")}")`;
+        $("cover").style.backgroundImage = `url("${cover.replace(/"/g, "%22")}")`;
+        $("cover").style.backgroundSize = "cover";
+        $("cover").style.backgroundPosition = "center";
     }
 
     if (isOwnProfile) {
@@ -461,56 +582,49 @@ async function renderProfile() {
         $("changeCoverButton").hidden = false;
 
         $("profileActions").innerHTML = `
-            <button class="btn btn-primary" id="editProfileButton">
-                <i data-lucide="pencil"></i>Editar perfil
+            <button class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition flex items-center gap-2" id="editProfileButton">
+                <i data-lucide="pencil" class="w-4 h-4"></i>
+                Editar perfil
             </button>
         `;
 
         $("editProfileButton").onclick = openEditModal;
+
     } else {
+        await loadFriendship();
+
         $("profileActions").innerHTML = `
-            <button class="btn btn-primary" id="friendButton">
-                <i data-lucide="user-plus"></i>Adicionar amigo
-            </button>
+            <div id="friendButton"></div>
         `;
 
-        $("friendButton").onclick = toggleFriendship;
+        renderFriendButton();
     }
 
     showIcons();
 }
 
-// =====================================
-// PUBLICAÇÕES
-// =====================================
-
-// Estrutura esperada nesta versão:
-// posts.user_id, posts.content, posts.created_at
-// Opcional: posts.media_url
-
+// 11. PUBLICAÇÕES
 async function loadUserPosts() {
     postsContainer.innerHTML = `
-        <div class="panel loading">
-            <div class="spinner"></div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
             Carregando publicações...
         </div>
     `;
 
     try {
-        const {data,error} = await supabase
+        const { data, error } = await supabase
             .from("posts")
             .select("*")
-            .eq("user_id",profileId)
-            .order("created_at",{ascending:false});
+            .eq("user_id", profileId)
+            .order("created_at", { ascending: false });
 
         if (error) throw error;
 
         if (!data || data.length === 0) {
             postsContainer.innerHTML = `
-                <div class="panel empty-state">
-                    <i data-lucide="images"></i>
-                    <strong>Nenhuma publicação</strong>
-                    <p>Este usuário ainda não publicou nada.</p>
+                <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
+                    <i data-lucide="images" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
+                    Nenhuma publicação encontrada.
                 </div>
             `;
             showIcons();
@@ -519,63 +633,44 @@ async function loadUserPosts() {
 
         postsContainer.innerHTML = data.map(post => {
             const media = post.media_url
-                ? `<img class="post-media" src="${escapeHTML(post.media_url)}" alt="Mídia da publicação" loading="lazy">`
+                ? `<img class="w-full max-h-[450px] object-cover rounded-xl bg-gray-100 mt-4 border border-gray-200" src="${escapeHTML(post.media_url)}" alt="Mídia" loading="lazy">`
                 : "";
 
             return `
-                <article class="panel post">
-                    <div class="post-header">
-                        <div class="post-avatar">
+                <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center gap-3.5 mb-4">
+                        <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                             ${escapeHTML(initials(currentProfile.full_name))}
                         </div>
-                        <div class="post-author">
-                            <strong>${escapeHTML(currentProfile.full_name || "Usuário")}</strong>
-                            <small>${escapeHTML(formatDate(post.created_at))}</small>
+                        <div class="flex-1 min-w-0">
+                            <strong class="block text-sm font-bold text-slate-900">
+                                ${escapeHTML(currentProfile.full_name || "Usuário")}
+                            </strong>
+                            <small class="text-xs text-gray-400">
+                                ${escapeHTML(formatDate(post.created_at))}
+                            </small>
                         </div>
                     </div>
-
-                    <div class="post-content">${escapeHTML(post.content || "")}</div>
+                    <div class="text-slate-800 text-sm leading-relaxed whitespace-pre-wrap break-words">
+                        ${escapeHTML(post.content || "")}
+                    </div>
                     ${media}
-                    <div class="post-footer">FaceCrato</div>
                 </article>
             `;
         }).join("");
 
         showIcons();
 
-    } catch(error) {
-        console.error("Publicações:",error);
-
+    } catch (error) {
         postsContainer.innerHTML = `
-            <div class="panel empty-state">
-                <i data-lucide="alert-circle"></i>
-                <strong>Erro ao carregar publicações</strong>
-                <p>${escapeHTML(error.message || "Verifique a tabela posts e as políticas RLS.")}</p>
-                <button class="btn btn-primary" id="retryPosts">Tentar novamente</button>
+            <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-sm">
+                Erro ao carregar publicações: ${escapeHTML(error.message)}
             </div>
         `;
-
-        $("retryPosts").onclick = loadUserPosts;
-        showIcons();
     }
 }
 
-// =====================================
-// AMIZADES
-// =====================================
-
-// Ainda não grava solicitações.
-// Precisamos conhecer o schema real da tabela
-// de amizades antes de implementar.
-
-async function toggleFriendship() {
-    notify("Sistema de amizades ainda não configurado.","info");
-}
-
-// =====================================
-// EDITAR PERFIL
-// =====================================
-
+// 12. MODAL DE EDIÇÃO
 function openEditModal() {
     $("editName").value = currentProfile.full_name || "";
     $("editUsername").value = currentProfile.username || "";
@@ -583,20 +678,20 @@ function openEditModal() {
     $("editCity").value = currentProfile.city || "";
     $("editState").value = currentProfile.state || "";
 
-    $("editModal").classList.add("show");
+    $("editModal").classList.remove("hidden");
+    $("editModal").classList.add("flex");
 }
 
-$("cancelEdit").onclick = () => {
-    $("editModal").classList.remove("show");
-};
+function closeEditModal() {
+    $("editModal").classList.remove("flex");
+    $("editModal").classList.add("hidden");
+}
 
-$("editModal").addEventListener("click",event => {
-    if (event.target === $("editModal")) {
-        $("editModal").classList.remove("show");
-    }
-});
+$("cancelEdit").onclick = closeEditModal;
+$("cancelEditX").onclick = closeEditModal;
 
-$("editForm").addEventListener("submit",async event => {
+// 13. SALVAR PERFIL
+$("editForm").addEventListener("submit", async event => {
     event.preventDefault();
 
     const button = $("saveProfileButton");
@@ -611,70 +706,61 @@ $("editForm").addEventListener("submit",async event => {
         }
 
         const updates = {
-            full_name:$("editName").value.trim(),
+            full_name: $("editName").value.trim(),
             username,
-            bio:$("editBio").value.trim(),
-            city:$("editCity").value.trim(),
-            state:$("editState").value.trim().toUpperCase()
+            bio: $("editBio").value.trim(),
+            city: $("editCity").value.trim(),
+            state: $("editState").value.trim().toUpperCase()
         };
 
-        const {error} = await supabase
+        const { error } = await supabase
             .from("profiles")
             .update(updates)
-            .eq("id",currentUser.id);
+            .eq("id", currentUser.id);
 
         if (error) throw error;
 
-        $("editModal").classList.remove("show");
+        closeEditModal();
         notify("Perfil atualizado!");
-
         await loadProfile();
 
-    } catch(error) {
-        console.error("Edição:",error);
-        errorMessage(error.message || "Erro ao atualizar perfil.");
+    } catch (error) {
+        errorMessage(error.message);
     } finally {
         button.disabled = false;
         button.textContent = "Salvar alterações";
     }
 });
 
-// =====================================
-// UPLOAD DE IMAGENS
-// =====================================
-
-async function uploadImage(file,bucket) {
+// 14. UPLOAD DE IMAGENS
+async function uploadImage(file, bucket) {
     if (!file) return;
 
-    if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
-        throw new Error("Formato de imagem não permitido.");
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        throw new Error("Formato não permitido.");
     }
 
     if (file.size > 5 * 1024 * 1024) {
         throw new Error("A imagem deve ter no máximo 5 MB.");
     }
 
-    const extension = file.type.split("/")[1];
-    const path = `${currentUser.id}/${crypto.randomUUID()}.${extension}`;
+    const ext = file.type.split("/")[1];
+    const path = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
 
-    const {error:uploadError} = await supabase.storage
+    const { error: uploadError } = await supabase.storage
         .from(bucket)
-        .upload(path,file,{
-            upsert:false,
-            contentType:file.type
-        });
+        .upload(path, file, { contentType: file.type });
 
     if (uploadError) throw uploadError;
 
     const field = bucket === "avatars" ? "avatar_url" : "cover_url";
 
-    const {error:updateError} = await supabase
+    const { error: updateError } = await supabase
         .from("profiles")
-        .update({[field]:path})
-        .eq("id",currentUser.id);
+        .update({ [field]: path })
+        .eq("id", currentUser.id);
 
     if (updateError) {
-        // Evita deixar arquivo órfão quando a atualização do perfil falha.
         await supabase.storage.from(bucket).remove([path]);
         throw updateError;
     }
@@ -683,13 +769,14 @@ async function uploadImage(file,bucket) {
     await loadProfile();
 }
 
+// 15. EVENTOS DE IMAGEM
 $("changeAvatarButton").onclick = () => $("avatarFile").click();
 $("changeCoverButton").onclick = () => $("coverFile").click();
 
 $("avatarFile").onchange = async event => {
     try {
-        await uploadImage(event.target.files[0],"avatars");
-    } catch(error) {
+        await uploadImage(event.target.files[0], "avatars");
+    } catch (error) {
         errorMessage(error.message);
     }
     event.target.value = "";
@@ -697,76 +784,41 @@ $("avatarFile").onchange = async event => {
 
 $("coverFile").onchange = async event => {
     try {
-        await uploadImage(event.target.files[0],"covers");
-    } catch(error) {
+        await uploadImage(event.target.files[0], "covers");
+    } catch (error) {
         errorMessage(error.message);
     }
     event.target.value = "";
 };
 
-// =====================================
-// ATUALIZAR
-// =====================================
-
+// 16. ATUALIZAR PUBLICAÇÕES
 $("refreshButton").onclick = loadUserPosts;
 
-// =====================================
-// LOGOUT
-// =====================================
-
-$("logoutButton").onclick = async () => {
-    const result = await Swal.fire({
-        title:"Sair da conta?",
-        icon:"question",
-        showCancelButton:true,
-        confirmButtonText:"Sair",
-        cancelButtonText:"Cancelar",
-        background:"#111c2e",
-        color:"#fff"
+// 17. SAIR DA CONTA
+const handleLogout = async () => {
+    const confirm = await Swal.fire({
+        title: "Sair da conta?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#0891b2"
     });
 
-    if (!result.isConfirmed) return;
-
-    const {error} = await supabase.auth.signOut();
-
-    if (error) {
-        errorMessage(error.message);
-        return;
+    if (confirm.isConfirmed) {
+        await supabase.auth.signOut();
+        window.location.replace("./login.html");
     }
-
-    location.replace("./login.html");
 };
 
-// =====================================
-// INICIAR A PÁGINA
-// =====================================
+$("logoutButton")?.addEventListener("click", handleLogout);
+$("logoutButtonMobile")?.addEventListener("click", handleLogout);
 
-function timeout(ms) {
-    return new Promise((_,reject) => {
-        setTimeout(() => reject(new Error(
-            "Tempo excedido. Verifique sua conexão e o Supabase."
-        )),ms);
-    });
-}
-
-try {
-    await Promise.race([
-        initialize(),
-        timeout(20000)
-    ]);
-} catch(error) {
-    console.error("Inicialização do perfil:",error);
-
-    if (error.message?.includes("JWT") ||
-        error.message?.includes("session")) {
-        location.replace("./login.html");
-    } else {
-        showProfileError(error.message || "Erro desconhecido.");
-    }
-}
+// 18. INICIAR
+initialize().catch(error =>
+    showProfileError(error.message || "Erro ao iniciar perfil.")
+);
 
 showIcons();
-
 </script>
+
 </body>
 </html>
