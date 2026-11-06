@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b1120">
-
+<meta name="theme-color" content="#ffffff">
 <title>Amigos | FaceCrato</title>
 
 <link rel="manifest" href="./manifest.json">
@@ -12,488 +11,136 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    background:#0b1120;
-    color:#f1f5f9;
-    font-family:Inter,system-ui,sans-serif;
-}
-
-button,input{font:inherit}
-button{cursor:pointer}
-
-:root{
-    --panel:#111c2e;
-    --panel2:#17243a;
-    --border:#26364f;
-    --muted:#94a3b8;
-}
-
-.topbar{
-    height:66px;
-    position:sticky;
-    top:0;
-    z-index:50;
-    background:#0b1120ed;
-    backdrop-filter:blur(16px);
-    border-bottom:1px solid var(--border);
-}
-
-.topbar-inner{
-    max-width:1100px;
-    height:100%;
-    margin:auto;
-    padding:0 18px;
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:22px;
-    font-weight:950;
-    letter-spacing:-1px;
-}
-
-.logo-mark{
-    width:37px;
-    height:37px;
-    border-radius:12px;
-    display:grid;
-    place-items:center;
-    background:linear-gradient(135deg,#2563eb,#6366f1);
-}
-
-.top-actions{
-    margin-left:auto;
-    display:flex;
-    gap:9px;
-}
-
-.icon-btn{
-    width:40px;
-    height:40px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:var(--panel);
-    color:#cbd5e1;
-    display:grid;
-    place-items:center;
-}
-
-.icon-btn svg{width:19px}
-
-.page{
-    max-width:1050px;
-    margin:auto;
-    padding:27px 16px 100px;
-}
-
-.page-title{
-    margin-bottom:23px;
-}
-
-.page-title h1{
-    font-size:27px;
-    font-weight:950;
-    letter-spacing:-1px;
-    margin:0;
-}
-
-.page-title p{
-    font-size:13px;
-    color:var(--muted);
-    margin:6px 0 0;
-}
-
-.panel{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:16px;
-}
-
-.search-box{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:13px 16px;
-    margin-bottom:20px;
-}
-
-.search-box svg{
-    color:var(--muted);
-    width:20px;
-    flex-shrink:0;
-}
-
-.search-box input{
-    background:transparent;
-    border:0;
-    outline:none;
-    width:100%;
-    color:white;
-    font-size:14px;
-}
-
-.tabs{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding-bottom:5px;
-    margin-bottom:20px;
-}
-
-.tab{
-    border:1px solid var(--border);
-    background:var(--panel);
-    color:#94a3b8;
-    padding:11px 15px;
-    border-radius:11px;
-    white-space:nowrap;
-    font-size:12px;
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.tab.active{
-    background:#1d3b68;
-    border-color:#3b82f6;
-    color:white;
-}
-
-.count{
-    background:#263b59;
-    padding:2px 7px;
-    border-radius:20px;
-    font-size:10px;
-}
-
-.section-title{
-    font-size:17px;
-    font-weight:900;
-    margin:0 0 14px;
-}
-
-.people-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:13px;
-}
-
-.person-card{
-    padding:17px;
-    display:flex;
-    align-items:center;
-    gap:13px;
-    min-width:0;
-}
-
-.avatar{
-    width:54px;
-    height:54px;
-    flex-shrink:0;
-    border-radius:50%;
-    background:linear-gradient(135deg,#2563eb,#8b5cf6);
-    display:grid;
-    place-items:center;
-    font-size:18px;
-    font-weight:900;
-    overflow:hidden;
-}
-
-.avatar img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.person-info{
-    flex:1;
-    min-width:0;
-}
-
-.person-info strong{
-    display:block;
-    font-size:13px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.person-info small{
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-    margin-top:4px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.person-actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:7px;
-    margin-top:12px;
-}
-
-.btn{
-    border:1px solid var(--border);
-    background:var(--panel2);
-    color:#dbeafe;
-    padding:9px 12px;
-    border-radius:9px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-    font-size:11px;
-    font-weight:800;
-}
-
-.btn svg{width:15px;height:15px}
-
-.btn-primary{
-    background:linear-gradient(100deg,#2563eb,#4f46e5);
-    border:0;
-    color:white;
-}
-
-.btn-danger{
-    color:#fca5a5;
-}
-
-.btn:hover{filter:brightness(1.12)}
-
-.empty-state{
-    padding:50px 20px;
-    text-align:center;
-    color:var(--muted);
-}
-
-.empty-state svg{
-    width:38px;
-    height:38px;
-    margin:0 auto 14px;
-}
-
-.empty-state strong{
-    display:block;
-    color:#cbd5e1;
-    margin-bottom:7px;
-}
-
-.empty-state p{
-    font-size:12px;
-    line-height:1.6;
-}
-
-.loading{
-    padding:35px;
-    text-align:center;
-    color:var(--muted);
-}
-
-.spinner{
-    width:25px;
-    height:25px;
-    border:3px solid #26364f;
-    border-top-color:#3b82f6;
-    border-radius:50%;
-    animation:spin .8s linear infinite;
-    margin:0 auto 12px;
-}
-
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.badge{
-    display:inline-block;
-    font-size:10px;
-    color:#93c5fd;
-    background:#1e3a5f;
-    padding:4px 8px;
-    border-radius:20px;
-    margin-top:7px;
-}
-
-.search-results{
-    margin-bottom:22px;
-}
-
-.search-results:empty{display:none}
-
-.mobile-nav{
-    display:none;
-}
-
-@media(max-width:650px){
-
-    .topbar-inner{padding:0 13px}
-    .logo{font-size:19px}
-
-    .page{padding:20px 11px 100px}
-
-    .page-title h1{font-size:24px}
-
-    .people-grid{grid-template-columns:1fr}
-
-    .person-card{
-        padding:14px;
-    }
-
-    .mobile-nav{
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        z-index:60;
-        display:flex;
-        justify-content:space-around;
-        padding:10px 8px calc(10px + env(safe-area-inset-bottom));
-        background:#101a2bed;
-        border-top:1px solid var(--border);
-        backdrop-filter:blur(15px);
-    }
-
-    .mobile-nav button{
-        border:0;
-        background:none;
-        color:#94a3b8;
-        display:grid;
-        justify-items:center;
-        gap:4px;
-        font-size:10px;
-    }
-
-    .mobile-nav svg{width:20px;height:20px}
-}
-</style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
-<header class="topbar">
-    <div class="topbar-inner">
-
-        <div class="logo">
-            <div class="logo-mark">F</div>
+<!-- TOPO -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
+        <!-- LOGO / BOTÃO HOME -->
+        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
+                <i data-lucide="home" class="w-5 h-5"></i>
+            </div>
             FaceCrato
+        </a>
+
+        <div class="flex-1 max-w-md relative hidden sm:block">
+            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
+            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
-        <div class="top-actions">
+        <div class="ml-auto flex items-center gap-2.5">
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" onclick="location.href='./notificacoes.html'" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
 
-            <button class="icon-btn" onclick="location.href='./feed.html'" title="Feed">
-                <i data-lucide="house"></i>
-            </button>
-
-            <button class="icon-btn" onclick="location.href='./notificacoes.html'" title="Notificações">
-                <i data-lucide="bell"></i>
-            </button>
-
-            <button class="icon-btn" id="logoutButton" title="Sair">
-                <i data-lucide="log-out"></i>
-            </button>
-
+            <!-- BOTÃO SANDUÍCHE (Mobile) -->
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
         </div>
     </div>
 </header>
 
-<main class="page">
+<!-- LAYOUT PRINCIPAL -->
+<main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-7 items-start relative">
 
-    <div class="page-title">
-        <h1>Amigos</h1>
-        <p>Encontre pessoas e gerencie suas amizades.</p>
-    </div>
-
-    <!-- PESQUISA -->
-    <div class="panel search-box">
-        <i data-lucide="search"></i>
-        <input
-            type="search"
-            id="searchInput"
-            placeholder="Pesquisar pessoas pelo nome ou @username..."
-            autocomplete="off"
-        >
-    </div>
-
-    <!-- RESULTADOS DA PESQUISA -->
-    <section class="search-results" id="searchResults"></section>
-
-    <!-- ABAS -->
-    <div class="tabs">
-
-        <button class="tab active" data-tab="friends">
-            <i data-lucide="users"></i>
-            Meus amigos
-            <span class="count" id="friendsCount">0</span>
-        </button>
-
-        <button class="tab" data-tab="received">
-            <i data-lucide="user-plus"></i>
-            Recebidas
-            <span class="count" id="receivedCount">0</span>
-        </button>
-
-        <button class="tab" data-tab="sent">
-            <i data-lucide="send"></i>
-            Enviadas
-            <span class="count" id="sentCount">0</span>
-        </button>
-
-    </div>
-
-    <!-- CONTEÚDO -->
-    <section id="content">
-
-        <div class="panel loading">
-            <div class="spinner"></div>
-            Carregando amizades...
+    <!-- SIDEBAR ESQUERDA -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+        <div class="flex items-center gap-3.5 pb-5 border-b border-gray-100 mb-4">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
+            <div class="min-w-0">
+                <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
+            </div>
         </div>
 
+        <div class="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
+            <strong class="text-slate-800">FACECRATO</strong><br>
+            Conectando pessoas em alto estilo.
+        </div>
+    </aside>
+
+    <!-- CONTEÚDO CENTRAL (Amigos) -->
+    <section class="min-w-0">
+        <div class="mb-6">
+            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Amigos</h1>
+            <p class="text-xs text-gray-500 mt-0.5">Encontre pessoas e gerencie suas amizades.</p>
+        </div>
+
+        <!-- PESQUISA -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-sm flex items-center gap-3">
+            <i data-lucide="search" class="w-4 h-4 text-gray-400 shrink-0"></i>
+            <input type="search" id="searchInput" placeholder="Pesquisar pessoas pelo nome ou @username..." autocomplete="off" class="w-full bg-transparent border-0 outline-none text-xs text-slate-900 placeholder:text-gray-400">
+        </div>
+
+        <!-- RESULTADOS DA PESQUISA -->
+        <section class="search-results mb-6" id="searchResults"></section>
+
+        <!-- ABAS -->
+        <div class="grid grid-cols-3 gap-2 mb-6">
+            <button class="tab-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-bold text-cyan-700 bg-cyan-50 border-cyan-200 flex items-center justify-center gap-2" data-tab="friends">
+                <i data-lucide="users" class="w-4 h-4"></i> Meus amigos <span class="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-[10px]" id="friendsCount">0</span>
+            </button>
+            <button class="tab-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-gray-500 hover:text-slate-900 flex items-center justify-center gap-2" data-tab="received">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> Recebidas <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="receivedCount">0</span>
+            </button>
+            <button class="tab-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-gray-500 hover:text-slate-900 flex items-center justify-center gap-2" data-tab="sent">
+                <i data-lucide="send" class="w-4 h-4"></i> Enviadas <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="sentCount">0</span>
+            </button>
+        </div>
+
+        <!-- CONTEÚDO -->
+        <div id="content" class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="p-12 text-center text-gray-400 text-xs">
+                Carregando amizades...
+            </div>
+        </div>
     </section>
+
+    <!-- SIDEBAR DIREITA (Navegação & Logout) -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
+        <nav class="space-y-1 mb-5">
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
+        </nav>
+
+        <div class="h-px bg-gray-100 my-4"></div>
+
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sessão</h3>
+        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm transition" id="logoutButton"><i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta</button>
+
+        <div class="h-px bg-gray-100 my-4"></div>
+        <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
+    </aside>
 
 </main>
 
-<nav class="mobile-nav">
+<!-- MENU MOBILE DESLIZANTE -->
+<div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
+<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
+    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+        <h3 class="text-base font-black text-slate-900">Menu</h3>
+        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="menuCloseBtn"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
 
-    <button onclick="location.href='./feed.html'">
-        <i data-lucide="house"></i>
-        Feed
-    </button>
+    <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
+    <nav class="space-y-1.5 mb-6">
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
+    </nav>
 
-    <button>
-        <i data-lucide="users"></i>
-        Amigos
-    </button>
-
-    <button onclick="location.href='./notificacoes.html'">
-        <i data-lucide="bell"></i>
-        Alertas
-    </button>
-
-    <button onclick="location.href='./perfil.html'">
-        <i data-lucide="user-round"></i>
-        Perfil
-    </button>
-
-</nav>
+    <div class="mt-auto pt-4 border-t border-gray-100">
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm transition" id="logoutButtonMobile"><i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta</button>
+    </div>
+</div>
 
 <script type="module">
-
 import { supabase } from "./supabase.js";
-
-// =====================================
-// ESTADO
-// =====================================
 
 let currentUser = null;
 let currentProfile = null;
@@ -506,9 +153,25 @@ const content = document.getElementById("content");
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
 
-// =====================================
-// UTILITÁRIOS
-// =====================================
+// Controle do Menu Sanduíche Mobile
+const menuToggleBtn = document.getElementById("menuToggleBtn");
+const menuCloseBtn = document.getElementById("menuCloseBtn");
+const mobileMenuDrawer = document.getElementById("mobileMenuDrawer");
+const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+
+function toggleMobileMenu(open) {
+    if (open) {
+        mobileMenuOverlay.classList.remove("hidden");
+        setTimeout(() => mobileMenuDrawer.classList.remove("translate-x-full"), 10);
+    } else {
+        mobileMenuDrawer.classList.add("translate-x-full");
+        setTimeout(() => mobileMenuOverlay.classList.add("hidden"), 300);
+    }
+}
+
+menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
+menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
+mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
 function escapeHTML(value = "") {
     return String(value).replace(/[&<>"']/g, char => ({
@@ -521,132 +184,75 @@ function escapeHTML(value = "") {
 }
 
 function initials(name = "F") {
-    return name.trim().split(/\s+/).slice(0,2)
-        .map(part => part[0] || "")
-        .join("")
-        .toUpperCase();
+    return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
+}
+
+function renderAvatar(profile, classes = "") {
+    const name = profile?.full_name || profile?.username || "U";
+    const avatar = profile?.avatar_url;
+
+    if (avatar && /^https?:\/\//i.test(avatar)) {
+        return `
+            <div class="${classes} overflow-hidden">
+                <img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover">
+            </div>
+        `;
+    }
+
+    return `<div class="${classes}">${escapeHTML(initials(name))}</div>`;
+}
+
+async function loadAvatarImages() {
+    const elements = document.querySelectorAll("[data-avatar-user]");
+    for (const element of elements) {
+        const id = element.dataset.avatarUser;
+        const profile = profiles[id];
+        if (!profile?.avatar_url) continue;
+
+        const { data, error } = await supabase.storage.from("avatars").createSignedUrl(profile.avatar_url, 3600);
+        if (error || !data?.signedUrl) continue;
+
+        const img = document.createElement("img");
+        img.src = data.signedUrl;
+        img.alt = "Foto de perfil";
+        img.className = "w-full h-full object-cover";
+        element.replaceChildren(img);
+    }
 }
 
 function notify(message, icon = "success") {
-    Swal.fire({
-        toast:true,
-        position:"top",
-        icon,
-        title:message,
-        showConfirmButton:false,
-        timer:2300,
-        background:"#111c2e",
-        color:"#f8fafc"
-    });
+    Swal.fire({ toast:true, position:"top", icon, title:message, showConfirmButton:false, timer:2200 });
 }
 
 function showError(message) {
-    Swal.fire({
-        icon:"error",
-        title:"Não foi possível concluir",
-        text:message,
-        background:"#111c2e",
-        color:"#f8fafc",
-        confirmButtonColor:"#2563eb"
-    });
+    Swal.fire({ icon:"error", title:"Ops!", text:message });
 }
 
 function getOtherUser(friendship) {
-    return friendship.user_a === currentUser.id
-        ? friendship.user_b
-        : friendship.user_a;
+    return friendship.user_a === currentUser.id ? friendship.user_b : friendship.user_a;
 }
 
 function profileUrl(id) {
     return `./perfil.html?id=${encodeURIComponent(id)}`;
 }
 
-function renderAvatar(profile) {
-
-    const name = profile?.full_name || "Usuário";
-
-    return `
-        <div class="avatar" data-avatar-user="${escapeHTML(profile?.id || "")}">
-            ${escapeHTML(initials(name))}
-        </div>
-    `;
-
-}
-
-async function loadAvatarImages() {
-
-    const elements = document.querySelectorAll("[data-avatar-user]");
-
-    for (const element of elements) {
-
-        const id = element.dataset.avatarUser;
-        const profile = profiles[id];
-
-        if (!profile?.avatar_url) continue;
-
-        const { data, error } = await supabase.storage
-            .from("avatars")
-            .createSignedUrl(profile.avatar_url,3600);
-
-        if (error || !data?.signedUrl) continue;
-
-        const img = document.createElement("img");
-        img.src = data.signedUrl;
-        img.alt = "Foto de perfil";
-
-        element.replaceChildren(img);
-
-    }
-
-}
-
-// =====================================
-// AUTENTICAÇÃO
-// =====================================
-
 async function initialize() {
-
     const { data, error } = await supabase.auth.getSession();
-
-    if (error || !data.session) {
-        location.replace("./login.html");
-        return;
-    }
-
+    if (error || !data.session) { location.replace("./login.html"); return; }
     currentUser = data.session.user;
 
-    const { data: profile } = await supabase
-        .from("profiles")
-        .select("id,full_name,username")
-        .eq("id", currentUser.id)
-        .maybeSingle();
+    const { data: profile } = await supabase.from("profiles").select("id,full_name,username,avatar_url").eq("id", currentUser.id).maybeSingle();
+    currentProfile = profile || { full_name: currentUser.email?.split("@")[0] || "Usuário" };
 
-    currentProfile = profile || { full_name: "Alguém" };
+    document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
+    document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
+    document.getElementById("sideAvatar").innerHTML = renderAvatar(currentProfile, "w-full h-full rounded-full flex items-center justify-center");
 
     await loadFriendships();
-
 }
 
-supabase.auth.onAuthStateChange((event,session) => {
-
-    if (event === "SIGNED_OUT" || !session) {
-        location.replace("./login.html");
-    }
-
-});
-
-// =====================================
-// CARREGAR AMIZADES
-// =====================================
-
 async function loadFriendships() {
-
-    content.innerHTML = `
-        <div class="panel loading">
-            <div class="spinner"></div>
-            Atualizando amizades...
-        </div>
-    `;
+    content.innerHTML = `<div class="p-12 text-center text-gray-400 text-xs">Atualizando amizades...</div>`;
 
     const { data, error } = await supabase
         .from("friendships")
@@ -656,322 +262,155 @@ async function loadFriendships() {
         .order("created_at",{ascending:false});
 
     if (error) {
-        console.error(error);
-        content.innerHTML = `
-            <div class="panel empty-state">
-                <i data-lucide="alert-circle"></i>
-                <strong>Erro ao carregar amizades</strong>
-                <p>${escapeHTML(error.message)}</p>
-            </div>
-        `;
-        lucide.createIcons();
+        content.innerHTML = `<div class="p-12 text-center text-red-500 text-xs">Erro ao carregar amizades: ${escapeHTML(error.message)}</div>`;
         return;
     }
 
     friendships = data || [];
-
     await loadProfiles();
-
     updateCounts();
     renderTab();
-
 }
-
-// =====================================
-// CARREGAR PERFIS
-// =====================================
 
 async function loadProfiles() {
-
     const ids = [...new Set(friendships.map(getOtherUser))];
+    if (ids.length === 0) { profiles = {}; return; }
 
-    if (ids.length === 0) {
-        profiles = {};
-        return;
-    }
-
-    const { data, error } = await supabase
-        .from("profiles")
-        .select("id,full_name,username,avatar_url,city,state")
-        .in("id",ids);
-
-    if (error) {
-        console.error("Erro ao carregar perfis:",error);
-        return;
-    }
-
+    const { data } = await supabase.from("profiles").select("id,full_name,username,avatar_url,city,state").in("id",ids);
     profiles = {};
-
-    for (const profile of data || []) {
-        profiles[profile.id] = profile;
-    }
-
+    (data || []).forEach(p => profiles[p.id] = p);
 }
 
-// =====================================
-// CONTADORES
-// =====================================
-
-function getFriends() {
-    return friendships.filter(item => item.status === "accepted");
-}
-
-function getReceived() {
-    return friendships.filter(item =>
-        item.status === "pending" &&
-        item.requested_by !== currentUser.id
-    );
-}
-
-function getSent() {
-    return friendships.filter(item =>
-        item.status === "pending" &&
-        item.requested_by === currentUser.id
-    );
-}
+function getFriends() { return friendships.filter(item => item.status === "accepted"); }
+function getReceived() { return friendships.filter(item => item.status === "pending" && item.requested_by !== currentUser.id); }
+function getSent() { return friendships.filter(item => item.status === "pending" && item.requested_by === currentUser.id); }
 
 function updateCounts() {
-
-    document.getElementById("friendsCount").textContent =
-        getFriends().length;
-
-    document.getElementById("receivedCount").textContent =
-        getReceived().length;
-
-    document.getElementById("sentCount").textContent =
-        getSent().length;
-
+    document.getElementById("friendsCount").textContent = getFriends().length;
+    document.getElementById("receivedCount").textContent = getReceived().length;
+    document.getElementById("sentCount").textContent = getSent().length;
 }
 
-// =====================================
-// ABAS
-// =====================================
-
-document.querySelectorAll(".tab").forEach(button => {
-
-    button.addEventListener("click",() => {
-
+document.querySelectorAll(".tab-btn").forEach(button => {
+    button.addEventListener("click", () => {
         activeTab = button.dataset.tab;
-
-        document.querySelectorAll(".tab").forEach(tab => {
-            tab.classList.toggle("active",tab === button);
+        document.querySelectorAll(".tab-btn").forEach(tab => {
+            const isCurrent = tab === button;
+            tab.classList.toggle("text-cyan-700", isCurrent);
+            tab.classList.toggle("bg-cyan-50", isCurrent);
+            tab.classList.toggle("border-cyan-200", isCurrent);
+            tab.classList.toggle("font-bold", isCurrent);
+            tab.classList.toggle("text-gray-500", !isCurrent);
+            tab.classList.toggle("font-semibold", !isCurrent);
         });
-
         renderTab();
-
     });
-
 });
 
 function renderTab() {
-
     let list = [];
-
     if (activeTab === "friends") list = getFriends();
     if (activeTab === "received") list = getReceived();
     if (activeTab === "sent") list = getSent();
 
-    const titles = {
-        friends:"Seus amigos",
-        received:"Solicitações recebidas",
-        sent:"Solicitações enviadas"
-    };
+    const titles = { friends:"Seus amigos", received:"Solicitações recebidas", sent:"Solicitações enviadas" };
 
     if (list.length === 0) {
-
         const messages = {
             friends:"Você ainda não tem amigos adicionados.",
             received:"Você não tem solicitações pendentes.",
             sent:"Você não enviou solicitações de amizade."
         };
-
         content.innerHTML = `
-            <div class="panel empty-state">
-                <i data-lucide="users"></i>
-                <strong>${titles[activeTab]}</strong>
-                <p>${messages[activeTab]}</p>
+            <div class="p-12 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4 border border-gray-200">
+                    <i data-lucide="users" class="w-7 h-7 text-gray-400"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 mb-1">${titles[activeTab]}</h3>
+                <p class="text-xs text-gray-500">${messages[activeTab]}</p>
             </div>
         `;
-
         lucide.createIcons();
         return;
-
     }
 
     content.innerHTML = `
-        <h2 class="section-title">${titles[activeTab]}</h2>
-        <div class="people-grid">
+        <div class="p-5 border-b border-gray-100 bg-gray-50/50">
+            <h2 class="font-bold text-sm text-slate-900">${titles[activeTab]}</h2>
+        </div>
+        <div class="divide-y divide-gray-100">
             ${list.map(item => renderPersonCard(item)).join("")}
         </div>
     `;
 
     attachCardEvents();
     loadAvatarImages();
-
 }
 
 function renderPersonCard(friendship) {
-
     const id = getOtherUser(friendship);
     const profile = profiles[id];
-
-    if (!profile) {
-        return `
-            <article class="panel person-card">
-                <div class="person-info">
-                    <strong>Perfil indisponível</strong>
-                    <small>Não foi possível carregar este usuário.</small>
-                </div>
-            </article>
-        `;
-    }
+    if (!profile) return `<div class="p-4 text-xs text-gray-400">Perfil indisponível.</div>`;
 
     const name = profile.full_name || "Usuário";
     const username = profile.username || "usuario";
-
-    const location = [profile.city,profile.state]
-        .filter(Boolean).join(" - ");
+    const location = [profile.city, profile.state].filter(Boolean).join(" - ");
 
     let actions = "";
-
     if (activeTab === "friends") {
-
         actions = `
-            <button class="btn" data-action="profile" data-id="${id}">
-                <i data-lucide="user-round"></i>
-                Ver perfil
-            </button>
-
-            <button class="btn btn-danger" data-action="remove" data-id="${id}">
-                <i data-lucide="user-minus"></i>
-                Remover
-            </button>
+            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
+            <button class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="remove" data-id="${id}">Remover</button>
         `;
-
     } else if (activeTab === "received") {
-
         actions = `
-            <button class="btn btn-primary" data-action="accept" data-id="${id}">
-                <i data-lucide="check"></i>
-                Aceitar
-            </button>
-
-            <button class="btn btn-danger" data-action="decline" data-id="${id}">
-                <i data-lucide="x"></i>
-                Recusar
-            </button>
-
-            <button class="btn" data-action="profile" data-id="${id}">
-                Ver perfil
-            </button>
+            <button class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-sm" data-action="accept" data-id="${id}">Aceitar</button>
+            <button class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="decline" data-id="${id}">Recusar</button>
+            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
         `;
-
     } else {
-
         actions = `
-            <button class="btn" data-action="profile" data-id="${id}">
-                <i data-lucide="user-round"></i>
-                Ver perfil
-            </button>
-
-            <button class="btn btn-danger" data-action="cancel" data-id="${id}">
-                <i data-lucide="x"></i>
-                Cancelar
-            </button>
+            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
+            <button class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="cancel" data-id="${id}">Cancelar</button>
         `;
-
     }
 
     return `
-        <article class="panel person-card">
-
-            ${renderAvatar(profile)}
-
-            <div class="person-info">
-                <strong>${escapeHTML(name)}</strong>
-                <small>@${escapeHTML(username)}</small>
-
-                ${location ? `<small>${escapeHTML(location)}</small>` : ""}
-
-                <div class="person-actions">
-                    ${actions}
-                </div>
+        <div class="p-4 flex items-center gap-4 hover:bg-gray-50/80 transition">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm" data-avatar-user="${escapeHTML(id)}">
+                ${escapeHTML(initials(name))}
             </div>
-
-        </article>
+            <div class="flex-1 min-w-0">
+                <strong class="block text-sm font-bold text-slate-900 truncate">${escapeHTML(name)}</strong>
+                <small class="text-xs text-gray-500">@${escapeHTML(username)}${location ? ` · ${escapeHTML(location)}` : ""}</small>
+                <div class="flex items-center gap-2 mt-2">${actions}</div>
+            </div>
+        </div>
     `;
-
 }
-
-// =====================================
-// AÇÕES DOS CARDS
-// =====================================
 
 function attachCardEvents() {
-
     content.querySelectorAll("[data-action]").forEach(button => {
-
-        button.addEventListener("click",async () => {
-
+        button.addEventListener("click", async () => {
             const action = button.dataset.action;
             const userId = button.dataset.id;
-
-            const friendship = friendships.find(item =>
-                getOtherUser(item) === userId
-            );
-
+            const friendship = friendships.find(item => getOtherUser(item) === userId);
             if (!friendship) return;
 
-            if (action === "profile") {
-                location.href = profileUrl(userId);
-                return;
-            }
-
-            if (action === "accept") {
-                await acceptRequest(friendship, userId);
-                return;
-            }
-
-            if (action === "decline") {
-                await declineRequest(friendship);
-                return;
-            }
-
-            if (action === "cancel") {
-                await cancelRequest(friendship);
-                return;
-            }
-
-            if (action === "remove") {
-                await removeFriend(friendship);
-                return;
-            }
-
+            if (action === "profile") { location.href = profileUrl(userId); return; }
+            if (action === "accept") { await acceptRequest(friendship, userId); return; }
+            if (action === "decline") { await declineRequest(friendship); return; }
+            if (action === "cancel") { await cancelRequest(friendship); return; }
+            if (action === "remove") { await removeFriend(friendship); return; }
         });
-
     });
-
     lucide.createIcons();
-
 }
 
-// =====================================
-// ACEITAR SOLICITAÇÃO
-// =====================================
-
 async function acceptRequest(friendship, targetId) {
+    const { error } = await supabase.rpc("respond_friend_request", { p_friendship_id: friendship.id, p_accept: true });
+    if (error) { showError(error.message); return; }
 
-    const { error } = await supabase.rpc("respond_friend_request",{
-        p_friendship_id:friendship.id,
-        p_accept:true
-    });
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
-    // Cria notificação em tempo real para quem enviou o pedido
     await supabase.from("notifications").insert({
         recipient_id: targetId,
         actor_id: currentUser.id,
@@ -981,333 +420,129 @@ async function acceptRequest(friendship, targetId) {
 
     notify("Amizade confirmada!");
     await loadFriendships();
-
 }
-
-// =====================================
-// RECUSAR SOLICITAÇÃO
-// =====================================
 
 async function declineRequest(friendship) {
+    const confirm = await Swal.fire({ title: "Recusar solicitação?", icon: "question", showCancelButton: true, confirmButtonColor: "#dc2626" });
+    if (!confirm.isConfirmed) return;
 
-    const confirmation = await Swal.fire({
-        title:"Recusar solicitação?",
-        text:"A solicitação será recusada.",
-        icon:"question",
-        showCancelButton:true,
-        confirmButtonText:"Recusar",
-        cancelButtonText:"Voltar",
-        confirmButtonColor:"#dc2626",
-        background:"#111c2e",
-        color:"#f8fafc"
-    });
-
-    if (!confirmation.isConfirmed) return;
-
-    const { error } = await supabase.rpc("respond_friend_request",{
-        p_friendship_id:friendship.id,
-        p_accept:false
-    });
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
+    const { error } = await supabase.rpc("respond_friend_request", { p_friendship_id: friendship.id, p_accept: false });
+    if (error) { showError(error.message); return; }
     notify("Solicitação recusada.");
     await loadFriendships();
-
 }
-
-// =====================================
-// CANCELAR SOLICITAÇÃO
-// =====================================
 
 async function cancelRequest(friendship) {
+    const confirm = await Swal.fire({ title: "Cancelar solicitação?", icon: "question", showCancelButton: true, confirmButtonColor: "#dc2626" });
+    if (!confirm.isConfirmed) return;
 
-    const confirmation = await Swal.fire({
-        title:"Cancelar solicitação?",
-        icon:"question",
-        showCancelButton:true,
-        confirmButtonText:"Cancelar solicitação",
-        cancelButtonText:"Voltar",
-        confirmButtonColor:"#dc2626",
-        background:"#111c2e",
-        color:"#f8fafc"
-    });
-
-    if (!confirmation.isConfirmed) return;
-
-    const { error } = await supabase.rpc("cancel_friend_request",{
-        p_friendship_id:friendship.id
-    });
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
+    const { error } = await supabase.rpc("cancel_friend_request", { p_friendship_id: friendship.id });
+    if (error) { showError(error.message); return; }
     notify("Solicitação cancelada.");
     await loadFriendships();
-
 }
-
-// =====================================
-// REMOVER AMIZADE
-// =====================================
 
 async function removeFriend(friendship) {
+    const confirm = await Swal.fire({ title: "Remover amizade?", icon: "warning", showCancelButton: true, confirmButtonColor: "#dc2626" });
+    if (!confirm.isConfirmed) return;
 
-    const confirmation = await Swal.fire({
-        title:"Remover amizade?",
-        text:"Vocês deixarão de aparecer na lista de amigos um do outro.",
-        icon:"warning",
-        showCancelButton:true,
-        confirmButtonText:"Remover amizade",
-        cancelButtonText:"Manter amizade",
-        confirmButtonColor:"#dc2626",
-        background:"#111c2e",
-        color:"#f8fafc"
-    });
-
-    if (!confirmation.isConfirmed) return;
-
-    const { error } = await supabase.rpc("remove_friendship",{
-        p_friendship_id:friendship.id
-    });
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
+    const { error } = await supabase.rpc("remove_friendship", { p_friendship_id: friendship.id });
+    if (error) { showError(error.message); return; }
     notify("Amizade removida.");
     await loadFriendships();
-
 }
 
-// =====================================
-// PESQUISAR PESSOAS
-// =====================================
-
-searchInput.addEventListener("input",() => {
-
+// Pesquisa
+searchInput.addEventListener("input", () => {
     clearTimeout(searchTimer);
-
     const term = searchInput.value.trim();
+    if (term.length < 2) { searchResults.innerHTML = ""; return; }
 
-    if (term.length < 2) {
-        searchResults.innerHTML = "";
-        return;
-    }
-
-    searchResults.innerHTML = `
-        <div class="panel loading">
-            <div class="spinner"></div>
-            Pesquisando pessoas...
-        </div>
-    `;
-
-    searchTimer = setTimeout(() => {
-        searchPeople(term);
-    },450);
-
+    searchResults.innerHTML = `<div class="p-6 text-center text-gray-400 text-xs">Pesquisando pessoas...</div>`;
+    searchTimer = setTimeout(() => searchPeople(term), 400);
 });
 
 async function searchPeople(term) {
-
-    const cleanTerm = term.replace(/^@/,"");
-
+    const cleanTerm = term.replace(/^@/, "");
     const { data, error } = await supabase
         .from("profiles")
         .select("id,full_name,username,avatar_url,city,state")
-        .neq("id",currentUser.id)
+        .neq("id", currentUser.id)
         .or(`full_name.ilike.%${cleanTerm}%,username.ilike.%${cleanTerm}%`)
         .limit(20);
 
-    if (error) {
-
-        console.error(error);
-
-        searchResults.innerHTML = `
-            <div class="panel empty-state">
-                <strong>Erro na pesquisa</strong>
-                <p>${escapeHTML(error.message)}</p>
-            </div>
-        `;
-
+    if (error || !data || data.length === 0) {
+        searchResults.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-6 text-center text-gray-400 text-xs">Nenhuma pessoa encontrada.</div>`;
         return;
-
-    }
-
-    if (!data || data.length === 0) {
-
-        searchResults.innerHTML = `
-            <div class="panel empty-state">
-                <i data-lucide="search-x"></i>
-                <strong>Nenhuma pessoa encontrada</strong>
-                <p>Tente outro nome ou username.</p>
-            </div>
-        `;
-
-        lucide.createIcons();
-        return;
-
     }
 
     const friendshipMap = {};
-
-    for (const item of friendships) {
-        friendshipMap[getOtherUser(item)] = item;
-    }
+    friendships.forEach(item => friendshipMap[getOtherUser(item)] = item);
 
     searchResults.innerHTML = `
-        <h2 class="section-title">Resultados da pesquisa</h2>
+        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="p-5 border-b border-gray-100 bg-gray-50/50">
+                <h2 class="font-bold text-sm text-slate-900">Resultados da pesquisa</h2>
+            </div>
+            <div class="divide-y divide-gray-100">
+                ${data.map(profile => {
+                    const relation = friendshipMap[profile.id];
+                    let actionBtn = `<button class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-sm" data-search-action="add" data-id="${profile.id}">Adicionar</button>`;
 
-        <div class="people-grid">
-            ${data.map(profile => {
+                    if (relation?.status === "accepted") {
+                        actionBtn = `<span class="text-xs text-emerald-600 font-semibold">Amigos</span>`;
+                    } else if (relation?.status === "pending") {
+                        actionBtn = `<span class="text-xs text-amber-600 font-semibold">Pendente</span>`;
+                    }
 
-                const relation = friendshipMap[profile.id];
-
-                let action = `
-                    <button
-                        class="btn btn-primary"
-                        data-search-action="add"
-                        data-id="${profile.id}">
-                        <i data-lucide="user-plus"></i>
-                        Adicionar
-                    </button>
-                `;
-
-                if (relation?.status === "accepted") {
-                    action = `
-                        <button
-                            class="btn"
-                            data-search-action="profile"
-                            data-id="${profile.id}">
-                            <i data-lucide="user-check"></i>
-                            Amigos
-                        </button>
-                    `;
-                } else if (relation?.status === "pending") {
-
-                    const sent = relation.requested_by === currentUser.id;
-
-                    action = `
-                        <button
-                            class="btn"
-                            data-search-action="profile"
-                            data-id="${profile.id}">
-                            ${sent ? "Solicitação enviada" : "Responder solicitação"}
-                        </button>
-                    `;
-
-                }
-
-                const place = [profile.city,profile.state]
-                    .filter(Boolean).join(" - ");
-
-                return `
-                    <article class="panel person-card">
-
-                        ${renderAvatar(profile)}
-
-                        <div class="person-info">
-                            <strong>${escapeHTML(profile.full_name || "Usuário")}</strong>
-                            <small>@${escapeHTML(profile.username || "usuario")}</small>
-                            ${place ? `<small>${escapeHTML(place)}</small>` : ""}
-
-                            <div class="person-actions">
-                                <button
-                                    class="btn"
-                                    data-search-action="profile"
-                                    data-id="${profile.id}">
-                                    Ver perfil
-                                </button>
-                                ${action}
+                    return `
+                        <div class="p-4 flex items-center gap-4 hover:bg-gray-50/80 transition">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm" data-avatar-user="${escapeHTML(profile.id)}">
+                                ${escapeHTML(initials(profile.full_name))}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <strong class="block text-sm font-bold text-slate-900 truncate">${escapeHTML(profile.full_name || "Usuário")}</strong>
+                                <small class="text-xs text-gray-500">@${escapeHTML(profile.username || "usuario")}</small>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-search-action="profile" data-id="${profile.id}">Ver perfil</button>
+                                    ${actionBtn}
+                                </div>
                             </div>
                         </div>
-
-                    </article>
-                `;
-
-            }).join("")}
+                    `;
+                }).join("")}
+            </div>
         </div>
     `;
 
-    for (const profile of data) {
-        profiles[profile.id] = profile;
-    }
+    data.forEach(p => profiles[p.id] = p);
 
     searchResults.querySelectorAll("[data-search-action]").forEach(button => {
-
-        button.addEventListener("click",async () => {
-
+        button.addEventListener("click", async () => {
             const action = button.dataset.searchAction;
             const id = button.dataset.id;
-
-            if (action === "profile") {
-                location.href = profileUrl(id);
-                return;
-            }
-
-            if (action === "add") {
-                await sendFriendRequest(id);
-            }
-
+            if (action === "profile") { location.href = profileUrl(id); return; }
+            if (action === "add") { await sendFriendRequest(id); }
         });
-
     });
 
     loadAvatarImages();
     lucide.createIcons();
-
 }
 
-// =====================================
-// ENVIAR SOLICITAÇÃO
-// =====================================
-
 async function sendFriendRequest(targetId) {
-
     if (targetId === currentUser.id) return;
 
-    const existing = friendships.find(item =>
-        getOtherUser(item) === targetId &&
-        ["pending","accepted"].includes(item.status)
-    );
+    const [userA, userB] = [currentUser.id, targetId].sort();
+    const { error } = await supabase.from("friendships").insert({
+        user_a: userA,
+        user_b: userB,
+        requested_by: currentUser.id,
+        status: "pending"
+    });
 
-    if (existing) {
-        notify("Já existe uma relação de amizade.", "info");
-        return;
-    }
+    if (error) { showError(error.message); return; }
 
-    const [userA,userB] = [currentUser.id,targetId].sort();
-
-    const { error } = await supabase
-        .from("friendships")
-        .insert({
-            user_a:userA,
-            user_b:userB,
-            requested_by:currentUser.id,
-            status:"pending"
-        });
-
-    if (error) {
-
-        console.error(error);
-
-        if (error.code === "23505") {
-            notify("Já existe uma solicitação entre vocês.","info");
-        } else {
-            showError(error.message);
-        }
-
-        return;
-
-    }
-
-    // Cria notificação em tempo real para quem recebeu o pedido
     await supabase.from("notifications").insert({
         recipient_id: targetId,
         actor_id: currentUser.id,
@@ -1316,67 +551,30 @@ async function sendFriendRequest(targetId) {
     });
 
     notify("Solicitação enviada!");
-
     await loadFriendships();
-
     const term = searchInput.value.trim();
-
-    if (term.length >= 2) {
-        await searchPeople(term);
-    }
-
+    if (term.length >= 2) searchPeople(term);
 }
 
-// =====================================
-// SAIR
-// =====================================
-
-document.getElementById("logoutButton").addEventListener("click",async () => {
-
-    const confirmation = await Swal.fire({
-        title:"Sair da conta?",
-        icon:"question",
-        showCancelButton:true,
-        confirmButtonText:"Sair",
-        cancelButtonText:"Cancelar",
-        confirmButtonColor:"#2563eb",
-        background:"#111c2e",
-        color:"#f8fafc"
+// Navegação global
+document.querySelectorAll("[data-nav]").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
+        if (destinations[btn.dataset.nav]) window.location.href = destinations[btn.dataset.nav];
     });
-
-    if (!confirmation.isConfirmed) return;
-
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
-    location.replace("./login.html");
-
 });
 
-// =====================================
-// INICIALIZAÇÃO
-// =====================================
+document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
-initialize().catch(error => {
-    console.error(error);
-    showError(error.message || "Erro ao iniciar a página.");
-});
+const handleLogout = async () => {
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
+    if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
+};
 
+document.getElementById("logoutButton").addEventListener("click", handleLogout);
+
+initialize().catch(error => showError(error.message || "Erro ao iniciar a página."));
 lucide.createIcons();
-
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load",() => {
-        navigator.serviceWorker.register("./service-worker.js")
-            .catch(error => console.error("Erro PWA:",error));
-    });
-}
 </script>
 
 </body>
