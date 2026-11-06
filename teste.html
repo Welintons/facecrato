@@ -12,36 +12,53 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
+<body class="bg-gray-100 text-slate-900 font-sans antialiased min-h-screen">
 
-<!-- TOPO -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
-    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <!-- LOGO / BOTÃO HOME -->
-        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
-                <i data-lucide="home" class="w-5 h-5"></i>
+<!-- TOPO ESTILO FACEBOOK -->
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
+    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-2 sm:gap-4">
+        
+        <!-- LOGO E PESQUISA ESQUERDA -->
+        <div class="flex items-center gap-2">
+            <a href="./feed.html" class="flex items-center gap-2 text-2xl font-black tracking-tight text-cyan-600 group cursor-pointer" title="Início">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                </div>
+                <span class="hidden md:inline">FaceCrato</span>
+            </a>
+
+            <div class="relative hidden sm:block ml-2">
+                <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-48 lg:w-64 h-10 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
             </div>
-            FaceCrato
-        </a>
-
-        <div class="flex-1 max-w-md relative hidden sm:block">
-            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
-            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
-        <div class="ml-auto flex items-center gap-2.5 relative">
+        <!-- ABAS CENTRAIS ESTILO APP -->
+        <div class="flex items-center justify-center h-full gap-1 md:gap-2">
+            <a href="./feed.html" class="flex items-center justify-center w-14 md:w-20 h-full border-b-4 border-cyan-600 text-cyan-600 transition" title="Início">
+                <i data-lucide="home" class="w-6 h-6"></i>
+            </a>
+            <a href="./amigos.html" class="flex items-center justify-center w-14 md:w-20 h-full text-gray-500 hover:bg-gray-100 rounded-xl md:rounded-none transition" title="Amigos">
+                <i data-lucide="users" class="w-6 h-6"></i>
+            </a>
+            <a href="./notificacoes.html" class="flex items-center justify-center w-14 md:w-20 h-full text-gray-500 hover:bg-gray-100 rounded-xl md:rounded-none transition relative" title="Notificações">
+                <i data-lucide="bell" class="w-6 h-6"></i>
+            </a>
+        </div>
+
+        <!-- BOTÕES DA DIREITA (PERFIL, MENU NOTIFICAÇÃO E MENU MOBILE) -->
+        <div class="flex items-center gap-2 relative">
             
             <!-- BOTÃO DE NOTIFICAÇÕES COM DROPDOWN MODAL -->
             <div class="relative">
-                <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition relative" id="notificationsButton" title="Notificações">
+                <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition relative" id="notificationsButton" title="Notificações">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     <!-- Badge de não lidas -->
                     <span id="notifBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
                 </button>
 
                 <!-- MODAL DROPDOWN DE NOTIFICAÇÕES -->
-                <div id="notifDropdown" class="fixed top-[80px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
+                <div id="notifDropdown" class="fixed top-[70px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
                     <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
                         <h3 class="font-bold text-sm text-slate-900">Notificações</h3>
                         <button onclick="markAllReadFromDropdown()" class="text-xs font-bold text-cyan-600 hover:underline">Marcar lidas</button>
@@ -57,20 +74,24 @@
                 </div>
             </div>
 
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition overflow-hidden" id="profileButton" title="Meu perfil">
+                <i data-lucide="user-round" class="w-5 h-5"></i>
+            </button>
             
             <!-- BOTÃO SANDUÍCHE (Mobile) -->
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition lg:hidden" id="menuToggleBtn" title="Menu">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
         </div>
     </div>
 </header>
 
 <!-- LAYOUT PRINCIPAL -->
-<main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-7 items-start relative">
+<main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_300px] gap-6 items-start relative">
 
     <!-- SIDEBAR ESQUERDA -->
-    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
-        <div class="flex items-center gap-3.5 pb-5 border-b border-gray-100 mb-4">
+    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
+        <div class="flex items-center gap-3.5 pb-4 border-b border-gray-100 mb-3">
             <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
             <div class="min-w-0">
                 <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
@@ -78,53 +99,79 @@
             </div>
         </div>
 
-        <div class="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
-            <strong class="text-slate-800">FACECRATO</strong><br>
-            Conectando pessoas em alto estilo.
-        </div>
+        <nav class="space-y-1">
+            <a href="./feed.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm transition"><i data-lucide="home" class="w-5 h-5"></i> Feed Principal</a>
+            <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="users" class="w-5 h-5"></i> Amigos</a>
+            <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</a>
+            <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil</a>
+        </nav>
     </aside>
 
     <!-- FEED CENTRAL -->
-    <section class="min-w-0">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Seu feed</h1>
-                <p class="text-xs text-gray-500 mt-0.5">O que está rolando na rede?</p>
-            </div>
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-sm" id="refreshButton" title="Atualizar feed"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-        </div>
+    <section class="min-w-0 max-w-xl mx-auto w-full">
 
-        <div class="flex gap-2 p-1.5 bg-white border border-gray-200 rounded-2xl mb-6 shadow-sm">
-            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold bg-gray-100 text-slate-900 border border-gray-200 shadow-sm transition" data-feed="discover">
-                <i data-lucide="compass" class="w-4 h-4 inline mr-1.5 align-text-bottom"></i> Para você
-            </button>
-            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold text-gray-500 hover:text-slate-900 transition" data-feed="friends">
-                <i data-lucide="users" class="w-4 h-4 inline mr-1.5 align-text-bottom"></i> Amigos
-            </button>
+        <!-- CARROSSEL DE STORIES ESTILO FACEBOOK -->
+        <div class="grid grid-cols-4 gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
+            <!-- Card de Criar Story -->
+            <div class="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer group">
+                <div class="h-32 bg-gray-100 overflow-hidden flex items-center justify-center relative" id="storyUserThumb">
+                    <div class="w-full h-full bg-slate-200 flex items-center justify-center text-xs text-gray-500 font-bold">Foto</div>
+                </div>
+                <div class="flex-1 bg-white relative flex flex-col items-center justify-end pb-2">
+                    <div class="absolute -top-4 w-8 h-8 rounded-full bg-cyan-600 text-white border-2 border-white flex items-center justify-center shadow-md group-hover:scale-105 transition">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-800 text-center px-1 truncate w-full mt-2">Criar story</span>
+                </div>
+            </div>
+
+            <!-- Story Exemplo 1 -->
+            <div class="relative bg-gradient-to-b from-cyan-500 to-violet-600 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer p-2 justify-between text-white group">
+                <div class="w-8 h-8 rounded-full border-2 border-cyan-400 bg-white flex items-center justify-center text-slate-900 text-xs font-bold shadow">M</div>
+                <div>
+                    <strong class="block text-xs font-bold leading-tight drop-shadow">Mila Ribeiro</strong>
+                </div>
+            </div>
+
+            <!-- Story Exemplo 2 -->
+            <div class="relative bg-gradient-to-b from-purple-500 to-pink-600 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer p-2 justify-between text-white group">
+                <div class="w-8 h-8 rounded-full border-2 border-pink-400 bg-white flex items-center justify-center text-slate-900 text-xs font-bold shadow">W</div>
+                <div>
+                    <strong class="block text-xs font-bold leading-tight drop-shadow">WS Infor</strong>
+                </div>
+            </div>
+
+            <!-- Story Exemplo 3 -->
+            <div class="relative bg-gradient-to-b from-emerald-500 to-teal-700 rounded-xl overflow-hidden shadow-xs flex flex-col h-48 cursor-pointer p-2 justify-between text-white group">
+                <div class="w-8 h-8 rounded-full border-2 border-emerald-400 bg-white flex items-center justify-center text-slate-900 text-xs font-bold shadow">R</div>
+                <div>
+                    <strong class="block text-xs font-bold leading-tight drop-shadow">Raissa</strong>
+                </div>
+            </div>
         </div>
 
         <!-- CRIAR PUBLICAÇÃO -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 mb-6 shadow-sm">
-            <div class="flex gap-3.5 items-start">
-                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm" id="composerAvatar">F</div>
-                <textarea id="postContent" maxlength="5000" placeholder="O que está acontecendo? Use #hashtags..." class="w-full min-h-[85px] resize-none bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition placeholder:text-gray-400"></textarea>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-xs">
+            <div class="flex gap-3 items-center pb-3 border-b border-gray-100">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs" id="composerAvatar">F</div>
+                <textarea id="postContent" maxlength="5000" placeholder="No que você está pensando?" class="w-full bg-gray-100 hover:bg-gray-200/50 focus:bg-white border border-transparent focus:border-cyan-600 rounded-full px-4 py-2.5 text-sm text-slate-900 focus:outline-none transition resize-none h-11 placeholder:text-gray-500"></textarea>
             </div>
 
-            <div class="file-preview hidden mt-3 ml-[54px] text-xs font-bold text-cyan-700" id="filePreview"></div>
+            <div class="file-preview hidden mt-3 text-xs font-bold text-cyan-700" id="filePreview"></div>
 
-            <div class="flex items-center flex-wrap gap-3 mt-4 pt-4 border-t border-gray-100">
-                <label class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-slate-900 transition" for="mediaInput">
-                    <i data-lucide="image" class="w-4 h-4"></i> Foto/vídeo
+            <div class="flex items-center justify-between pt-3 mt-1">
+                <label class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 cursor-pointer transition flex-1 justify-center" for="mediaInput">
+                    <i data-lucide="image" class="w-5 h-5 text-emerald-500"></i> Foto/vídeo
                 </label>
                 <input id="mediaInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
 
-                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none">
+                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-1.5 text-xs font-medium focus:outline-none">
                     <option value="public">Público</option>
                     <option value="friends">Amigos</option>
                     <option value="private">Privado</option>
                 </select>
 
-                <button class="ml-auto bg-gradient-to-r from-cyan-600 to-violet-600 text-white border-0 rounded-xl px-5 py-2.5 text-xs font-bold shadow-md shadow-cyan-500/25 hover:brightness-110 transition disabled:opacity-50" id="publishButton">
+                <button class="bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl px-4 py-2 text-xs font-bold shadow transition disabled:opacity-50 ml-2" id="publishButton">
                     Publicar
                 </button>
             </div>
@@ -132,7 +179,7 @@
 
         <!-- POSTS CONTAINER -->
         <div id="postsContainer">
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm animate-pulse">
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-xs animate-pulse">
                 <div class="flex gap-3.5 items-center mb-4">
                     <div class="w-11 h-11 rounded-full bg-gray-200"></div>
                     <div class="space-y-2"><div class="w-32 h-3.5 bg-gray-200 rounded"></div><div class="w-20 h-3 bg-gray-200 rounded"></div></div>
@@ -143,22 +190,18 @@
     </section>
 
     <!-- SIDEBAR DIREITA -->
-    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
-        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
-        <nav class="space-y-1 mb-5">
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="home" class="w-4 h-4"></i> Feed</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
-        </nav>
-
-        <div class="h-px bg-gray-100 my-4"></div>
-
-        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sessão</h3>
-        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm transition" id="logoutButton"><i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta</button>
-
-        <div class="h-px bg-gray-100 my-4"></div>
-        <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
+    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
+        <h3 class="text-sm font-extrabold text-slate-800 mb-3">Contatos</h3>
+        <div class="space-y-2.5">
+            <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">M</div>
+                <span>Mila Ribeiro</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                <div class="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold">R</div>
+                <span>Raissa Ribeiro</span>
+            </div>
+        </div>
     </aside>
 
 </main>
@@ -173,10 +216,10 @@
 
     <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
     <nav class="space-y-1.5 mb-6">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="home" class="w-5 h-5"></i> Feed</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
+        <a href="./feed.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm"><i data-lucide="home" class="w-5 h-5"></i> Feed</a>
+        <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="users" class="w-5 h-5"></i> Amigos</a>
+        <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</a>
+        <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil</a>
     </nav>
 
     <div class="mt-auto pt-4 border-t border-gray-100">
@@ -325,6 +368,9 @@ async function initialize() {
     document.getElementById("composerAvatar").innerHTML =
         renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm");
 
+    document.getElementById("storyUserThumb").innerHTML =
+        renderAvatar(currentProfile, "w-full h-full object-cover");
+
     await loadFeed();
     await checkUnreadCount();
     subscribeDropdownNotifications();
@@ -446,7 +492,6 @@ async function loadFeed() {
 
         const profileMap = Object.fromEntries((profilesRes.data || []).map(p => [p.id, p]));
 
-        // Buscar perfis dos autores dos comentários
         const commentUserIds = [...new Set(
             (commentsRes.data || []).map(c => c.user_id)
         )].filter(id => !profileMap[id]);
@@ -533,9 +578,9 @@ function renderPosts(posts) {
         const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
         return `
-            <article class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
-                <div class="flex items-center gap-3.5 mb-4">
-                    ${renderAvatar(author, "w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
+            <article class="bg-white border border-gray-200 rounded-2xl p-5 mb-5 shadow-xs">
+                <div class="flex items-center gap-3.5 mb-3">
+                    ${renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
                     <div class="flex-1 min-w-0">
                         <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
                         <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
@@ -543,17 +588,17 @@ function renderPosts(posts) {
                     ${post.user_id === currentUser.id ? `<button class="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-50 rounded-lg transition" data-action="delete-post" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ""}
                 </div>
 
-                ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-4 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
+                ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-3 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
                 ${mediaHTML}
 
-                <div class="flex justify-between text-xs text-gray-500 py-2.5 border-b border-gray-100 mb-2">
+                <div class="flex justify-between text-xs text-gray-500 py-2 border-b border-gray-100 mb-1">
                     <span>${reactionSummary || " "}</span>
                     <span>${commentCount} comentário(s)</span>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2 pt-1 relative">
+                <div class="grid grid-cols-3 gap-1 pt-1 relative">
                     <div class="reaction-wrapper">
-                        <button class="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
+                        <button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
                             <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
                             ${userReaction ? "Reagiu" : "Curtir"} (${reactionCount})
                         </button>
@@ -567,11 +612,11 @@ function renderPosts(posts) {
                         </div>
                     </div>
 
-                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition" data-action="toggle-comments">
+                    <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition" data-action="toggle-comments">
                         <i data-lucide="message-circle" class="w-4 h-4"></i> Comentar
                     </button>
 
-                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${post.saved ? 'text-violet-600' : ''}" data-action="save-post">
+                    <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${post.saved ? 'text-violet-600' : ''}" data-action="save-post">
                         <i data-lucide="bookmark" class="w-4 h-4"></i> ${post.saved ? "Salvo" : "Salvar"}
                     </button>
                 </div>
@@ -579,8 +624,8 @@ function renderPosts(posts) {
                 <div class="comments-area pt-3 border-t border-gray-100 mt-2" id="comments-${post.id}">
                     ${commentsHTML || `<p class="text-xs text-gray-400">Nenhum comentário ainda.</p>`}
                     <form class="flex gap-2 mt-3" data-post-id="${post.id}">
-                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
-                        <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl px-4 flex items-center justify-center hover:brightness-110 transition"><i data-lucide="send" class="w-4 h-4"></i></button>
+                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-gray-100 border border-transparent focus:border-cyan-600 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none">
+                        <button type="submit" class="bg-cyan-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-cyan-700 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
                     </form>
                 </div>
             </article>
@@ -700,37 +745,13 @@ postsContainer.addEventListener("submit", async event => {
     document.getElementById(`comments-${postId}`)?.classList.add("open");
 });
 
-document.querySelectorAll("[data-feed]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-        currentFeed = btn.dataset.feed;
-        document.querySelectorAll("[data-feed]").forEach(b => {
-            b.classList.toggle("bg-gray-100", b === btn);
-            b.classList.toggle("text-slate-900", b === btn);
-            b.classList.toggle("border", b === btn);
-            b.classList.toggle("border-gray-200", b === btn);
-            b.classList.toggle("shadow-sm", b === btn);
-            b.classList.toggle("text-gray-500", b !== btn);
-        });
-        await loadFeed();
-    });
-});
-
-document.querySelectorAll("[data-nav]").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
-        if (destinations[btn.dataset.nav]) window.location.href = destinations[btn.dataset.nav];
-    });
-});
-
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
-document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
 const handleLogout = async () => {
     const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
     if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
 };
 
-document.getElementById("logoutButton").addEventListener("click", handleLogout);
 document.getElementById("logoutButtonMobile").addEventListener("click", handleLogout);
 
 initialize();
