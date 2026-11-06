@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
+
 <title>Feed | FaceCrato</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -14,10 +14,12 @@
 
 <body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
+<!-- TOPO -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
     <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md">
+        <!-- LOGO / BOTÃO HOME -->
+        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
                 <i data-lucide="home" class="w-5 h-5"></i>
             </div>
             FaceCrato
@@ -25,43 +27,49 @@
 
         <div class="flex-1 max-w-md relative hidden sm:block">
             <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
-            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm">
+            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
         <div class="ml-auto flex items-center gap-2.5 relative">
+            
+            <!-- BOTÃO DE NOTIFICAÇÕES COM DROPDOWN MODAL -->
             <div class="relative">
-                <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center relative" id="notificationsButton" title="Notificações">
+                <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition relative" id="notificationsButton" title="Notificações">
                     <i data-lucide="bell" class="w-5 h-5"></i>
+                    <!-- Badge de não lidas -->
                     <span id="notifBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
                 </button>
 
-                <div id="notifDropdown" class="fixed top-[80px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
+                <!-- MODAL DROPDOWN DE NOTIFICAÇÕES -->
+<div id="notifDropdown" class="fixed top-[80px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
+
                     <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
                         <h3 class="font-bold text-sm text-slate-900">Notificações</h3>
                         <button onclick="markAllReadFromDropdown()" class="text-xs font-bold text-cyan-600 hover:underline">Marcar lidas</button>
                     </div>
+
                     <div id="notifDropdownList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
                         <div class="p-6 text-center text-xs text-gray-400">Carregando...</div>
                     </div>
+
                     <div class="p-3 border-t border-gray-100 bg-gray-50/50 text-center">
                         <a href="./notificacoes.html" class="text-xs font-bold text-cyan-600 hover:underline">Ver todas as notificações</a>
                     </div>
                 </div>
             </div>
 
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center" id="profileButton" title="Meu perfil">
-                <i data-lucide="user-round" class="w-5 h-5"></i>
-            </button>
-
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center lg:hidden" id="menuToggleBtn" title="Menu">
-                <i data-lucide="menu" class="w-5 h-5"></i>
-            </button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+            
+            <!-- BOTÃO SANDUÍCHE (Mobile) -->
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
         </div>
     </div>
 </header>
 
+<!-- LAYOUT PRINCIPAL -->
 <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-7 items-start relative">
 
+    <!-- SIDEBAR ESQUERDA -->
     <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
         <div class="flex items-center gap-3.5 pb-5 border-b border-gray-100 mb-4">
             <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
@@ -77,145 +85,123 @@
         </div>
     </aside>
 
+    <!-- FEED CENTRAL -->
     <section class="min-w-0">
         <div class="flex justify-between items-center mb-6">
             <div>
                 <h1 class="text-2xl font-black text-slate-900 tracking-tight">Seu feed</h1>
                 <p class="text-xs text-gray-500 mt-0.5">O que está rolando na rede?</p>
             </div>
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center shadow-sm" id="refreshButton" title="Atualizar feed">
-                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-            </button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-sm" id="refreshButton" title="Atualizar feed"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
         </div>
 
         <div class="flex gap-2 p-1.5 bg-white border border-gray-200 rounded-2xl mb-6 shadow-sm">
-            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold bg-gray-100 text-slate-900 border border-gray-200 shadow-sm" data-feed="discover">
-                <i data-lucide="compass" class="w-4 h-4 inline mr-1.5"></i> Para você
+            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold bg-gray-100 text-slate-900 border border-gray-200 shadow-sm transition" data-feed="discover">
+                <i data-lucide="compass" class="w-4 h-4 inline mr-1.5 align-text-bottom"></i> Para você
             </button>
-            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold text-gray-500" data-feed="friends">
-                <i data-lucide="users" class="w-4 h-4 inline mr-1.5"></i> Amigos
+            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold text-gray-500 hover:text-slate-900 transition" data-feed="friends">
+                <i data-lucide="users" class="w-4 h-4 inline mr-1.5 align-text-bottom"></i> Amigos
             </button>
         </div>
 
+        <!-- CRIAR PUBLICAÇÃO -->
         <div class="bg-white border border-gray-200 rounded-2xl p-5 mb-6 shadow-sm">
             <div class="flex gap-3.5 items-start">
                 <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm" id="composerAvatar">F</div>
-                <textarea id="postContent" maxlength="5000" placeholder="O que está acontecendo? Use #hashtags..." class="w-full min-h-[85px] resize-none bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition"></textarea>
+                <textarea id="postContent" maxlength="5000" placeholder="O que está acontecendo? Use #hashtags..." class="w-full min-h-[85px] resize-none bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition placeholder:text-gray-400"></textarea>
             </div>
 
             <div class="file-preview hidden mt-3 ml-[54px] text-xs font-bold text-cyan-700" id="filePreview"></div>
 
             <div class="flex items-center flex-wrap gap-3 mt-4 pt-4 border-t border-gray-100">
-                <label class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-700 cursor-pointer" for="mediaInput">
+                <label class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-slate-900 transition" for="mediaInput">
                     <i data-lucide="image" class="w-4 h-4"></i> Foto/vídeo
                 </label>
                 <input id="mediaInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
 
-                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 text-xs">
+                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none">
                     <option value="public">Público</option>
                     <option value="friends">Amigos</option>
                     <option value="private">Privado</option>
                 </select>
 
-                <button class="ml-auto bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl px-5 py-2.5 text-xs font-bold shadow-md" id="publishButton">Publicar</button>
+                <button class="ml-auto bg-gradient-to-r from-cyan-600 to-violet-600 text-white border-0 rounded-xl px-5 py-2.5 text-xs font-bold shadow-md shadow-cyan-500/25 hover:brightness-110 transition disabled:opacity-50" id="publishButton">
+                    Publicar
+                </button>
             </div>
         </div>
 
+        <!-- POSTS CONTAINER -->
         <div id="postsContainer">
             <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm animate-pulse">
                 <div class="flex gap-3.5 items-center mb-4">
                     <div class="w-11 h-11 rounded-full bg-gray-200"></div>
-                    <div class="space-y-2">
-                        <div class="w-32 h-3.5 bg-gray-200 rounded"></div>
-                        <div class="w-20 h-3 bg-gray-200 rounded"></div>
-                    </div>
+                    <div class="space-y-2"><div class="w-32 h-3.5 bg-gray-200 rounded"></div><div class="w-20 h-3 bg-gray-200 rounded"></div></div>
                 </div>
                 <div class="w-full h-16 bg-gray-100 rounded-xl"></div>
             </div>
         </div>
     </section>
 
+    <!-- SIDEBAR DIREITA -->
     <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
         <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
         <nav class="space-y-1 mb-5">
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 font-semibold text-sm" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 font-semibold text-sm" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 font-semibold text-sm" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
         </nav>
 
         <div class="h-px bg-gray-100 my-4"></div>
+
         <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sessão</h3>
-        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 font-semibold text-sm" id="logoutButton">
-            <i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta
-        </button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm transition" id="logoutButton"><i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta</button>
+
         <div class="h-px bg-gray-100 my-4"></div>
         <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
     </aside>
+
 </main>
 
-<div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden"></div>
-
+<!-- MENU MOBILE DESLIZANTE -->
+<div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
 <div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
     <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
         <h3 class="text-base font-black text-slate-900">Menu</h3>
-        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center" id="menuCloseBtn">
-            <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="menuCloseBtn"><i data-lucide="x" class="w-5 h-5"></i></button>
     </div>
 
     <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
     <nav class="space-y-1.5 mb-6">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 font-semibold text-sm" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 font-semibold text-sm" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 font-semibold text-sm" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
     </nav>
 
     <div class="mt-auto pt-4 border-t border-gray-100">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm" id="logoutButtonMobile">
-            <i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta
-        </button>
+        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm transition" id="logoutButtonMobile"><i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta</button>
     </div>
 </div>
 
 <style>
-.reaction-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
+.reaction-wrapper { position: relative; display: flex; justify-content: center; }
 .reaction-popup {
-    position: absolute;
-    bottom: 52px;
-    left: 0;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    box-shadow: 0 10px 30px rgba(0,0,0,.12);
-    border-radius: 30px;
-    padding: 6px 10px;
-    display: none;
-    gap: 6px;
-    z-index: 30;
-    opacity: 0;
+    position: absolute; bottom: 52px; left: 0;
+    background: #ffffff; border: 1px solid #cbd5e1;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 30px; padding: 6px 10px;
+    display: none; gap: 6px; z-index: 30; opacity: 0;
     max-width: calc(100vw - 32px);
     overflow-x: auto;
-    transition: all .2s;
+    transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.reaction-wrapper:hover .reaction-popup,
-.reaction-popup.show {
-    display: flex;
-    opacity: 1;
+.reaction-wrapper:hover .reaction-popup, .reaction-popup.show {
+    display: flex; opacity: 1;
 }
-.react-emoji-btn {
-    background: none;
-    border: 0;
-    font-size: 24px;
-    padding: 2px;
-    border-radius: 50%;
-    cursor: pointer;
-    flex-shrink: 0;
-}
+.react-emoji-btn { background: none; border: 0; font-size: 24px; padding: 2px; border-radius: 50%; cursor: pointer; transition: transform .15s ease; flex-shrink: 0; }
+.react-emoji-btn:hover { transform: scale(1.3); background: #f1f5f9; }
 .comments-area { display: none; }
 .comments-area.open { display: block; }
 </style>
@@ -241,20 +227,16 @@ const notifDropdownList = document.getElementById("notifDropdownList");
 const notifBadge = document.getElementById("notifBadge");
 
 let notifsChannel = null;
-let currentUser = null;
-let currentProfile = null;
-let currentFeed = "discover";
-let loadingFeed = false;
 
-const reactionIcons = {
-    like: "👍",
-    love: "❤️",
-    haha: "😂",
-    wow: "😮",
-    sad: "😢",
-    angry: "😡"
-};
+// ==========================================
+// DESCRIÇÃO DAS FUNÇÕES DO SCRIPT
+// ==========================================
 
+/*
+  1. toggleMobileMenu(open)
+  Controla a abertura e o fechamento do menu sanduíche (gaveta lateral) em dispositivos móveis, 
+  alternando a visibilidade do fundo escurecido (overlay) e o deslizamento da gaveta.
+*/
 function toggleMobileMenu(open) {
     if (open) {
         mobileMenuOverlay.classList.remove("hidden");
@@ -269,16 +251,39 @@ menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
 menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
 mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
+notificationsButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    notifDropdown.classList.toggle("hidden");
+    if (!notifDropdown.classList.contains("hidden")) {
+        fetchDropdownNotifications();
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (!notifDropdown.contains(e.target) && !notificationsButton.contains(e.target)) {
+        notifDropdown.classList.add("hidden");
+    }
+});
+
+let currentUser = null;
+let currentProfile = null;
+let currentFeed = "discover";
+let loadingFeed = false;
+
+const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
+
+/*
+  2. escapeHTML(value)
+  Neutraliza caracteres perigosos em textos inseridos por usuários para evitar ataques de XSS (injeção de código malicioso).
+*/
 function escapeHTML(value = "") {
-    return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-    })[char]);
+    return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 }
 
+/*
+  3. formatRichText(text)
+  Analisa o texto do post e converte URLs em links clicáveis, hashtags (#) em marcações estilizadas e menções (@) em tags coloridas.
+*/
 function formatRichText(text = "") {
     let safe = escapeHTML(text);
     safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="text-cyan-600 underline font-semibold">$1</a>');
@@ -287,12 +292,18 @@ function formatRichText(text = "") {
     return safe;
 }
 
+/*
+  4. initials(name)
+  Extrai as iniciais do nome do usuário (até 2 palavras) para serem exibidas caso ele não tenha foto de perfil cadastrada.
+*/
 function initials(name = "F") {
-    return String(name).trim().split(/\s+/).slice(0, 2)
-        .map(p => p[0] || "").join("").toUpperCase();
+    return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
-/* Avatar reutilizável */
+/*
+  5. renderAvatar(profile, classes)
+  Função reutilizável que retorna o HTML formatado da foto de perfil (se houver link válido) ou as iniciais do usuário estilizadas com as classes CSS passadas.
+*/
 function renderAvatar(profile, classes = "") {
     const name = profile?.full_name || profile?.username || "U";
     const avatar = profile?.avatar_url;
@@ -300,13 +311,9 @@ function renderAvatar(profile, classes = "") {
     if (avatar && /^https?:\/\//i.test(avatar)) {
         return `
             <div class="${classes} overflow-hidden">
-                <img
-                    src="${escapeHTML(avatar)}"
-                    alt="${escapeHTML(name)}"
-                    class="w-full h-full object-cover"
-                    loading="lazy"
-                    onerror="this.style.display='none'"
-                >
+                <img src="${escapeHTML(avatar)}"
+                     alt="${escapeHTML(name)}"
+                     class="w-full h-full object-cover">
             </div>
         `;
     }
@@ -318,67 +325,37 @@ function renderAvatar(profile, classes = "") {
     `;
 }
 
+/*
+  6. formatDate(date)
+  Formata datas brutas em um padrão amigável ao usuário no formato brasileiro (ex: 15 abr, 14:30).
+*/
 function formatDate(date) {
     const d = new Date(date);
-    if (isNaN(d)) return "";
-
-    return new Intl.DateTimeFormat("pt-BR", {
-        day: "2-digit",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit"
-    }).format(d);
+    if(isNaN(d)) return "";
+    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(d);
 }
 
-function showError(text) {
-    Swal.fire({ icon: "error", title: "Ops!", text });
-}
+function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
+function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
 
-function showSuccess(text) {
-    Swal.fire({
-        toast: true,
-        position: "top",
-        icon: "success",
-        title: text,
-        showConfirmButton: false,
-        timer: 2200
-    });
-}
-
-/* INICIALIZAÇÃO */
+/*
+  7. initialize()
+  Verifica a sessão ativa do usuário no Supabase, busca os dados do perfil logado, injeta o avatar e o nome na barra lateral e dispara o carregamento inicial do feed e notificações.
+*/
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
-
-    if (error || !data.session) {
-        window.location.replace("./login.html");
-        return;
-    }
-
+    if (error || !data.session) { window.location.replace("./login.html"); return; }
     currentUser = data.session.user;
 
-    const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("id,username,full_name,avatar_url")
-        .eq("id", currentUser.id)
-        .maybeSingle();
+    const { data: profile } = await supabase.from("profiles").select("id,username,full_name,avatar_url").eq("id", currentUser.id).maybeSingle();
+    currentProfile = profile || { id: currentUser.id, username: currentUser.email?.split("@")[0] || "usuario", full_name: currentUser.email?.split("@")[0] || "Usuário" };
 
-    if (profileError) console.error("Erro perfil:", profileError);
-
-    currentProfile = profile || {
-        id: currentUser.id,
-        username: currentUser.email?.split("@")[0] || "usuario",
-        full_name: currentUser.email?.split("@")[0] || "Usuário"
-    };
-
-    document.getElementById("sideName").textContent =
-        currentProfile.full_name || "Usuário";
-
-    document.getElementById("sideUsername").textContent =
-        "@" + (currentProfile.username || "usuario");
-
+    document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
+    document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
+    
     document.getElementById("sideAvatar").innerHTML =
         renderAvatar(currentProfile, "w-full h-full rounded-full flex items-center justify-center");
-
+    
     document.getElementById("composerAvatar").innerHTML =
         renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm");
 
@@ -387,7 +364,10 @@ async function initialize() {
     subscribeDropdownNotifications();
 }
 
-/* NOTIFICAÇÕES */
+/*
+  8. checkUnreadCount()
+  Conta quantas notificações o usuário possui pendentes (não lidas) para atualizar o contador vermelho no ícone do sino.
+*/
 async function checkUnreadCount() {
     const { count, error } = await supabase
         .from("notifications")
@@ -395,12 +375,7 @@ async function checkUnreadCount() {
         .eq("recipient_id", currentUser.id)
         .eq("is_read", false);
 
-    if (error) {
-        console.error("Erro notificações:", error);
-        return;
-    }
-
-    if (count > 0) {
+    if (!error && count > 0) {
         notifBadge.textContent = count > 9 ? "9+" : count;
         notifBadge.classList.remove("hidden");
     } else {
@@ -408,9 +383,12 @@ async function checkUnreadCount() {
     }
 }
 
+/*
+  9. fetchDropdownNotifications()
+  Busca as últimas notificações do usuário no Supabase para preencher o conteúdo do modal dropdown flutuante no topo.
+*/
 async function fetchDropdownNotifications() {
-    notifDropdownList.innerHTML =
-        `<div class="p-6 text-center text-xs text-gray-400">Carregando...</div>`;
+    notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Carregando...</div>`;
 
     const { data, error } = await supabase
         .from("notifications")
@@ -419,38 +397,22 @@ async function fetchDropdownNotifications() {
         .order("created_at", { ascending: false })
         .limit(6);
 
-    if (error) {
-        console.error("Erro dropdown:", error);
-        notifDropdownList.innerHTML =
-            `<div class="p-6 text-center text-xs text-red-500">Erro ao carregar notificações.</div>`;
-        return;
-    }
-
-    if (!data?.length) {
-        notifDropdownList.innerHTML =
-            `<div class="p-6 text-center text-xs text-gray-400">Nenhuma notificação por enquanto.</div>`;
+    if (error || !data || data.length === 0) {
+        notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhuma notificação por enquanto.</div>`;
         return;
     }
 
     notifDropdownList.innerHTML = data.map(item => {
         const message = escapeHTML(item.message || "Nova atividade");
         const date = formatDate(item.created_at);
-        const unreadClass = !item.is_read
-            ? "bg-cyan-50/50 border-l-2 border-cyan-600"
-            : "";
-
+        const unreadClass = !item.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
+        
         let target = "#";
-
-        if (item.post_id) {
-            target = `./feed.html?post=${encodeURIComponent(item.post_id)}`;
-        } else if (item.actor_id) {
-            target = `./perfil.html?id=${encodeURIComponent(item.actor_id)}`;
-        }
+        if (item.post_id) target = `./feed.html?post=${encodeURIComponent(item.post_id)}`;
+        else if (item.actor_id) target = `./perfil.html?id=${encodeURIComponent(item.actor_id)}`;
 
         return `
-            <a href="${target}"
-               onclick="markOneReadModal('${escapeHTML(item.id)}')"
-               class="block p-3 hover:bg-gray-50 transition ${unreadClass}">
+            <a href="${target}" onclick="markOneReadModal('${item.id}')" class="block p-3 hover:bg-gray-50 transition ${unreadClass}">
                 <p class="text-xs text-slate-800 leading-relaxed">${message}</p>
                 <span class="text-[10px] text-gray-400 mt-1 block">${date}</span>
             </a>
@@ -458,41 +420,29 @@ async function fetchDropdownNotifications() {
     }).join("");
 }
 
+/*
+  10. markOneReadModal(id)
+  Marca uma notificação específica como lida ao ser clicada no dropdown e atualiza o contador.
+*/
 window.markOneReadModal = async function(id) {
-    await supabase.from("notifications")
-        .update({ is_read: true })
-        .eq("id", id)
-        .eq("recipient_id", currentUser.id);
-
+    await supabase.from("notifications").update({ is_read: true }).eq("id", id).eq("recipient_id", currentUser.id);
     await checkUnreadCount();
-};
+}
 
+/*
+  11. markAllReadFromDropdown()
+  Marca todas as notificações não lidas como lidas de uma vez só direto pelo modal do feed.
+*/
 window.markAllReadFromDropdown = async function() {
-    await supabase.from("notifications")
-        .update({ is_read: true })
-        .eq("recipient_id", currentUser.id)
-        .eq("is_read", false);
-
+    await supabase.from("notifications").update({ is_read: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
     await checkUnreadCount();
     await fetchDropdownNotifications();
-};
+}
 
-notificationsButton.addEventListener("click", e => {
-    e.stopPropagation();
-    notifDropdown.classList.toggle("hidden");
-
-    if (!notifDropdown.classList.contains("hidden")) {
-        fetchDropdownNotifications();
-    }
-});
-
-document.addEventListener("click", e => {
-    if (!notifDropdown.contains(e.target) &&
-        !notificationsButton.contains(e.target)) {
-        notifDropdown.classList.add("hidden");
-    }
-});
-
+/*
+  12. subscribeDropdownNotifications()
+  Conecta o canal em tempo real (Realtime) do Supabase para escutar novas notificações e atualizar o feed instantaneamente.
+*/
 function subscribeDropdownNotifications() {
     if (notifsChannel) supabase.removeChannel(notifsChannel);
 
@@ -505,7 +455,6 @@ function subscribeDropdownNotifications() {
             filter: "recipient_id=eq." + currentUser.id
         }, async () => {
             await checkUnreadCount();
-
             if (!notifDropdown.classList.contains("hidden")) {
                 await fetchDropdownNotifications();
             }
@@ -513,62 +462,35 @@ function subscribeDropdownNotifications() {
         .subscribe();
 }
 
-/* AMIGOS */
+/*
+  13. getFriendIds()
+  Busca os IDs de todos os amigos com quem o usuário possui amizade aceita para filtrar o feed de "Amigos".
+*/
 async function getFriendIds() {
-    const { data, error } = await supabase
-        .from("friendships")
-        .select("user_a,user_b")
-        .eq("status", "accepted")
-        .or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
-
+    const { data, error } = await supabase.from("friendships").select("user_a,user_b").eq("status", "accepted").or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
     if (error) throw error;
-
     const ids = new Set([currentUser.id]);
-
-    (data || []).forEach(f => {
-        ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a);
-    });
-
+    (data || []).forEach(f => ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a));
     return [...ids];
 }
 
-/* CARREGAR FEED */
+/*
+  14. loadFeed()
+  Busca os posts recentes no banco de dados (seja da aba "Para você" ou "Amigos"), juntamente com perfis, mídias, reações e comentários correspondentes.
+*/
 async function loadFeed() {
     if (loadingFeed) return;
     loadingFeed = true;
 
     try {
-        let query = supabase
-            .from("posts")
-            .select(`
-                id,
-                user_id,
-                content,
-                post_type,
-                visibility,
-                comments_permission,
-                created_at,
-                edited_at
-            `)
-            .order("created_at", { ascending: false })
-            .limit(40);
-
-        if (currentFeed === "friends") {
-            query = query.in("user_id", await getFriendIds());
-        }
+        let query = supabase.from("posts").select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`).order("created_at", { ascending:false }).limit(40);
+        if (currentFeed === "friends") { query = query.in("user_id", await getFriendIds()); }
 
         const { data: posts, error } = await query;
-
         if (error) throw error;
 
-        if (!posts?.length) {
-            postsContainer.innerHTML = `
-                <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-500">
-                    <i data-lucide="messages-square" class="w-10 h-10 mx-auto mb-3 text-gray-400"></i>
-                    <strong class="block text-slate-800 text-base mb-1">Nenhuma publicação por aqui</strong>
-                    <p class="text-xs">Quando houver publicações disponíveis, elas aparecerão aqui.</p>
-                </div>
-            `;
+        if (!posts || posts.length === 0) {
+            postsContainer.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-500"><i data-lucide="messages-square" class="w-10 h-10 mx-auto mb-3 text-gray-400"></i><strong class="block text-slate-800 text-base mb-1">Nenhuma publicação por aqui</strong><p class="text-xs">Quando houver publicações disponíveis, elas aparecerão aqui.</p></div>`;
             lucide.createIcons();
             return;
         }
@@ -576,261 +498,82 @@ async function loadFeed() {
         const postIds = posts.map(p => p.id);
         const userIds = [...new Set(posts.map(p => p.user_id))];
 
-        const [
-            profilesRes,
-            mediaRes,
-            reactionsRes,
-            commentsRes,
-            savedRes
-        ] = await Promise.all([
-            supabase.from("profiles")
-                .select("id,username,full_name,avatar_url")
-                .in("id", userIds),
-
-            supabase.from("post_media")
-                .select("id,post_id,media_url,media_type,position")
-                .in("post_id", postIds)
-                .order("position"),
-
-            supabase.from("reactions")
-                .select("post_id,user_id,reaction_type")
-                .in("post_id", postIds),
-
-            supabase.from("comments")
-                .select("id,post_id,user_id,content,created_at,parent_id")
-                .in("post_id", postIds)
-                .is("parent_id", null)
-                .order("created_at", { ascending: true }),
-
-            supabase.from("saved_posts")
-                .select("post_id")
-                .eq("user_id", currentUser.id)
-                .in("post_id", postIds)
+        const [profilesRes, mediaRes, reactionsRes, commentsRes, savedRes] = await Promise.all([
+            supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", userIds),
+            supabase.from("post_media").select("id,post_id,media_url,media_type,position").in("post_id", postIds).order("position"),
+            supabase.from("reactions").select("post_id,user_id,reaction_type").in("post_id", postIds),
+            supabase.from("comments").select("id,post_id,user_id,content,created_at,parent_id").in("post_id", postIds).is("parent_id", null).order("created_at", { ascending:true }),
+            supabase.from("saved_posts").select("post_id").eq("user_id", currentUser.id).in("post_id", postIds)
         ]);
 
-        if (profilesRes.error) throw profilesRes.error;
-        if (commentsRes.error) throw commentsRes.error;
-        if (mediaRes.error) throw mediaRes.error;
-        if (reactionsRes.error) throw reactionsRes.error;
-        if (savedRes.error) throw savedRes.error;
-
-        /* MAPA DE PERFIS */
-        const profileMap = Object.fromEntries(
-            (profilesRes.data || []).map(p => [p.id, p])
-        );
-
-        /*
-         * CORREÇÃO PRINCIPAL:
-         * Busca também os perfis dos autores dos comentários.
-         * Antes, somente os autores das publicações eram consultados.
-         */
-        const commentUserIds = [
-            ...new Set((commentsRes.data || []).map(c => c.user_id))
-        ];
-
-        const missingUserIds = commentUserIds.filter(
-            id => !profileMap[id]
-        );
-
-        if (missingUserIds.length) {
-            const { data: commentProfiles, error: commentProfilesError } =
-                await supabase
-                    .from("profiles")
-                    .select("id,username,full_name,avatar_url")
-                    .in("id", missingUserIds);
-
-            if (commentProfilesError) {
-                console.error("Erro ao buscar perfis dos comentários:", commentProfilesError);
-            } else {
-                (commentProfiles || []).forEach(profile => {
-                    profileMap[profile.id] = profile;
-                });
-            }
-        }
-
-        const mediaMap = {};
-
-        (mediaRes.data || []).forEach(m => {
-            if (!mediaMap[m.post_id]) mediaMap[m.post_id] = [];
-            mediaMap[m.post_id].push(m);
-        });
-
-        const commentsMap = {};
-
-        (commentsRes.data || []).forEach(c => {
-            if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
-            commentsMap[c.post_id].push(c);
-        });
-
-        const reactionMap = {};
-
-        (reactionsRes.data || []).forEach(r => {
-            if (!reactionMap[r.post_id]) reactionMap[r.post_id] = [];
-            reactionMap[r.post_id].push(r);
-        });
-
-        const saved = new Set(
-            (savedRes.data || []).map(s => s.post_id)
-        );
+        const profileMap = Object.fromEntries((profilesRes.data || []).map(p => [p.id, p]));
+        const mediaMap = {}; (mediaRes.data || []).forEach(m => { if (!mediaMap[m.post_id]) mediaMap[m.post_id] = []; mediaMap[m.post_id].push(m); });
+        const commentsMap = {}; (commentsRes.data || []).forEach(c => { if (!commentsMap[c.post_id]) commentsMap[c.post_id] = []; commentsMap[c.post_id].push(c); });
+        const reactionMap = {}; (reactionsRes.data || []).forEach(r => { if (!reactionMap[r.post_id]) reactionMap[r.post_id] = []; reactionMap[r.post_id].push(r); });
+        const saved = new Set((savedRes.data || []).map(s => s.post_id));
 
         const prepared = await Promise.all(posts.map(async post => {
             const postMedia = mediaMap[post.id] || [];
-
-            const signedMedia = await Promise.all(
-                postMedia.map(async item => {
-                    const { data, error } = await supabase.storage
-                        .from("post-media")
-                        .createSignedUrl(item.media_url, 3600);
-
-                    if (error) console.error("Erro mídia:", error);
-
-                    return {
-                        ...item,
-                        signedUrl: data?.signedUrl || null
-                    };
-                })
-            );
-
-            return {
-                ...post,
-                author: profileMap[post.user_id],
-                media: signedMedia,
-                reactions: reactionMap[post.id] || [],
-                comments: commentsMap[post.id] || [],
-                saved: saved.has(post.id)
-            };
+            const signedMedia = await Promise.all(postMedia.map(async item => {
+                const { data } = await supabase.storage.from("post-media").createSignedUrl(item.media_url, 3600);
+                return {...item, signedUrl: data?.signedUrl || null};
+            }));
+            return { ...post, author: profileMap[post.user_id], media: signedMedia, reactions: reactionMap[post.id] || [], comments: commentsMap[post.id] || [], saved: saved.has(post.id) };
         }));
 
         renderPosts(prepared);
-
     } catch (error) {
         console.error("Erro feed:", error);
-        showError(error.message || "Não foi possível carregar o feed.");
     } finally {
         loadingFeed = false;
     }
 }
 
-/* RENDERIZAR PUBLICAÇÕES */
+/*
+  15. renderPosts(posts)
+  Gera dinamicamente o HTML de cada post carregado (cabeçalho com avatar usando renderAvatar, texto formatado, imagens/vídeos, botões de reação, salvamento e área de comentários).
+*/
 function renderPosts(posts) {
     postsContainer.innerHTML = posts.map(post => {
-        const author = post.author || {
-            full_name: "Usuário",
-            username: "usuario",
-            avatar_url: null
-        };
-
-        const userReaction = post.reactions.find(
-            r => r.user_id === currentUser.id
-        );
-
+        const author = post.author || { full_name:"Usuário", username:"usuario" };
+        const userReaction = post.reactions.find(r => r.user_id === currentUser.id);
         const reactionCount = post.reactions.length;
         const commentCount = post.comments.length;
 
         const reactionSummary = Object.entries(
-            post.reactions.reduce((acc, r) => {
-                acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1;
-                return acc;
-            }, {})
-        ).map(([type, count]) =>
-            `${reactionIcons[type] || "👍"} ${count}`
-        ).join(" ");
+            post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
+        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
 
         const mediaHTML = post.media.map(m => {
             if (!m.signedUrl) return "";
-
-            if (m.media_type === "video") {
-                return `
-                    <video class="w-full max-h-[500px] object-cover rounded-xl bg-black mb-4 border border-gray-200"
-                           controls preload="metadata">
-                        <source src="${escapeHTML(m.signedUrl)}">
-                    </video>
-                `;
-            }
-
-            return `
-                <img class="w-full max-h-[500px] object-cover rounded-xl bg-gray-100 mb-4 border border-gray-200"
-                     src="${escapeHTML(m.signedUrl)}"
-                     alt="Mídia"
-                     loading="lazy">
-            `;
+            if (m.media_type === "video") return `<video class="w-full max-h-[500px] object-cover rounded-xl bg-black mb-4 border border-gray-200" controls preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>`;
+            return `<img class="w-full max-h-[500px] object-cover rounded-xl bg-gray-100 mb-4 border border-gray-200" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">`;
         }).join("");
 
-        /*
-         * CORREÇÃO DO AVATAR:
-         * Cada comentário agora utiliza o perfil do seu próprio autor.
-         */
-        const commentsHTML = post.comments.map(c => {
-            const commentAuthor = profileMapSafe(c.user_id);
-
-            return `
-                <div class="flex gap-3 my-3">
-
-                    ${renderAvatar(
-                        commentAuthor,
-                        "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0 overflow-hidden"
-                    )}
-
-                    <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
-
-                        <strong class="block text-cyan-700 font-bold mb-1">
-                            ${escapeHTML(commentAuthor.full_name || "Usuário")}
-                        </strong>
-
-                        <p class="text-slate-800 leading-relaxed">
-                            ${formatRichText(c.content)}
-                        </p>
-
-                    </div>
+        const commentsHTML = post.comments.map(c => `
+            <div class="flex gap-3 my-3">
+                ${renderAvatar(author, "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0 overflow-hidden")}
+                <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
+                    <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(author.full_name || "Usuário")}</strong>
+                    <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
                 </div>
-            `;
-        }).join("");
+            </div>
+        `).join("");
 
-        const visibilityLabel = {
-            public: "Público",
-            friends: "Amigos",
-            private: "Privado"
-        }[post.visibility] || "Público";
+        const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
         return `
-            <article class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm"
-                     data-post-id="${escapeHTML(post.id)}">
-
+            <article class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
                 <div class="flex items-center gap-3.5 mb-4">
-
-                    ${renderAvatar(
-                        author,
-                        "w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden"
-                    )}
-
+                    ${renderAvatar(author, "w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden")}
                     <div class="flex-1 min-w-0">
-                        <strong class="block text-sm font-bold text-slate-900">
-                            ${escapeHTML(author.full_name || "Usuário")}
-                        </strong>
-
-                        <small class="text-xs text-gray-400">
-                            @${escapeHTML(author.username || "usuario")}
-                            · ${escapeHTML(formatDate(post.created_at))}
-                            · ${visibilityLabel}
-                        </small>
+                        <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+                        <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
                     </div>
-
-                    ${post.user_id === currentUser.id ? `
-                        <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-50 rounded-lg transition"
-                                data-action="delete-post"
-                                title="Excluir">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    ` : ""}
-
+                    ${post.user_id === currentUser.id ? `<button class="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-50 rounded-lg transition" data-action="delete-post" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ""}
                 </div>
 
-                ${post.content ? `
-                    <div class="text-slate-800 text-sm leading-relaxed mb-4 whitespace-pre-wrap break-words">
-                        ${formatRichText(post.content)}
-                    </div>
-                ` : ""}
-
+                ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-4 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
                 ${mediaHTML}
 
                 <div class="flex justify-between text-xs text-gray-500 py-2.5 border-b border-gray-100 mb-2">
@@ -839,156 +582,79 @@ function renderPosts(posts) {
                 </div>
 
                 <div class="grid grid-cols-3 gap-2 pt-1 relative">
-
                     <div class="reaction-wrapper">
-                        <button class="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${userReaction ? "text-cyan-600 bg-cyan-50" : ""}"
-                                data-action="like-click">
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
                             <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
                             ${userReaction ? "Reagiu" : "Curtir"} (${reactionCount})
                         </button>
-
-                        <div class="reaction-popup" id="popup-${escapeHTML(post.id)}">
-                            <button class="react-emoji-btn" data-reaction="like" data-post-id="${escapeHTML(post.id)}">👍</button>
-                            <button class="react-emoji-btn" data-reaction="love" data-post-id="${escapeHTML(post.id)}">❤️</button>
-                            <button class="react-emoji-btn" data-reaction="haha" data-post-id="${escapeHTML(post.id)}">😂</button>
-                            <button class="react-emoji-btn" data-reaction="wow" data-post-id="${escapeHTML(post.id)}">😮</button>
-                            <button class="react-emoji-btn" data-reaction="sad" data-post-id="${escapeHTML(post.id)}">😢</button>
-                            <button class="react-emoji-btn" data-reaction="angry" data-post-id="${escapeHTML(post.id)}">😡</button>
+                        <div class="reaction-popup" id="popup-${post.id}">
+                            <button class="react-emoji-btn" data-reaction="like" data-post-id="${post.id}">👍</button>
+                            <button class="react-emoji-btn" data-reaction="love" data-post-id="${post.id}">❤️</button>
+                            <button class="react-emoji-btn" data-reaction="haha" data-post-id="${post.id}">😂</button>
+                            <button class="react-emoji-btn" data-reaction="wow" data-post-id="${post.id}">😮</button>
+                            <button class="react-emoji-btn" data-reaction="sad" data-post-id="${post.id}">😢</button>
+                            <button class="react-emoji-btn" data-reaction="angry" data-post-id="${post.id}">😡</button>
                         </div>
                     </div>
 
-                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition"
-                            data-action="toggle-comments">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i>
-                        Comentar
+                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition" data-action="toggle-comments">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Comentar
                     </button>
 
-                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${post.saved ? "text-violet-600" : ""}"
-                            data-action="save-post">
-                        <i data-lucide="bookmark" class="w-4 h-4"></i>
-                        ${post.saved ? "Salvo" : "Salvar"}
+                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${post.saved ? 'text-violet-600' : ''}" data-action="save-post">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i> ${post.saved ? "Salvo" : "Salvar"}
                     </button>
-
                 </div>
 
-                <div class="comments-area pt-3 border-t border-gray-100 mt-2"
-                     id="comments-${escapeHTML(post.id)}">
-
-                    ${commentsHTML || `
-                        <p class="text-xs text-gray-400">Nenhum comentário ainda.</p>
-                    `}
-
-                    <form class="flex gap-2 mt-3" data-post-id="${escapeHTML(post.id)}">
-                        <input type="text"
-                               name="comment"
-                               placeholder="Escreva um comentário..."
-                               maxlength="2000"
-                               required
-                               class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
-
-                        <button type="submit"
-                                class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl px-4 flex items-center justify-center">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                        </button>
+                <div class="comments-area pt-3 border-t border-gray-100 mt-2" id="comments-${post.id}">
+                    ${commentsHTML || `<p class="text-xs text-gray-400">Nenhum comentário ainda.</p>`}
+                    <form class="flex gap-2 mt-3" data-post-id="${post.id}">
+                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
+                        <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl px-4 flex items-center justify-center hover:brightness-110 transition"><i data-lucide="send" class="w-4 h-4"></i></button>
                     </form>
-
                 </div>
-
             </article>
         `;
     }).join("");
-
     lucide.createIcons();
 }
 
-/* ACESSO SEGURO AO MAPA DE PERFIS */
-function profileMapSafe(userId) {
-    return window.__faceCratoProfiles?.[userId] || {
-        full_name: "Usuário",
-        username: "usuario",
-        avatar_url: null
-    };
-}
-
-/* SELECIONAR MÍDIA */
 mediaInput.addEventListener("change", () => {
     const file = mediaInput.files[0];
-
-    if (!file) {
-        filePreview.classList.add("hidden");
-        return;
-    }
-
+    if (!file) { filePreview.classList.add("hidden"); return; }
     filePreview.classList.remove("hidden");
-    filePreview.textContent =
-        `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+    filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 });
 
-/* PUBLICAR */
+/*
+  16. Event listener do botão Publicar
+  Envia o conteúdo do post e o arquivo de mídia (caso exista) para o banco de dados e bucket do Supabase.
+*/
 publishButton.addEventListener("click", async () => {
     const content = postContent.value.trim();
     const file = mediaInput.files[0];
-
-    if (!content && !file) {
-        showError("Escreva alguma coisa ou escolha um arquivo.");
-        return;
-    }
+    if (!content && !file) { showError("Escreva alguma coisa ou escolha um arquivo."); return; }
 
     publishButton.disabled = true;
     publishButton.textContent = "Publicando...";
 
     try {
-        const postType = file
-            ? (file.type.startsWith("video/") ? "video" : "photo")
-            : "text";
-
-        const { data: post, error: postErr } = await supabase
-            .from("posts")
-            .insert({
-                user_id: currentUser.id,
-                content,
-                post_type: postType,
-                visibility: visibility.value,
-                comments_permission: "everyone"
-            })
-            .select("id")
-            .single();
-
+        const postType = file ? (file.type.startsWith("video/") ? "video" : "photo") : "text";
+        const { data: post, error: postErr } = await supabase.from("posts").insert({ user_id: currentUser.id, content, post_type: postType, visibility: visibility.value, comments_permission: "everyone" }).select("id").single();
         if (postErr) throw postErr;
 
         if (file) {
             const ext = file.name.split(".").pop();
-
-            const filePath =
-                `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
-
-            const { error: upErr } = await supabase.storage
-                .from("post-media")
-                .upload(filePath, file, { contentType: file.type });
-
+            const filePath = `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
+            const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, file, { contentType: file.type });
             if (upErr) throw upErr;
-
-            const { error: mediaErr } = await supabase
-                .from("post_media")
-                .insert({
-                    post_id: post.id,
-                    media_url: filePath,
-                    media_type: file.type.startsWith("video/") ? "video" : "image",
-                    position: 0
-                });
-
-            if (mediaErr) throw mediaErr;
+            await supabase.from("post_media").insert({ post_id: post.id, media_url: filePath, media_type: file.type.startsWith("video/") ? "video" : "image", position: 0 });
         }
 
-        postContent.value = "";
-        mediaInput.value = "";
-        filePreview.classList.add("hidden");
-
+        postContent.value = ""; mediaInput.value = ""; filePreview.classList.add("hidden");
         showSuccess("Publicação criada!");
         await loadFeed();
-
     } catch (err) {
-        console.error(err);
         showError(err.message || "Erro ao publicar.");
     } finally {
         publishButton.disabled = false;
@@ -996,195 +662,94 @@ publishButton.addEventListener("click", async () => {
     }
 });
 
-/* INTERAÇÕES DOS POSTS */
+/*
+  17. Gerenciador de cliques do feed (postsContainer)
+  Gerencia interações nos posts como exibir o seletor de reações, abrir/fechar comentários, salvar post ou excluir publicação.
+*/
 postsContainer.addEventListener("click", async event => {
     const target = event.target;
-
-    const emojiButton = target.closest(".react-emoji-btn");
-
-    if (emojiButton) {
-        await applyReaction(
-            emojiButton.dataset.postId,
-            emojiButton.dataset.reaction
-        );
+    const button = target.closest("[data-action]");
+    const postElement = target.closest("[data-post-id]");
+    
+    if (target.classList.contains("react-emoji-btn")) {
+        await applyReaction(target.dataset.postId, target.dataset.reaction);
         return;
     }
 
-    const button = target.closest("[data-action]");
-    const postElement = target.closest("article[data-post-id]");
-
     if (!button || !postElement) return;
-
     const postId = postElement.dataset.postId;
     const action = button.dataset.action;
 
     if (action === "like-click") {
         const popup = document.getElementById(`popup-${postId}`);
-
         if (window.innerWidth <= 768) {
             const isVisible = popup.classList.contains("show");
-
-            document.querySelectorAll(".reaction-popup")
-                .forEach(p => p.classList.remove("show"));
-
+            document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
             if (!isVisible) popup.classList.add("show");
         } else {
             await applyReaction(postId, "like");
         }
-
         return;
     }
 
-    if (action === "toggle-comments") {
-        document.getElementById(`comments-${postId}`)
-            ?.classList.toggle("open");
-    }
+    if (action === "toggle-comments") { document.getElementById(`comments-${postId}`)?.classList.toggle("open"); }
 
     if (action === "save-post") {
-        const { data: existing, error } = await supabase
-            .from("saved_posts")
-            .select("post_id")
-            .eq("post_id", postId)
-            .eq("user_id", currentUser.id)
-            .maybeSingle();
-
-        if (error) {
-            showError(error.message);
-            return;
-        }
-
-        if (existing) {
-            await supabase.from("saved_posts")
-                .delete()
-                .eq("post_id", postId)
-                .eq("user_id", currentUser.id);
-        } else {
-            await supabase.from("saved_posts")
-                .insert({
-                    post_id: postId,
-                    user_id: currentUser.id
-                });
-        }
-
+        const { data: existing } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+        if (existing) { await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id); }
+        else { await supabase.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id }); }
         await loadFeed();
     }
 
     if (action === "delete-post") {
-        const confirm = await Swal.fire({
-            title: "Excluir?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#dc2626"
-        });
-
+        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626" });
         if (!confirm.isConfirmed) return;
-
-        const { error } = await supabase
-            .from("posts")
-            .delete()
-            .eq("id", postId)
-            .eq("user_id", currentUser.id);
-
-        if (error) {
-            showError(error.message);
-            return;
-        }
-
+        await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
         showSuccess("Excluído com sucesso.");
         await loadFeed();
     }
 });
 
-/* REAÇÕES */
+/*
+  18. applyReaction(postId, reactionType)
+  Adiciona, altera ou remove a reação em emoji de um usuário em um post específico no banco de dados.
+*/
 async function applyReaction(postId, reactionType) {
-    document.querySelectorAll(".reaction-popup")
-        .forEach(p => p.classList.remove("show"));
-
-    const { data: existing, error } = await supabase
-        .from("reactions")
-        .select("id,reaction_type")
-        .eq("post_id", postId)
-        .eq("user_id", currentUser.id)
-        .maybeSingle();
-
-    if (error) {
-        showError(error.message);
-        return;
-    }
-
-    let result;
+    document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
 
     if (existing) {
-        if (existing.reaction_type === reactionType) {
-            result = await supabase.from("reactions")
-                .delete()
-                .eq("post_id", postId)
-                .eq("user_id", currentUser.id);
-        } else {
-            result = await supabase.from("reactions")
-                .update({ reaction_type: reactionType })
-                .eq("post_id", postId)
-                .eq("user_id", currentUser.id);
-        }
+        if (existing.reaction_type === reactionType) { await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id); }
+        else { await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id); }
     } else {
-        result = await supabase.from("reactions")
-            .insert({
-                post_id: postId,
-                user_id: currentUser.id,
-                reaction_type: reactionType
-            });
+        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
     }
-
-    if (result.error) {
-        showError(result.error.message);
-        return;
-    }
-
     await loadFeed();
 }
 
-/* ENVIAR COMENTÁRIO */
+/*
+  19. Envio de comentários
+  Captura o texto digitado no formulário de comentário de um post e salva no Supabase.
+*/
 postsContainer.addEventListener("submit", async event => {
-    const form = event.target.closest("form[data-post-id]");
-
-    if (!form) return;
-
+    const form = event.target.closest("form");
+    if (!form || !form.dataset.postId) return;
     event.preventDefault();
 
     const postId = form.dataset.postId;
     const input = form.querySelector("input[name='comment']");
     const content = input.value.trim();
-
     if (!content) return;
 
-    const submitButton = form.querySelector("button[type='submit']");
-    submitButton.disabled = true;
-
-    const { error } = await supabase
-        .from("comments")
-        .insert({
-            post_id: postId,
-            user_id: currentUser.id,
-            content
-        });
-
-    if (error) {
-        showError(error.message);
-        submitButton.disabled = false;
-        return;
-    }
-
+    await supabase.from("comments").insert({ post_id: postId, user_id: currentUser.id, content });
     await loadFeed();
-
-    document.getElementById(`comments-${postId}`)
-        ?.classList.add("open");
+    document.getElementById(`comments-${postId}`)?.classList.add("open");
 });
 
-/* ABAS */
+// Alternância entre abas de Feed ("Para você" e "Amigos")
 document.querySelectorAll("[data-feed]").forEach(btn => {
     btn.addEventListener("click", async () => {
         currentFeed = btn.dataset.feed;
-
         document.querySelectorAll("[data-feed]").forEach(b => {
             b.classList.toggle("bg-gray-100", b === btn);
             b.classList.toggle("text-slate-900", b === btn);
@@ -1193,74 +758,33 @@ document.querySelectorAll("[data-feed]").forEach(btn => {
             b.classList.toggle("shadow-sm", b === btn);
             b.classList.toggle("text-gray-500", b !== btn);
         });
-
         await loadFeed();
     });
 });
 
-/* NAVEGAÇÃO */
+// Navegação global por botões de menu lateral e mobile
 document.querySelectorAll("[data-nav]").forEach(btn => {
     btn.addEventListener("click", () => {
-        const destinations = {
-            feed: "./feed.html",
-            friends: "./amigos.html",
-            notifications: "./notificacoes.html",
-            profile: "./perfil.html"
-        };
-
-        if (destinations[btn.dataset.nav]) {
-            window.location.href = destinations[btn.dataset.nav];
-        }
+        const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
+        if (destinations[btn.dataset.nav]) window.location.href = destinations[btn.dataset.nav];
     });
 });
 
-document.getElementById("profileButton").addEventListener("click", () => {
-    window.location.href = "./perfil.html";
-});
-
+document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
-/* SAIR */
+/*
+  20. handleLogout
+  Encerra a sessão ativa do usuário no Supabase e o redireciona de volta para a tela de login.
+*/
 const handleLogout = async () => {
-    const confirm = await Swal.fire({
-        title: "Sair da conta?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#0891b2"
-    });
-
-    if (confirm.isConfirmed) {
-        await supabase.auth.signOut();
-        window.location.replace("./login.html");
-    }
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
+    if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
 };
 
-document.getElementById("logoutButton")
-    .addEventListener("click", handleLogout);
+document.getElementById("logoutButton").addEventListener("click", handleLogout);
+document.getElementById("logoutButtonMobile").addEventListener("click", handleLogout);
 
-document.getElementById("logoutButtonMobile")
-    .addEventListener("click", handleLogout);
-
-/* MAPA GLOBAL DOS PERFIS */
-const originalRenderPosts = renderPosts;
-
-function renderPosts(posts) {
-    window.__faceCratoProfiles = window.__faceCratoProfiles || {};
-
-    posts.forEach(post => {
-        if (post.author) {
-            window.__faceCratoProfiles[post.author.id] = post.author;
-        }
-
-        (post.comments || []).forEach(comment => {
-            // Os perfis são armazenados pelo carregamento de loadFeed.
-        });
-    });
-
-    originalRenderPosts(posts);
-}
-
-/* INICIAR */
 initialize();
 </script>
 
