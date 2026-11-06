@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#070b14">
+<meta name="theme-color" content="#0b0f17">
 
 <title>Feed | FaceCrato</title>
 
@@ -18,7 +18,7 @@
 
 body {
     margin: 0;
-    background: #070b14;
+    background: #0b0f17; /* Fundo neutro bem escuro */
     color: #f1f5f9;
     font-family: Inter, system-ui, sans-serif;
 }
@@ -27,24 +27,22 @@ button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 
 :root {
-    --bg-main: #070b14;
-    --panel: #0d1526;
-    --panel-hover: #131d35;
-    --border: #1a2744;
-    --border-glow: #253c6e;
-    --muted: #8a9bbd;
-    --accent: #3b82f6;
-    --accent-gradient: linear-gradient(135deg, #3b82f6, #6366f1);
+    --panel: #141c2e;         /* Cinza chumbo fosco */
+    --panel-hover: #1b263b;   /* Tom acima para hover */
+    --border: #23314f;        /* Borda sutil e neutra */
+    --muted: #8b9bb4;         /* Texto secundário limpo */
+    --accent: #8b5cf6;        /* Toque moderno em violeta/índigo */
+    --accent-gradient: linear-gradient(135deg, #7c3aed, #4f46e5);
 }
 
-/* TOPBAR ESTILO GLASSMORPHISM */
+/* TOPBAR */
 .topbar {
     height: 70px;
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(7, 11, 20, 0.85);
-    backdrop-filter: blur(20px);
+    background: rgba(11, 15, 23, 0.9);
+    backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
 }
 
@@ -77,7 +75,7 @@ button { cursor: pointer; }
     background: var(--accent-gradient);
     color: white;
     font-size: 22px;
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
 }
 
 .search-box {
@@ -92,7 +90,7 @@ button { cursor: pointer; }
     padding: 0 16px 0 44px;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: #0a1120;
+    background: #0f1626;
     color: white;
     outline: none;
     transition: all .2s ease;
@@ -100,7 +98,7 @@ button { cursor: pointer; }
 
 .search-box input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
 }
 
 .search-box i {
@@ -132,7 +130,7 @@ button { cursor: pointer; }
 
 .icon-btn:hover {
     background: var(--panel-hover);
-    border-color: var(--border-glow);
+    border-color: #33446b;
     color: #ffffff;
     transform: translateY(-1px);
 }
@@ -158,7 +156,7 @@ button { cursor: pointer; }
 .avatar img {
     width: 100%;
     height: 100%;
-    object-fit:cover;
+    object-fit: cover;
 }
 
 .avatar.online::after {
@@ -173,7 +171,7 @@ button { cursor: pointer; }
     border-radius: 50%;
 }
 
-/* LAYOUT PRINCIPAL */
+/* LAYOUT */
 .layout {
     max-width: 1200px;
     margin: 30px auto;
@@ -188,10 +186,10 @@ button { cursor: pointer; }
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* SIDEBAR ESQUERDA */
+/* SIDEBAR */
 .sidebar {
     position: sticky;
     top: 98px;
@@ -241,9 +239,9 @@ button { cursor: pointer; }
 }
 
 .nav-btn.active {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
-    color: #60a5fa;
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    background: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(124, 58, 237, 0.3);
     font-weight: 700;
 }
 
@@ -253,7 +251,7 @@ button { cursor: pointer; }
     margin-top: 24px;
     padding: 16px;
     border-radius: 14px;
-    background: #0a1120;
+    background: #0f1626;
     border: 1px solid var(--border);
     color: var(--muted);
     font-size: 12px;
@@ -294,9 +292,9 @@ button { cursor: pointer; }
     transition: all .2s ease;
 }
 
-.refresh-btn:hover { background: var(--panel-hover); border-color: var(--border-glow); }
+.refresh-btn:hover { background: var(--panel-hover); border-color: #33446b; }
 
-/* TABS ESTILO PILL */
+/* TABS */
 .tabs {
     display: flex;
     gap: 8px;
@@ -322,8 +320,8 @@ button { cursor: pointer; }
 .tab.active {
     color: #ffffff;
     background: var(--panel-hover);
+    border: 1px solid #33446b;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    border: 1px solid var(--border-glow);
 }
 
 /* COMPOSER */
@@ -344,7 +342,7 @@ button { cursor: pointer; }
     resize: none;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: #0a1120;
+    background: #0f1626;
     color: white;
     padding: 14px;
     outline: none;
@@ -354,7 +352,7 @@ button { cursor: pointer; }
 
 .composer textarea:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
 }
 
 .composer textarea::placeholder { color: #64748b; }
@@ -373,7 +371,7 @@ button { cursor: pointer; }
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #0a1120;
+    background: #0f1626;
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 10px 14px;
@@ -384,11 +382,11 @@ button { cursor: pointer; }
 }
 
 .option-btn svg { width: 18px; }
-.option-btn:hover { background: var(--panel-hover); border-color: var(--border-glow); color: white; }
+.option-btn:hover { background: var(--panel-hover); border-color: #33446b; color: white; }
 
 .composer select {
     margin-left: auto;
-    background: #0a1120;
+    background: #0f1626;
     border: 1px solid var(--border);
     color: #cbd5e1;
     border-radius: 12px;
@@ -405,7 +403,7 @@ button { cursor: pointer; }
     padding: 11px 22px;
     font-size: 13px;
     font-weight: 800;
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
     transition: all .2s ease;
 }
 
@@ -415,7 +413,7 @@ button { cursor: pointer; }
 .file-preview {
     display: none;
     margin: 12px 0 0 56px;
-    color: #93c5fd;
+    color: #c4b5fd;
     font-size: 13px;
     font-weight: 600;
 }
@@ -428,7 +426,7 @@ button { cursor: pointer; }
 }
 
 .post:hover {
-    border-color: var(--border-glow);
+    border-color: #33446b;
 }
 
 .post-header {
@@ -475,18 +473,18 @@ button { cursor: pointer; }
     color: #e2e8f0;
 }
 
-/* HASHTAGS E LINKS NO POST */
-.post-content .hashtag { color: #60a5fa; font-weight: 700; text-decoration: none; }
+/* HASHTAGS E LINKS */
+.post-content .hashtag { color: #a78bfa; font-weight: 700; text-decoration: none; }
 .post-content .hashtag:hover { text-decoration: underline; }
-.post-content .mention { color: #38bdf8; font-weight: 700; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 6px; }
-.post-content .post-link { color: #93c5fd; text-decoration: underline; }
+.post-content .mention { color: #c084fc; font-weight: 700; background: rgba(192, 132, 252, 0.1); padding: 2px 6px; border-radius: 6px; }
+.post-content .post-link { color: #a78bfa; text-decoration: underline; }
 
 .post-media {
     width: 100%;
     max-height: 500px;
     object-fit: cover;
     border-radius: 14px;
-    background: #04070d;
+    background: #05070a;
     margin-bottom: 14px;
     border: 1px solid var(--border);
 }
@@ -527,19 +525,19 @@ button { cursor: pointer; }
 .action-btn:hover { background: var(--panel-hover); color: #f1f5f9; }
 
 .action-btn.reacted {
-    color: #60a5fa;
+    color: #a78bfa;
     font-weight: 800;
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(167, 139, 250, 0.1);
 }
-.action-btn.saved { color: #c4b5fd; }
+.action-btn.saved { color: #f472b6; }
 
-/* REACTION POPUP (ESTILO FACEBOOK MODERNO) */
+/* REACTION POPUP */
 .reaction-popup {
     position: absolute;
     bottom: 54px;
     left: 0;
-    background: #0d1526;
-    border: 1px solid var(--border-glow);
+    background: #141c2e;
+    border: 1px solid #33446b;
     box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     border-radius: 35px;
     padding: 8px 14px;
@@ -579,7 +577,7 @@ button { cursor: pointer; }
 }
 
 .comment-bubble {
-    background: #0a1120;
+    background: #0f1626;
     border: 1px solid var(--border);
     padding: 12px 14px;
     border-radius: 14px;
@@ -591,7 +589,7 @@ button { cursor: pointer; }
     font-size: 12px;
     display: block;
     margin-bottom: 4px;
-    color: #93c5fd;
+    color: #a78bfa;
 }
 
 .comment-bubble p {
@@ -611,7 +609,7 @@ button { cursor: pointer; }
 .comment-form input {
     flex: 1;
     min-width: 0;
-    background: #0a1120;
+    background: #0f1626;
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 16px;
@@ -629,7 +627,7 @@ button { cursor: pointer; }
     color: white;
     transition: all .2s ease;
 }
-.comment-form button:hover { background: #2563eb; }
+.comment-form button:hover { background: #7c3aed; }
 .comment-form button svg { width: 18px; }
 
 /* RIGHT PANEL */
@@ -689,7 +687,7 @@ button { cursor: pointer; }
     border-radius: 20px;
 }
 .skeleton-line {
-    background: linear-gradient(90deg, #0d1526 25%, #162442 50%, #0d1526 75%);
+    background: linear-gradient(90deg, #141c2e 25%, #1f2b45 50%, #141c2e 75%);
     background-size: 200% 100%;
     animation: shimmer 1.4s infinite;
     border-radius: 8px;
@@ -733,7 +731,7 @@ button { cursor: pointer; }
         display: flex;
         justify-content: space-around;
         padding: 12px 8px calc(12px + env(safe-area-inset-bottom));
-        background: rgba(13, 21, 38, 0.9);
+        background: rgba(20, 28, 46, 0.9);
         border-top: 1px solid var(--border);
         backdrop-filter: blur(20px);
     }
@@ -747,7 +745,7 @@ button { cursor: pointer; }
         font-size: 11px;
         font-weight: 600;
     }
-    .mobile-nav button.active { color: #60a5fa; }
+    .mobile-nav button.active { color: #a78bfa; }
     .mobile-nav svg { width: 22px; height: 22px; }
 }
 </style>
@@ -965,14 +963,14 @@ function formatDate(date) {
 function showError(text) {
     Swal.fire({
         icon:"error", title:"Ops!", text,
-        background:"#0d1526", color:"#f8fafc", confirmButtonColor:"#3b82f6"
+        background:"#141c2e", color:"#f8fafc", confirmButtonColor:"#7c3aed"
     });
 }
 
 function showSuccess(text) {
     Swal.fire({
         toast:true, position:"top", icon:"success", title:text,
-        showConfirmButton:false, timer:2200, background:"#0d1526", color:"#f8fafc"
+        showConfirmButton:false, timer:2200, background:"#141c2e", color:"#f8fafc"
     });
 }
 
@@ -1056,7 +1054,7 @@ async function loadFeed() {
                 <div class="panel empty-state">
                     <i data-lucide="messages-square"></i>
                     <strong>Nenhuma publicação por aqui</strong>
-                    <p>Quando houver publicações disponíveis, elas aparecerão aqui.</p>
+                    <p>Когда houver publicações disponíveis, elas aparecerão aqui.</p>
                 </div>
             `;
             lucide.createIcons();
@@ -1318,7 +1316,7 @@ postsContainer.addEventListener("click", async event => {
     }
 
     if (action === "delete-post") {
-        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626", background:"#0d1526", color:"#f8fafc" });
+        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626", background:"#141c2e", color:"#f8fafc" });
         if (!confirm.isConfirmed) return;
         await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
         showSuccess("Excluído com sucesso.");
@@ -1377,7 +1375,7 @@ document.getElementById("notificationsButton").addEventListener("click", () => w
 document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
 document.getElementById("logoutButton").addEventListener("click", async () => {
-    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#3b82f6", background:"#0d1526", color:"#f8fafc" });
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#7c3aed", background:"#141c2e", color:"#f8fafc" });
     if (confirm.isConfirmed) {
         await supabase.auth.signOut();
         window.location.replace("./login.html");
