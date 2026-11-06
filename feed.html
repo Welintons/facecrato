@@ -10,755 +10,156 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    background: #f8fafc; /* Fundo branco/gelo bem suave */
-    color: #0f172a;
-    font-family: 'Inter', system-ui, sans-serif;
-    overflow-x: hidden;
-}
-
-button, input, textarea, select { font: inherit; }
-button { cursor: pointer; }
-
-:root {
-    --bg-deep: #f8fafc;
-    --card-bg: #ffffff;
-    --card-border: #e2e8f0;
-    --card-border-hover: #cbd5e1;
-    --accent-cyan: #0891b2;
-    --accent-purple: #7c3aed;
-    --muted: #64748b;
-}
-
-/* TOPBAR */
-.topbar {
-    height: 72px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.topbar-inner {
-    max-width: 1200px;
-    height: 100%;
-    margin: auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 24px;
-    font-weight: 950;
-    letter-spacing: -1.2px;
-    color: #0f172a;
-}
-
-.logo-mark {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(135deg, #0891b2, #7c3aed);
-    color: white;
-    font-size: 22px;
-    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.25);
-}
-
-.search-box {
-    flex: 1;
-    max-width: 400px;
-    position: relative;
-}
-
-.search-box input {
-    width: 100%;
-    height: 44px;
-    padding: 0 16px 0 44px;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    background: #f1f5f9;
-    color: #0f172a;
-    outline: none;
-    transition: all .3s ease;
-}
-
-.search-box input:focus {
-    border-color: #0891b2;
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
-}
-
-.search-box i {
-    position: absolute;
-    left: 15px;
-    top: 14px;
-    color: var(--muted);
-    width: 18px;
-}
-
-.top-actions {
-    margin-left: auto;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.icon-btn {
-    width: 42px;
-    height: 42px;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    background: #ffffff;
-    color: #475569;
-    display: grid;
-    place-items: center;
-    transition: all .25s ease;
-}
-
-.icon-btn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    color: #0f172a;
-    transform: translateY(-2px);
-}
-.icon-btn svg { width: 20px; }
-
-/* AVATAR */
-.avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0891b2, #7c3aed);
-    display: grid;
-    place-items: center;
-    color: white;
-    font-weight: 900;
-    overflow: hidden;
-    flex-shrink: 0;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
-}
-
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-.avatar.online::after {
-    content: "";
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 12px;
-    height: 12px;
-    background: #10b981;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-}
-
-/* LAYOUT */
-.layout {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 24px;
-    display: grid;
-    grid-template-columns: 260px minmax(0, 620px) 280px;
-    gap: 28px;
-    align-items: start;
-}
-
-.panel {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 22px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    transition: all .3s ease;
-}
-
-.panel:hover {
-    border-color: var(--card-border-hover);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
-}
-
-/* SIDEBAR */
-.sidebar {
-    position: sticky;
-    top: 98px;
-    padding: 22px;
-}
-
-.profile-mini {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 16px;
-}
-
-.profile-mini strong { display: block; font-size: 15px; color: #0f172a; }
-.profile-mini small { color: var(--muted); font-size: 13px; }
-
-.nav-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 13px 16px;
-    color: var(--muted);
-    border: 0;
-    background: transparent;
-    border-radius: 14px;
-    text-align: left;
-    margin: 4px 0;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all .25s ease;
-}
-
-.nav-btn:hover {
-    background: #f1f5f9;
-    color: #0f172a;
-}
-
-.nav-btn.active {
-    background: rgba(8, 145, 178, 0.08);
-    color: #0891b2;
-    border: 1px solid rgba(8, 145, 178, 0.25);
-    font-weight: 750;
-}
-.nav-btn svg { width: 20px; }
-
-.sidebar-note {
-    margin-top: 24px;
-    padding: 16px;
-    border-radius: 14px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-.feed-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.feed-header h1 { font-size: 26px; font-weight: 950; letter-spacing: -1px; margin: 0; color: #0f172a; }
-.feed-header p { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
-
-.refresh-btn {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    color: #475569;
-    border-radius: 14px;
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    transition: all .25s ease;
-}
-.refresh-btn:hover { background: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
-
-.tabs {
-    display: flex;
-    gap: 8px;
-    padding: 6px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    margin-bottom: 22px;
-}
-
-.tab {
-    flex: 1;
-    border: 0;
-    padding: 12px;
-    border-radius: 12px;
-    background: transparent;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 750;
-    transition: all .25s ease;
-}
-
-.tab.active {
-    color: #0891b2;
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-}
-
-.composer {
-    padding: 22px;
-    margin-bottom: 22px;
-}
-
-.composer-top {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-}
-
-.composer textarea {
-    width: 100%;
-    min-height: 85px;
-    resize: none;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    background: #f8fafc;
-    color: #0f172a;
-    padding: 16px;
-    outline: none;
-    font-size: 14px;
-    transition: all .3s ease;
-}
-.composer textarea:focus { border-color: #0891b2; background: #ffffff; box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15); }
-.composer textarea::placeholder { color: #94a3b8; }
-
-.composer-options {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid #f1f5f9;
-}
-
-.option-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 10px 14px;
-    color: #475569;
-    font-size: 13px;
-    font-weight: 600;
-    transition: all .25s ease;
-}
-.option-btn svg { width: 18px; }
-.option-btn:hover { background: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
-
-.composer select {
-    margin-left: auto;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #475569;
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-size: 13px;
-    outline: none;
-}
-
-.publish-btn {
-    background: linear-gradient(135deg, #0891b2, #7c3aed);
-    color: white;
-    border: 0;
-    border-radius: 12px;
-    padding: 11px 24px;
-    font-size: 13px;
-    font-weight: 900;
-    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
-    transition: all .25s ease;
-}
-.publish-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.publish-btn:disabled { opacity: .5; cursor: wait; transform: none; }
-
-.file-preview {
-    display: none;
-    margin: 12px 0 0 58px;
-    color: #0891b2;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.post {
-    padding: 24px;
-    margin-bottom: 22px;
-}
-
-.post-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.post-author { flex: 1; min-width: 0; }
-.post-author strong { display: block; font-size: 15px; color: #0f172a; }
-.post-author small { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
-
-.post-menu {
-    background: none;
-    color: var(--muted);
-    border: 0;
-    padding: 8px;
-    border-radius: 10px;
-    transition: all .2s ease;
-}
-.post-menu:hover { background: #f1f5f9; color: #0f172a; }
-.post-menu svg { width: 18px; }
-
-.post-content {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    line-height: 1.75;
-    font-size: 15px;
-    margin: 18px 0;
-    color: #1e293b;
-}
-
-.post-content .hashtag { color: #0891b2; font-weight: 800; text-decoration: none; }
-.post-content .hashtag:hover { text-decoration: underline; }
-.post-content .mention { color: #7c3aed; font-weight: 800; background: rgba(124, 58, 237, 0.08); padding: 2px 6px; border-radius: 6px; }
-.post-content .post-link { color: #0891b2; text-decoration: underline; }
-
-.post-media {
-    width: 100%;
-    max-height: 520px;
-    object-fit: cover;
-    border-radius: 16px;
-    background: #f1f5f9;
-    margin-bottom: 16px;
-    border: 1px solid #e2e8f0;
-}
-
-.post-stats {
-    display: flex;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: 12px;
-    padding: 12px 4px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.post-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding-top: 12px;
-    position: relative;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: transparent;
-    border: 0;
-    color: var(--muted);
-    padding: 11px 6px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 650;
-    transition: all .25s ease;
-}
-.action-btn svg { width: 18px; }
-.action-btn:hover { background: #f1f5f9; color: #0f172a; }
-
-.action-btn.reacted {
-    color: #0891b2;
-    font-weight: 900;
-    background: rgba(8, 145, 178, 0.08);
-}
-.action-btn.saved { color: #7c3aed; }
-
-/* REACTION POPUP */
-.reaction-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-
-.reaction-popup {
-    position: absolute;
-    bottom: 52px;
-    left: 50%;
-    transform: translateX(-50%) scale(0.9);
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    border-radius: 40px;
-    padding: 8px 14px;
-    display: none;
-    gap: 10px;
-    z-index: 30;
-    opacity: 0;
-    transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.reaction-wrapper:hover .reaction-popup,
-.reaction-popup.show {
-    display: flex;
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-}
-
-.react-emoji-btn {
-    background: none;
-    border: 0;
-    font-size: 26px;
-    padding: 4px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform .15s ease;
-}
-.react-emoji-btn:hover { transform: scale(1.4); background: #f1f5f9; }
-
-.comments-area {
-    display: none;
-    border-top: 1px solid #f1f5f9;
-    margin-top: 16px;
-    padding-top: 18px;
-}
-.comments-area.open { display: block; }
-
-.comment-item {
-    display: flex;
-    gap: 12px;
-    margin: 14px 0;
-}
-
-.comment-bubble {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 12px 16px;
-    border-radius: 16px;
-    min-width: 0;
-    flex: 1;
-}
-
-.comment-bubble strong { font-size: 12px; display: block; margin-bottom: 4px; color: #0891b2; }
-.comment-bubble p { font-size: 13.5px; margin: 0; color: #1e293b; white-space: pre-wrap; overflow-wrap: anywhere; }
-
-.comment-form {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-}
-
-.comment-form input {
-    flex: 1;
-    min-width: 0;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 12px 16px;
-    outline: none;
-    color: #0f172a;
-    font-size: 13.5px;
-}
-.comment-form input:focus { border-color: #0891b2; background: #ffffff; }
-
-.comment-form button {
-    background: linear-gradient(135deg, #0891b2, #7c3aed);
-    border: 0;
-    border-radius: 14px;
-    padding: 0 18px;
-    color: white;
-    transition: all .25s ease;
-}
-.comment-form button:hover { filter: brightness(1.1); }
-.comment-form button svg { width: 18px; }
-
-.right-panel {
-    position: sticky;
-    top: 98px;
-    padding: 22px;
-}
-
-.right-panel h3 { font-size: 15px; font-weight: 850; margin: 0 0 14px; color: #0f172a; }
-.right-panel p { font-size: 13px; line-height: 1.7; color: var(--muted); }
-
-.right-separator { height: 1px; background: #f1f5f9; margin: 20px 0; }
-
-.empty-state { padding: 50px 20px; text-align: center; color: var(--muted); }
-.empty-state svg { width: 40px; height: 40px; margin: 0 auto 14px; color: #cbd5e1; }
-.empty-state strong { display: block; color: #0f172a; font-size: 15px; margin-bottom: 8px; }
-.empty-state p { font-size: 13px; line-height: 1.6; }
-
-.skeleton-post {
-    padding: 24px;
-    margin-bottom: 22px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 22px;
-}
-.skeleton-line {
-    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    border-radius: 8px;
-}
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-.mobile-nav { display: none; }
-
-@media(max-width: 1050px) {
-    .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 900px; }
-    .right-panel { display: none; }
-}
-
-@media(max-width: 768px) {
-    .topbar-inner { padding: 0 16px; gap: 14px; }
-    .logo { font-size: 20px; }
-    .logo-mark { width: 38px; height: 38px; }
-    .search-box { display: none; }
-    .layout { display: block; padding: 0 16px; margin: 20px auto 100px; }
-    .sidebar { display: none; }
-    .feed-header h1 { font-size: 23px; }
-    .composer, .post { padding: 18px; border-radius: 18px; }
-    .composer select { margin-left: 0; flex: 1; }
-    .publish-btn { flex: 1; }
-    .mobile-nav {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        z-index: 60;
-        display: flex;
-        justify-content: space-around;
-        padding: 12px 8px calc(12px + env(safe-area-inset-bottom));
-        background: rgba(255, 255, 255, 0.9);
-        border-top: 1px solid #e2e8f0;
-        backdrop-filter: blur(20px);
-    }
-    .mobile-nav button {
-        border: 0; background: none; color: var(--muted);
-        display: grid; justify-items: center; gap: 5px;
-        font-size: 11px; font-weight: 650;
-    }
-    .mobile-nav button.active { color: #0891b2; }
-    .mobile-nav svg { width: 22px; height: 22px; }
-}
-</style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
 
-<header class="topbar">
-    <div class="topbar-inner">
-        <div class="logo">
-            <div class="logo-mark">F</div>
+<!-- TOPO -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-6">
+        <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">F</div>
             FaceCrato
         </div>
 
-        <div class="search-box">
-            <i data-lucide="search"></i>
-            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled>
+        <div class="flex-1 max-w-md relative">
+            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
+            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
-        <div class="top-actions">
-            <button class="icon-btn" id="notificationsButton" title="Notificações"><i data-lucide="bell"></i></button>
-            <button class="icon-btn" id="profileButton" title="Meu perfil"><i data-lucide="user-round"></i></button>
-            <button class="icon-btn" id="logoutButton" title="Sair"><i data-lucide="log-out"></i></button>
+        <div class="ml-auto flex items-center gap-3">
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="notificationsButton" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="logoutButton" title="Sair"><i data-lucide="log-out" class="w-5 h-5"></i></button>
         </div>
     </div>
 </header>
 
-<main class="layout">
-    <aside class="sidebar panel">
-        <div class="profile-mini">
-            <div class="avatar online" id="sideAvatar">F</div>
-            <div>
-                <strong id="sideName">Carregando...</strong>
-                <small id="sideUsername">@...</small>
+<!-- LAYOUT PRINCIPAL -->
+<main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-7 items-start">
+
+    <!-- SIDEBAR ESQUERDA -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+        <div class="flex items-center gap-3.5 pb-5 border-b border-gray-100 mb-4">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
+            <div class="min-w-0">
+                <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
             </div>
         </div>
 
-        <button class="nav-btn active" data-nav="feed"><i data-lucide="house"></i> Feed</button>
-        <button class="nav-btn" data-nav="friends"><i data-lucide="users"></i> Amigos</button>
-        <button class="nav-btn" data-nav="notifications"><i data-lucide="bell"></i> Notificações</button>
-        <button class="nav-btn" data-nav="profile"><i data-lucide="user-round"></i> Meu perfil</button>
+        <nav class="space-y-1">
+            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
+            <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
+        </nav>
 
-        <div class="sidebar-note">
-            <strong>FACECRATO</strong><br>
+        <div class="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
+            <strong class="text-slate-800">FACECRATO</strong><br>
             Conectando pessoas em alto estilo.
         </div>
     </aside>
 
-    <section>
-        <div class="feed-header">
+    <!-- FEED CENTRAL -->
+    <section class="min-w-0">
+        <div class="flex justify-between items-center mb-6">
             <div>
-                <h1>Seu feed</h1>
-                <p>O que está rolando na rede?</p>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Seu feed</h1>
+                <p class="text-xs text-gray-500 mt-0.5">O que está rolando na rede?</p>
             </div>
-            <button class="refresh-btn" id="refreshButton" title="Atualizar feed"><i data-lucide="refresh-cw"></i></button>
+            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-sm" id="refreshButton" title="Atualizar feed"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
         </div>
 
-        <div class="tabs">
-            <button class="tab active" data-feed="discover"><i data-lucide="compass" style="width:15px;vertical-align:middle"></i> Para você</button>
-            <button class="tab" data-feed="friends"><i data-lucide="users" style="width:15px;vertical-align:middle"></i> Amigos</button>
+        <div class="flex gap-2 p-1.5 bg-white border border-gray-200 rounded-2xl mb-6 shadow-sm">
+            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold bg-gray-100 text-slate-900 border border-gray-200 shadow-sm transition" data-feed="discover">
+                <i data-lucide="compass" class="w-4 h-4 inline mr-1.5 align-text-bottom"></i> Para você
+            </button>
+            <button class="flex-1 py-3 px-4 rounded-xl text-xs font-bold text-gray-500 hover:text-slate-900 transition" data-feed="friends">
+                <i data-lucide="users" class="w-4 h-4 inline mr-1.5 align-text-bottom"></i> Amigos
+            </button>
         </div>
 
-        <div class="composer panel">
-            <div class="composer-top">
-                <div class="avatar online" id="composerAvatar">F</div>
-                <textarea id="postContent" maxlength="5000" placeholder="O que está acontecendo? Use #hashtags..."></textarea>
+        <!-- CRIAR PUBLICAÇÃO -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 mb-6 shadow-sm">
+            <div class="flex gap-3.5 items-start">
+                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-sm" id="composerAvatar">F</div>
+                <textarea id="postContent" maxlength="5000" placeholder="O que está acontecendo? Use #hashtags..." class="w-full min-h-[85px] resize-none bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition placeholder:text-gray-400"></textarea>
             </div>
 
-            <div class="file-preview" id="filePreview"></div>
+            <div class="file-preview hidden mt-3 ml-[54px] text-xs font-bold text-cyan-700" id="filePreview"></div>
 
-            <div class="composer-options">
-                <label class="option-btn" for="mediaInput"><i data-lucide="image"></i> Foto/vídeo</label>
+            <div class="flex items-center flex-wrap gap-3 mt-4 pt-4 border-t border-gray-100">
+                <label class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 hover:text-slate-900 transition" for="mediaInput">
+                    <i data-lucide="image" class="w-4 h-4"></i> Foto/vídeo
+                </label>
                 <input id="mediaInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
 
-                <select id="visibility">
+                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none">
                     <option value="public">Público</option>
                     <option value="friends">Amigos</option>
                     <option value="private">Privado</option>
                 </select>
 
-                <button class="publish-btn" id="publishButton">Publicar</button>
+                <button class="ml-auto bg-gradient-to-r from-cyan-600 to-violet-600 text-white border-0 rounded-xl px-5 py-2.5 text-xs font-bold shadow-md shadow-cyan-500/25 hover:brightness-110 transition disabled:opacity-50" id="publishButton">
+                    Publicar
+                </button>
             </div>
         </div>
 
+        <!-- POSTS CONTAINER -->
         <div id="postsContainer">
-            <div class="skeleton-post">
-                <div style="display:flex;gap:14px;align-items:center;margin-bottom:16px;">
-                    <div class="skeleton-line" style="width:44px;height:44px;border-radius:50%;"></div>
-                    <div style="flex:1;"><div class="skeleton-line" style="width:130px;height:14px;margin-bottom:6px;"></div><div class="skeleton-line" style="width:80px;height:10px;"></div></div>
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm animate-pulse">
+                <div class="flex gap-3.5 items-center mb-4">
+                    <div class="w-11 h-11 rounded-full bg-gray-200"></div>
+                    <div class="space-y-2"><div class="w-32 h-3.5 bg-gray-200 rounded"></div><div class="w-20 h-3 bg-gray-200 rounded"></div></div>
                 </div>
-                <div class="skeleton-line" style="width:100%;height:16px;margin-bottom:10px;"></div>
-                <div class="skeleton-line" style="width:65%;height:16px;"></div>
+                <div class="w-full h-16 bg-gray-100 rounded-xl"></div>
             </div>
         </div>
     </section>
 
-    <aside class="right-panel panel">
-        <h3>Sobre o FaceCrato</h3>
-        <p>Uma rede social independente e moderna criada para fortalecer conexões.</p>
-        <div class="right-separator"></div>
-        <h3>Comunidade</h3>
-        <p>Novos recursos chegam em breve.</p>
-        <div class="right-separator"></div>
-        <p style="font-size:11px">FaceCrato © 2026</p>
+    <!-- SIDEBAR DIREITA -->
+    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sobre o FaceCrato</h3>
+        <p class="text-xs text-gray-500 leading-relaxed">Uma rede social independente e moderna criada para fortalecer conexões locais.</p>
+        <div class="h-px bg-gray-100 my-4"></div>
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Comunidade</h3>
+        <p class="text-xs text-gray-500 leading-relaxed">Novos recursos chegam em breve.</p>
+        <div class="h-px bg-gray-100 my-4"></div>
+        <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
     </aside>
+
 </main>
 
-<nav class="mobile-nav">
-    <button class="active" data-nav="feed"><i data-lucide="house"></i> Feed</button>
-    <button data-nav="friends"><i data-lucide="users"></i> Amigos</button>
-    <button data-nav="notifications"><i data-lucide="bell"></i> Alertas</button>
-    <button data-nav="profile"><i data-lucide="user-round"></i> Perfil</button>
+<!-- NAVEGAÇÃO MOBILE -->
+<nav class="fixed bottom-0 left-0 right-0 z-60 bg-white/90 backdrop-blur-md border-t border-gray-200 px-3 py-3 flex justify-around lg:hidden">
+    <button class="flex flex-col items-center gap-1 text-[11px] font-bold text-cyan-600" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
+    <button class="flex flex-col items-center gap-1 text-[11px] font-semibold text-gray-500" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
+    <button class="flex flex-col items-center gap-1 text-[11px] font-semibold text-gray-500" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Alertas</button>
+    <button class="flex flex-col items-center gap-1 text-[11px] font-semibold text-gray-500" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Perfil</button>
 </nav>
+
+<style>
+/* Estilo customizado para os popups de reação no Tailwind */
+.reaction-wrapper { position: relative; display: flex; justify-content: center; }
+.reaction-popup {
+    position: absolute; bottom: 52px; left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    background: #ffffff; border: 1px solid #cbd5e1;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 40px; padding: 8px 14px;
+    display: none; gap: 10px; z-index: 30; opacity: 0;
+    transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.reaction-wrapper:hover .reaction-popup, .reaction-popup.show {
+    display: flex; opacity: 1; transform: translateX(-50%) scale(1);
+}
+.react-emoji-btn { background: none; border: 0; font-size: 26px; padding: 4px; border-radius: 50%; cursor: pointer; transition: transform .15s ease; }
+.react-emoji-btn:hover { transform: scale(1.4); background: #f1f5f9; }
+.comments-area { display: none; }
+.comments-area.open { display: block; }
+</style>
 
 <script type="module">
 import { supabase } from "./supabase.js";
@@ -775,26 +176,17 @@ let currentProfile = null;
 let currentFeed = "discover";
 let loadingFeed = false;
 
-const reactionIcons = {
-    like: "👍",
-    love: "❤️",
-    haha: "😂",
-    wow: "😮",
-    sad: "😢",
-    angry: "😡"
-};
+const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
 
 function escapeHTML(value = "") {
-    return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
-    })[char]);
+    return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 }
 
 function formatRichText(text = "") {
     let safe = escapeHTML(text);
-    safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="post-link">$1</a>');
-    safe = safe.replace(/#([a-zA-Z0-9_á-úÁ-Ú]+)/g, '<span class="hashtag">#$1</span>');
-    safe = safe.replace(/@([a-zA-Z0-9_]+)/g, '<span class="mention">@$1</span>');
+    safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="text-cyan-600 underline font-semibold">$1</a>');
+    safe = safe.replace(/#([a-zA-Z0-9_á-úÁ-Ú]+)/g, '<span class="text-cyan-600 font-bold">#$1</span>');
+    safe = safe.replace(/@([a-zA-Z0-9_]+)/g, '<span class="text-violet-600 font-bold bg-violet-50 px-1.5 py-0.5 rounded">@$1</span>');
     return safe;
 }
 
@@ -803,52 +195,29 @@ function initials(name = "F") {
 }
 
 function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR", {
-        day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit"
-    }).format(new Date(date));
+    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(new Date(date));
 }
 
-function showError(text) {
-    Swal.fire({ icon:"error", title:"Ops!", text, background:"#ffffff", color:"#0f172a", confirmButtonColor:"#0891b2" });
-}
-
-function showSuccess(text) {
-    Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200, background:"#ffffff", color:"#0f172a" });
-}
+function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
+function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
 
 function setAvatar(element, profile) {
     if (!element) return;
     const name = profile?.full_name || profile?.username || "FaceCrato";
     element.textContent = initials(name);
-    if (profile?.avatar_url) {
-        element.innerHTML = `<img src="${escapeHTML(profile.avatar_url)}" alt="">`;
-    }
+    if (profile?.avatar_url) { element.innerHTML = `<img src="${escapeHTML(profile.avatar_url)}" alt="" class="w-full h-full object-cover">`; }
 }
 
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
-    if (error || !data.session) {
-        window.location.replace("./login.html");
-        return;
-    }
-
+    if (error || !data.session) { window.location.replace("./login.html"); return; }
     currentUser = data.session.user;
 
-    const { data: profile } = await supabase
-        .from("profiles")
-        .select("id,username,full_name,avatar_url")
-        .eq("id", currentUser.id)
-        .maybeSingle();
-
-    currentProfile = profile || {
-        id: currentUser.id,
-        username: currentUser.email?.split("@")[0] || "usuario",
-        full_name: currentUser.email?.split("@")[0] || "Usuário"
-    };
+    const { data: profile } = await supabase.from("profiles").select("id,username,full_name,avatar_url").eq("id", currentUser.id).maybeSingle();
+    currentProfile = profile || { id: currentUser.id, username: currentUser.email?.split("@")[0] || "usuario", full_name: currentUser.email?.split("@")[0] || "Usuário" };
 
     document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
-
     setAvatar(document.getElementById("sideAvatar"), currentProfile);
     setAvatar(document.getElementById("composerAvatar"), currentProfile);
 
@@ -856,12 +225,7 @@ async function initialize() {
 }
 
 async function getFriendIds() {
-    const { data, error } = await supabase
-        .from("friendships")
-        .select("user_a,user_b")
-        .eq("status", "accepted")
-        .or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
-
+    const { data, error } = await supabase.from("friendships").select("user_a,user_b").eq("status", "accepted").or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
     if (error) throw error;
     const ids = new Set([currentUser.id]);
     (data || []).forEach(f => ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a));
@@ -872,33 +236,15 @@ async function loadFeed() {
     if (loadingFeed) return;
     loadingFeed = true;
 
-    postsContainer.innerHTML = `
-        <div class="skeleton-post"><div style="display:flex;gap:14px;align-items:center;margin-bottom:16px;"><div class="skeleton-line" style="width:44px;height:44px;border-radius:50%;"></div><div style="flex:1;"><div class="skeleton-line" style="width:130px;height:14px;margin-bottom:6px;"></div><div class="skeleton-line" style="width:80px;height:10px;"></div></div></div><div class="skeleton-line" style="width:100%;height:16px;margin-bottom:10px;"></div><div class="skeleton-line" style="width:70%;height:16px;"></div></div>
-    `;
-
     try {
-        let query = supabase
-            .from("posts")
-            .select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`)
-            .order("created_at", { ascending:false })
-            .limit(40);
-
-        if (currentFeed === "friends") {
-            const friendIds = await getFriendIds();
-            query = query.in("user_id", friendIds);
-        }
+        let query = supabase.from("posts").select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`).order("created_at", { ascending:false }).limit(40);
+        if (currentFeed === "friends") { query = query.in("user_id", await getFriendIds()); }
 
         const { data: posts, error } = await query;
         if (error) throw error;
 
         if (!posts || posts.length === 0) {
-            postsContainer.innerHTML = `
-                <div class="panel empty-state">
-                    <i data-lucide="messages-square"></i>
-                    <strong>Nenhuma publicação por aqui</strong>
-                    <p>Quando houver publicações disponíveis, elas aparecerão aqui.</p>
-                </div>
-            `;
+            postsContainer.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-500"><i data-lucide="messages-square" class="w-10 h-10 mx-auto mb-3 text-gray-400"></i><strong class="block text-slate-800 text-base mb-1">Nenhuma publicação por aqui</strong><p class="text-xs">Quando houver publicações disponíveis, elas aparecerão aqui.</p></div>`;
             lucide.createIcons();
             return;
         }
@@ -915,21 +261,9 @@ async function loadFeed() {
         ]);
 
         const profileMap = Object.fromEntries((profilesRes.data || []).map(p => [p.id, p]));
-        const mediaMap = {};
-        (mediaRes.data || []).forEach(m => {
-            if (!mediaMap[m.post_id]) mediaMap[m.post_id] = [];
-            mediaMap[m.post_id].push(m);
-        });
-        const commentsMap = {};
-        (commentsRes.data || []).forEach(c => {
-            if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
-            commentsMap[c.post_id].push(c);
-        });
-        const reactionMap = {};
-        (reactionsRes.data || []).forEach(r => {
-            if (!reactionMap[r.post_id]) reactionMap[r.post_id] = [];
-            reactionMap[r.post_id].push(r);
-        });
+        const mediaMap = {}; (mediaRes.data || []).forEach(m => { if (!mediaMap[m.post_id]) mediaMap[m.post_id] = []; mediaMap[m.post_id].push(m); });
+        const commentsMap = {}; (commentsRes.data || []).forEach(c => { if (!commentsMap[c.post_id]) commentsMap[c.post_id] = []; commentsMap[c.post_id].push(c); });
+        const reactionMap = {}; (reactionsRes.data || []).forEach(r => { if (!reactionMap[r.post_id]) reactionMap[r.post_id] = []; reactionMap[r.post_id].push(r); });
         const saved = new Set((savedRes.data || []).map(s => s.post_id));
 
         const prepared = await Promise.all(posts.map(async post => {
@@ -938,31 +272,12 @@ async function loadFeed() {
                 const { data } = await supabase.storage.from("post-media").createSignedUrl(item.media_url, 3600);
                 return {...item, signedUrl: data?.signedUrl || null};
             }));
-
-            return {
-                ...post,
-                author: profileMap[post.user_id],
-                media: signedMedia,
-                reactions: reactionMap[post.id] || [],
-                comments: commentsMap[post.id] || [],
-                saved: saved.has(post.id)
-            };
+            return { ...post, author: profileMap[post.user_id], media: signedMedia, reactions: reactionMap[post.id] || [], comments: commentsMap[post.id] || [], saved: saved.has(post.id) };
         }));
 
         renderPosts(prepared);
-
     } catch (error) {
         console.error("Erro feed:", error);
-        postsContainer.innerHTML = `
-            <div class="panel empty-state">
-                <i data-lucide="alert-circle"></i>
-                <strong>Erro ao carregar feed</strong>
-                <p>${escapeHTML(error.message)}</p>
-                <button class="publish-btn" id="retryFeed" style="margin-top:14px;">Tentar novamente</button>
-            </div>
-        `;
-        document.getElementById("retryFeed")?.addEventListener("click", loadFeed);
-        lucide.createIcons();
     } finally {
         loadingFeed = false;
     }
@@ -976,62 +291,52 @@ function renderPosts(posts) {
         const commentCount = post.comments.length;
 
         const reactionSummary = Object.entries(
-            post.reactions.reduce((acc, r) => {
-                acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1;
-                return acc;
-            }, {})
+            post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
         ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
 
         const mediaHTML = post.media.map(m => {
             if (!m.signedUrl) return "";
-            if (m.media_type === "video") {
-                return `<video class="post-media" controls preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>`;
-            }
-            return `<img class="post-media" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">`;
+            if (m.media_type === "video") return `<video class="w-full max-h-[500px] object-cover rounded-xl bg-black mb-4 border border-gray-200" controls preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>`;
+            return `<img class="w-full max-h-[500px] object-cover rounded-xl bg-gray-100 mb-4 border border-gray-200" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">`;
         }).join("");
 
-        const commentsHTML = post.comments.map(c => {
-            return `
-                <div class="comment-item">
-                    <div class="avatar" style="width:36px;height:36px;font-size:11px">
-                        ${escapeHTML(initials(author.full_name || "U"))}
-                    </div>
-                    <div class="comment-bubble">
-                        <strong>${escapeHTML(author.full_name || "Usuário")}</strong>
-                        <p>${formatRichText(c.content)}</p>
-                    </div>
+        const commentsHTML = post.comments.map(c => `
+            <div class="flex gap-3 my-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs font-black flex items-center justify-center shrink-0">${escapeHTML(initials(author.full_name || "U"))}</div>
+                <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
+                    <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(author.full_name || "Usuário")}</strong>
+                    <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
                 </div>
-            `;
-        }).join("");
+            </div>
+        `).join("");
 
         const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
         return `
-            <article class="post panel" data-post-id="${post.id}">
-                <div class="post-header">
-                    <div class="avatar online">${escapeHTML(initials(author.full_name || author.username))}</div>
-                    <div class="post-author">
-                        <strong>${escapeHTML(author.full_name || "Usuário")}</strong>
-                        <small>@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
+            <article class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
+                <div class="flex items-center gap-3.5 mb-4">
+                    <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center">${escapeHTML(initials(author.full_name || author.username))}</div>
+                    <div class="flex-1 min-w-0">
+                        <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+                        <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
                     </div>
-                    ${post.user_id === currentUser.id ? `<button class="post-menu" data-action="delete-post" title="Excluir"><i data-lucide="trash-2"></i></button>` : ""}
+                    ${post.user_id === currentUser.id ? `<button class="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-50 rounded-lg transition" data-action="delete-post" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ""}
                 </div>
 
-                ${post.content ? `<div class="post-content">${formatRichText(post.content)}</div>` : ""}
+                ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-4 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
                 ${mediaHTML}
 
-                <div class="post-stats">
+                <div class="flex justify-between text-xs text-gray-500 py-2.5 border-b border-gray-100 mb-2">
                     <span>${reactionSummary || " "}</span>
                     <span>${commentCount} comentário(s)</span>
                 </div>
 
-                <div class="post-actions">
+                <div class="grid grid-cols-3 gap-2 pt-1 relative">
                     <div class="reaction-wrapper">
-                        <button class="action-btn ${userReaction ? "reacted" : ""}" data-action="like-click">
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
                             <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
                             ${userReaction ? "Reagiu" : "Curtir"} (${reactionCount})
                         </button>
-
                         <div class="reaction-popup" id="popup-${post.id}">
                             <button class="react-emoji-btn" data-reaction="like" data-post-id="${post.id}">👍</button>
                             <button class="react-emoji-btn" data-reaction="love" data-post-id="${post.id}">❤️</button>
@@ -1042,58 +347,46 @@ function renderPosts(posts) {
                         </div>
                     </div>
 
-                    <button class="action-btn" data-action="toggle-comments">
-                        <i data-lucide="message-circle"></i> Comentar
+                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition" data-action="toggle-comments">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Comentar
                     </button>
 
-                    <button class="action-btn ${post.saved ? "saved" : ""}" data-action="save-post">
-                        <i data-lucide="bookmark"></i> ${post.saved ? "Salvo" : "Salvar"}
+                    <button class="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition ${post.saved ? 'text-violet-600' : ''}" data-action="save-post">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i> ${post.saved ? "Salvo" : "Salvar"}
                     </button>
                 </div>
 
-                <div class="comments-area" id="comments-${post.id}">
-                    ${commentsHTML || `<p style="font-size:13px;color:var(--muted)">Nenhum comentário ainda.</p>`}
-                    <form class="comment-form" data-post-id="${post.id}">
-                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required>
-                        <button type="submit"><i data-lucide="send"></i></button>
+                <div class="comments-area pt-3 border-t border-gray-100 mt-2" id="comments-${post.id}">
+                    ${commentsHTML || `<p class="text-xs text-gray-400">Nenhum comentário ainda.</p>`}
+                    <form class="flex gap-2 mt-3" data-post-id="${post.id}">
+                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
+                        <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl px-4 flex items-center justify-center hover:brightness-110 transition"><i data-lucide="send" class="w-4 h-4"></i></button>
                     </form>
                 </div>
             </article>
         `;
     }).join("");
-
     lucide.createIcons();
 }
 
 mediaInput.addEventListener("change", () => {
     const file = mediaInput.files[0];
-    if (!file) { filePreview.style.display = "none"; return; }
-    filePreview.style.display = "block";
+    if (!file) { filePreview.classList.add("hidden"); return; }
+    filePreview.classList.remove("hidden");
     filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 });
 
 publishButton.addEventListener("click", async () => {
     const content = postContent.value.trim();
     const file = mediaInput.files[0];
-
-    if (!content && !file) {
-        showError("Escreva alguma coisa ou escolha um arquivo.");
-        return;
-    }
+    if (!content && !file) { showError("Escreva alguma coisa ou escolha um arquivo."); return; }
 
     publishButton.disabled = true;
     publishButton.textContent = "Publicando...";
 
     try {
         const postType = file ? (file.type.startsWith("video/") ? "video" : "photo") : "text";
-        const { data: post, error: postErr } = await supabase.from("posts").insert({
-            user_id: currentUser.id,
-            content,
-            post_type: postType,
-            visibility: visibility.value,
-            comments_permission: "everyone"
-        }).select("id").single();
-
+        const { data: post, error: postErr } = await supabase.from("posts").insert({ user_id: currentUser.id, content, post_type: postType, visibility: visibility.value, comments_permission: "everyone" }).select("id").single();
         if (postErr) throw postErr;
 
         if (file) {
@@ -1101,18 +394,10 @@ publishButton.addEventListener("click", async () => {
             const filePath = `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
             const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, file, { contentType: file.type });
             if (upErr) throw upErr;
-
-            await supabase.from("post_media").insert({
-                post_id: post.id,
-                media_url: filePath,
-                media_type: file.type.startsWith("video/") ? "video" : "image",
-                position: 0
-            });
+            await supabase.from("post_media").insert({ post_id: post.id, media_url: filePath, media_type: file.type.startsWith("video/") ? "video" : "image", position: 0 });
         }
 
-        postContent.value = "";
-        mediaInput.value = "";
-        filePreview.style.display = "none";
+        postContent.value = ""; mediaInput.value = ""; filePreview.classList.add("hidden");
         showSuccess("Publicação criada!");
         await loadFeed();
     } catch (err) {
@@ -1149,22 +434,17 @@ postsContainer.addEventListener("click", async event => {
         return;
     }
 
-    if (action === "toggle-comments") {
-        document.getElementById(`comments-${postId}`)?.classList.toggle("open");
-    }
+    if (action === "toggle-comments") { document.getElementById(`comments-${postId}`)?.classList.toggle("open"); }
 
     if (action === "save-post") {
         const { data: existing } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
-        if (existing) {
-            await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id);
-        } else {
-            await supabase.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id });
-        }
+        if (existing) { await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id); }
+        else { await supabase.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id }); }
         await loadFeed();
     }
 
     if (action === "delete-post") {
-        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626", background:"#ffffff", color:"#0f172a" });
+        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626" });
         if (!confirm.isConfirmed) return;
         await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
         showSuccess("Excluído com sucesso.");
@@ -1177,11 +457,8 @@ async function applyReaction(postId, reactionType) {
     const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
 
     if (existing) {
-        if (existing.reaction_type === reactionType) {
-            await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
-        } else {
-            await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
-        }
+        if (existing.reaction_type === reactionType) { await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id); }
+        else { await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id); }
     } else {
         await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
     }
@@ -1189,8 +466,8 @@ async function applyReaction(postId, reactionType) {
 }
 
 postsContainer.addEventListener("submit", async event => {
-    const form = event.target.closest(".comment-form");
-    if (!form) return;
+    const form = event.target.closest("form");
+    if (!form || !form.dataset.postId) return;
     event.preventDefault();
 
     const postId = form.dataset.postId;
@@ -1206,7 +483,14 @@ postsContainer.addEventListener("submit", async event => {
 document.querySelectorAll("[data-feed]").forEach(btn => {
     btn.addEventListener("click", async () => {
         currentFeed = btn.dataset.feed;
-        document.querySelectorAll("[data-feed]").forEach(b => b.classList.toggle("active", b === btn));
+        document.querySelectorAll("[data-feed]").forEach(b => {
+            b.classList.toggle("bg-gray-100", b === btn);
+            b.classList.toggle("text-slate-900", b === btn);
+            b.classList.toggle("border", b === btn);
+            b.classList.toggle("border-gray-200", b === btn);
+            b.classList.toggle("shadow-sm", b === btn);
+            b.classList.toggle("text-gray-500", b !== btn);
+        });
         await loadFeed();
     });
 });
@@ -1223,11 +507,8 @@ document.getElementById("notificationsButton").addEventListener("click", () => w
 document.getElementById("refreshButton").addEventListener("click", loadFeed);
 
 document.getElementById("logoutButton").addEventListener("click", async () => {
-    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2", background:"#ffffff", color:"#0f172a" });
-    if (confirm.isConfirmed) {
-        await supabase.auth.signOut();
-        window.location.replace("./login.html");
-    }
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
+    if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
 });
 
 initialize();
