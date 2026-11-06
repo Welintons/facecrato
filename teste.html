@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
 
-<title>Entrar | FaceCrato - A rede do Cariri</title>
+<title>Criar conta | FaceCrato - A rede do Cariri</title>
 
 <link rel="manifest" href="./manifest.json">
 
@@ -22,7 +22,7 @@
         
         <!-- Background com imagem temática de cactos e sobreposição escura para legibilidade -->
         <div class="absolute inset-0 bg-cover bg-center z-0 filter brightness-40 contrast-125" style="background-image: url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1200&auto=format&fit=crop');"></div>
-        <!-- Gradiente extra para dar o toque moderno do FaceCrato -->
+        <!-- Gradiente moderno do FaceCrato -->
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-cyan-950/90 z-0"></div>
 
         <!-- CONTEÚDO DO LADO ESQUERDO (Z-10 para ficar acima do fundo) -->
@@ -38,13 +38,13 @@
 
         <div class="max-w-lg my-auto py-8 z-10">
             <h1 class="text-4xl xl:text-5xl font-black tracking-tight leading-tight mb-6">
-                A nossa terra.<br>
-                A nossa gente.<br>
-                <span class="text-cyan-400">A nossa rede.</span>
+                Sua história.<br>
+                Suas conexões.<br>
+                <span class="text-cyan-400">Seu espaço.</span>
             </h1>
 
             <p class="text-slate-200 text-base xl:text-lg leading-relaxed font-medium">
-                Do Crato para todo o Cariri e o mundo. Um cantinho digital feito por nós e para nós, onde a amizade é forte que nem o cacto no sertão e a prosa nunca tem fim. Chegue mais, puxe uma cadeira e venha prosear!
+                Crie sua conta e venha fazer parte da nossa comunidade no Cariri. Compartilhe suas ideias, seus momentos e conecte-se com a nossa gente com muito estilo e aconchego.
             </p>
         </div>
 
@@ -53,7 +53,7 @@
         </div>
     </section>
 
-    <!-- LADO DIREITO: FORMULÁRIO DE LOGIN -->
+    <!-- LADO DIREITO: FORMULÁRIO DE CADASTRO -->
     <section class="flex items-center justify-center p-6 sm:p-12 bg-white">
         <div class="w-full max-w-md">
 
@@ -68,10 +68,44 @@
                 </div>
             </div>
 
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Bem-vindo de volta!</h2>
-            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre na sua conta para ver o que a galera está postando.</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Crie sua conta</h2>
+            <p class="text-xs sm:text-sm text-gray-500 mb-8">Junte-se à comunidade do FaceCrato.</p>
 
-            <form id="loginForm" class="space-y-4">
+            <form id="registerForm" class="space-y-4">
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="fullName">Nome completo</label>
+                    <div class="relative">
+                        <input
+                            id="fullName"
+                            type="text"
+                            placeholder="Como você se chama?"
+                            autocomplete="name"
+                            maxlength="100"
+                            required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                        >
+                        <i data-lucide="user" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="username">Nome de usuário</label>
+                    <div class="relative">
+                        <input
+                            id="username"
+                            type="text"
+                            placeholder="exemplo: welington123"
+                            autocomplete="username"
+                            maxlength="30"
+                            pattern="[a-z0-9_]{3,30}"
+                            required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                        >
+                        <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+                    <small class="text-[11px] text-gray-400 mt-1 block">Use letras minúsculas, números e underline. De 3 a 30 caracteres.</small>
+                </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">E-mail</label>
@@ -94,29 +128,53 @@
                         <input
                             id="password"
                             type="password"
-                            placeholder="Digite sua senha"
-                            autocomplete="current-password"
+                            placeholder="Crie uma senha"
+                            autocomplete="new-password"
+                            minlength="8"
                             required
                             class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
                         >
-
                         <button
                             type="button"
-                            class="absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
-                            id="togglePassword"
+                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
+                            data-target="password"
                             aria-label="Mostrar senha"
                         >
-                            <i data-lucide="eye" id="toggleIcon" class="w-4 h-4"></i>
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <small class="text-[11px] text-gray-400 mt-1 block">Mínimo de 8 caracteres.</small>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="confirmPassword">Confirmar senha</label>
+                    <div class="relative">
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="Digite a senha novamente"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                        >
+                        <button
+                            type="button"
+                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
+                            data-target="confirmPassword"
+                            aria-label="Mostrar confirmação"
+                        >
+                            <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
 
                 <button
                     type="submit"
+                    id="registerButton"
                     class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2"
-                    id="loginButton"
                 >
-                    Entrar na minha conta
+                    Criar minha conta
                 </button>
 
                 <div id="message" class="hidden mt-4 p-3.5 rounded-xl text-xs leading-relaxed"></div>
@@ -124,11 +182,11 @@
             </form>
 
             <div class="text-center text-xs text-gray-500 mt-6">
-                Ainda não tem uma conta?
-                <a href="./cadastro.html" class="text-cyan-700 font-bold hover:underline">Criar conta</a>
+                Já tem uma conta?
+                <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar</a>
             </div>
 
-            <div class="text-center text-[11px] text-gray-400 mt-12">
+            <div class="text-center text-[11px] text-gray-400 mt-10">
                 FaceCrato — Conectando o Cariri com estilo.
             </div>
 
@@ -145,24 +203,39 @@ lucide.createIcons();
 
 import { supabase } from "./supabase.js";
 
-const form = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const button = document.getElementById("loginButton");
+const form = document.getElementById("registerForm");
+const button = document.getElementById("registerButton");
 const message = document.getElementById("message");
-const togglePassword = document.getElementById("togglePassword");
-const toggleIcon = document.getElementById("toggleIcon");
 
-// MOSTRAR / OCULTAR SENHA
-togglePassword.addEventListener("click", () => {
-    const showing = passwordInput.type === "text";
-    passwordInput.type = showing ? "password" : "text";
+const fullName = document.getElementById("fullName");
+const username = document.getElementById("username");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirmPassword");
 
-    toggleIcon.setAttribute("data-lucide", showing ? "eye" : "eye-off");
-    lucide.createIcons();
+// =====================================
+// MOSTRAR / OCULTAR SENHAS
+// =====================================
+
+document.querySelectorAll(".toggle-password").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        const showing = input.type === "text";
+
+        input.type = showing ? "password" : "text";
+
+        btn.innerHTML = showing
+            ? '<i data-lucide="eye" class="w-4 h-4"></i>'
+            : '<i data-lucide="eye-off" class="w-4 h-4"></i>';
+
+        lucide.createIcons();
+    });
 });
 
+// =====================================
 // MENSAGENS
+// =====================================
+
 function showMessage(text, type = "error") {
     message.textContent = text;
     message.className = `mt-4 p-3.5 rounded-xl text-xs leading-relaxed block ${
@@ -172,84 +245,129 @@ function showMessage(text, type = "error") {
     }`;
 }
 
+function normalizeUsername(value) {
+    return value.trim().toLowerCase();
+}
+
+// =====================================
 // VERIFICAR SESSÃO EXISTENTE
+// =====================================
+
 async function verificarSessao() {
-    try {
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("Timeout")), 6000)
-        );
-
-        const sessionPromise = supabase.auth.getSession();
-        const { data, error } = await Promise.race([sessionPromise, timeoutPromise]);
-
-        if (error) throw error;
-
-        if (data.session) {
-            window.location.replace("./feed.html");
-        }
-    } catch (err) {
-        console.warn("Aviso ao verificar sessão:", err);
+    const { data, error } = await supabase.auth.getSession();
+    if (error) {
+        console.error(error);
+        return;
+    }
+    if (data.session) {
+        window.location.replace("./feed.html");
     }
 }
 
 verificarSessao();
 
-// LOGIN
-form.addEventListener("submit", async (event) => {
+// =====================================
+// CADASTRO
+// =====================================
+
+form.addEventListener("submit", async event => {
     event.preventDefault();
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    const nome = fullName.value.trim();
+    const usuario = normalizeUsername(username.value);
+    const emailValor = email.value.trim();
+    const senha = password.value;
+    const confirmacao = confirmPassword.value;
 
-    if (!email || !password) {
-        showMessage("Preencha seu e-mail e sua senha.");
+    if (nome.length < 2) {
+        showMessage("Informe seu nome completo.");
+        return;
+    }
+
+    if (!/^[a-z0-9_]{3,30}$/.test(usuario)) {
+        showMessage("Nome de usuário inválido. Use letras minúsculas, números e underline.");
+        return;
+    }
+
+    if (senha.length < 8) {
+        showMessage("Sua senha precisa ter pelo menos 8 caracteres.");
+        return;
+    }
+
+    if (senha !== confirmacao) {
+        showMessage("As senhas não são iguais.");
         return;
     }
 
     button.disabled = true;
-    button.textContent = "Entrando...";
+    button.textContent = "Criando sua conta...";
     message.className = "hidden";
 
     try {
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("NetworkTimeout")), 10000)
-        );
-
-        const loginPromise = supabase.auth.signInWithPassword({
-            email,
-            password
+        const { data, error } = await supabase.auth.signUp({
+            email: emailValor,
+            password: senha,
+            options: {
+                data: {
+                    full_name: nome,
+                    username: usuario
+                },
+                emailRedirectTo: window.location.origin +
+                    window.location.pathname.replace(
+                        /[^/]*$/,
+                        "login.html"
+                    )
+            }
         });
-
-        const { data, error } = await Promise.race([loginPromise, timeoutPromise]);
 
         if (error) throw error;
 
-        if (!data.session) {
-            throw new Error("Não foi possível iniciar sua sessão.");
+        if (!data.user) {
+            throw new Error("O Supabase não retornou os dados do usuário.");
         }
 
-        showMessage("Login realizado! Redirecionando...", "success");
-        window.location.replace("./feed.html");
+        if (data.session) {
+            showMessage(
+                "Conta criada! Seu perfil está sendo preparado. Redirecionando...",
+                "success"
+            );
+            window.location.replace("./feed.html");
+        } else {
+            showMessage(
+                "Cadastro realizado! Verifique seu e-mail para confirmar a conta antes de entrar.",
+                "success"
+            );
+            form.reset();
+        }
 
     } catch (error) {
-        console.error("Erro de login:", error);
+        console.error("Erro no cadastro:", error);
 
-        let texto = "Não foi possível entrar. Tente novamente.";
-        const errStr = (error.message || "").toLowerCase();
+        let texto = "Não foi possível criar sua conta.";
+        const erro = (error.message || "").toLowerCase();
 
-        if (errStr.includes("invalid login credentials")) {
-            texto = "E-mail ou senha incorretos.";
-        } else if (errStr.includes("email not confirmed")) {
-            texto = "Confirme seu e-mail antes de entrar.";
-        } else if (errStr.includes("network") || errStr.includes("timeout")) {
+        if (
+            erro.includes("already registered") ||
+            erro.includes("user already registered")
+        ) {
+            texto = "Este e-mail já está cadastrado.";
+        } else if (erro.includes("username")) {
+            texto = "Não foi possível utilizar esse nome de usuário.";
+        } else if (erro.includes("password")) {
+            texto = "A senha não atende aos requisitos.";
+        } else if (erro.includes("email")) {
+            texto = "Verifique se o e-mail foi digitado corretamente.";
+        } else if (erro.includes("network")) {
             texto = "Erro de conexão. Verifique sua internet.";
+        } else {
+            texto = error.message || texto;
         }
 
         showMessage(texto);
 
     } finally {
         button.disabled = false;
-        button.textContent = "Entrar na minha conta";
+        button.textContent = "Criar minha conta";
     }
 });
 
