@@ -4,101 +4,197 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>Perfil | FaceCrato</title>
 
-<link rel="manifest" href="./manifest.json">
+<title>Feed | FaceCrato - A rede do Cariri</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
+<body class="bg-gray-100 text-slate-900 font-sans antialiased min-h-screen">
 
 <!-- TOPO -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
-    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <!-- LOGO / BOTÃO HOME -->
-        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
-                <i data-lucide="home" class="w-5 h-5"></i>
-            </div>
-            FaceCrato
-        </a>
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
+    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-4">
+        
+        <!-- LOGO E PESQUISA COM A IMAGEM REDONDINHA -->
+        <div class="flex items-center gap-3">
+            <a href="./feed.html" class="flex items-center gap-2.5 group cursor-pointer" title="Início - FaceCrato">
+                
+                <!-- Ícone / Logo Redondinho -->
+                <div class="w-10 h-10 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 group-hover:scale-105 transition shrink-0 border-2 border-cyan-500">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
+                </div>
 
-        <div class="flex-1 max-w-md relative hidden sm:block">
-            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
-            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-cyan-600 leading-none">FaceCrato</span>
+                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase">Cariri · CE</span>
+                </div>
+            </a>
+
+            <div class="relative hidden sm:block">
+                <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                <input type="search" placeholder="Pesquisar no Cariri..." disabled class="w-48 lg:w-64 h-10 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+            </div>
         </div>
 
-        <div class="ml-auto flex items-center gap-2.5">
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" onclick="location.href='./notificacoes.html'" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
-            <button class="w-10 h-10 bg-cyan-50 border border-cyan-200 rounded-xl text-cyan-700 flex items-center justify-center shadow-sm" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+        <!-- BOTÕES DA DIREITA -->
+        <div class="flex items-center gap-2.5 relative">
+            
+            <!-- BOTÃO DE NOTIFICAÇÕES COM DROPDOWN MODAL -->
+            <div class="relative">
+                <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition relative" id="notificationsButton" title="Notificações">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <!-- Badge de não lidas -->
+                    <span id="notifBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                </button>
 
+                <!-- MODAL DROPDOWN DE NOTIFICAÇÕES -->
+                <div id="notifDropdown" class="fixed top-[70px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
+                    <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
+                        <h3 class="font-bold text-sm text-slate-900">Notificações</h3>
+                        <button onclick="markAllReadFromDropdown()" class="text-xs font-bold text-cyan-600 hover:underline">Marcar lidas</button>
+                    </div>
+
+                    <div id="notifDropdownList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                        <div class="p-6 text-center text-xs text-gray-400">Carregando...</div>
+                    </div>
+
+                    <div class="p-3 border-t border-gray-100 bg-gray-50/50 text-center">
+                        <a href="./notificacoes.html" class="text-xs font-bold text-cyan-600 hover:underline">Ver todas as notificações</a>
+                    </div>
+                </div>
+            </div>
+
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition" id="profileButton" title="Meu perfil">
+                <i data-lucide="user-round" class="w-5 h-5"></i>
+            </button>
+            
             <!-- BOTÃO SANDUÍCHE (Mobile) -->
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition lg:hidden" id="menuToggleBtn" title="Menu">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
         </div>
     </div>
 </header>
 
 <!-- LAYOUT PRINCIPAL -->
-<main class="max-w-4xl mx-auto px-6 py-8">
+<main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_300px] gap-6 items-start relative">
 
-    <!-- CARTÃO DO PERFIL -->
-    <section class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mb-8">
-        <!-- CAPA -->
-        <div class="h-64 sm:h-72 relative bg-gradient-to-r from-cyan-600 to-violet-600 bg-cover bg-center" id="cover">
-            <button class="absolute right-4 top-4 bg-black/40 hover:bg-black/60 text-white px-3.5 py-2 rounded-xl text-xs font-semibold backdrop-blur-md flex items-center gap-2 transition" id="changeCoverButton" hidden>
-                <i data-lucide="camera" class="w-4 h-4"></i> Alterar capa
+    <!-- SIDEBAR ESQUERDA -->
+    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
+        <div class="flex items-center gap-3.5 pb-4 border-b border-gray-100 mb-3">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
+            <div class="min-w-0">
+                <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
+            </div>
+        </div>
+
+        <nav class="space-y-1">
+            <a href="./feed.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm transition"><i data-lucide="home" class="w-5 h-5"></i> Feed Principal</a>
+            <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="users" class="w-5 h-5"></i> Amigos</a>
+            <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</a>
+            <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil</a>
+        </nav>
+    </aside>
+
+    <!-- FEED CENTRAL -->
+    <section class="min-w-0 max-w-xl mx-auto w-full">
+
+        <!-- CRIAR PUBLICAÇÃO -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-xs">
+            <div class="flex gap-3 items-center pb-3 border-b border-gray-100">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs" id="composerAvatar">F</div>
+                <textarea id="postContent" maxlength="5000" placeholder="No que você está pensando por estas bandas?" class="w-full bg-gray-100 hover:bg-gray-200/50 focus:bg-white border border-transparent focus:border-cyan-600 rounded-full px-4 py-2.5 text-sm text-slate-900 focus:outline-none transition resize-none h-11 placeholder:text-gray-500"></textarea>
+            </div>
+
+            <div class="file-preview hidden mt-3 text-xs font-bold text-cyan-700" id="filePreview"></div>
+
+            <div class="flex items-center justify-between pt-3 mt-1">
+                <label class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 cursor-pointer transition flex-1 justify-center" for="mediaInput">
+                    <i data-lucide="image" class="w-5 h-5 text-emerald-500"></i> Foto/vídeo
+                </label>
+                <input id="mediaInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
+
+                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-1.5 text-xs font-medium focus:outline-none">
+                    <option value="public">Público</option>
+                    <option value="friends">Amigos</option>
+                    <option value="private">Privado</option>
+                </select>
+
+                <button class="bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl px-4 py-2 text-xs font-bold shadow transition disabled:opacity-50 ml-2" id="publishButton">
+                    Publicar
+                </button>
+            </div>
+        </div>
+
+        <!-- POSTS CONTAINER -->
+        <div id="postsContainer">
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-xs animate-pulse">
+                <div class="flex gap-3.5 items-center mb-4">
+                    <div class="w-11 h-11 rounded-full bg-gray-200"></div>
+                    <div class="space-y-2"><div class="w-32 h-3.5 bg-gray-200 rounded"></div><div class="w-20 h-3 bg-gray-200 rounded"></div></div>
+                </div>
+                <div class="w-full h-16 bg-gray-100 rounded-xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIDEBAR DIREITA -->
+    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
+        <h3 class="text-sm font-extrabold text-slate-800 mb-3">Contatos do Cariri</h3>
+        <div class="space-y-2.5">
+            <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">M</div>
+                <span>Mila Ribeiro</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                <div class="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold">R</div>
+                <span>Raissa Ribeiro</span>
+            </div>
+        </div>
+    </aside>
+
+</main>
+
+<!-- MODAL DE MÍDIA COM PLAYER PERSONALIZADO -->
+<div id="mediaModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[200] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
+    <div class="bg-white w-full max-w-6xl h-[92vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
+        
+        <!-- Botão Fechar Modal -->
+        <button id="closeMediaModal" class="absolute top-3 right-3 z-30 w-10 h-10 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <!-- LADO ESQUERDO: MÍDIA E PLAYER -->
+        <div class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
+            <div id="modalMediaContainer" class="w-full h-full flex items-center justify-center relative"></div>
+            
+            <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <button id="nextMediaBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
+                <i data-lucide="chevron-right" class="w-6 h-6"></i>
             </button>
         </div>
 
-        <div class="px-6 sm:px-8 pb-6">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 sm:-mt-20 relative z-10 mb-6">
-                <!-- AVATAR -->
-                <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-4 border-white bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black text-4xl flex items-center justify-center overflow-hidden relative shadow-md">
-                    <div id="avatarPlaceholder" class="w-full h-full flex items-center justify-center">F</div>
-                    <img id="avatarImage" alt="Foto de perfil" class="w-full h-full object-cover" hidden>
-                    <button class="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-slate-900 text-white border-2 border-white flex items-center justify-center shadow hover:bg-slate-800 transition" id="changeAvatarButton" hidden title="Alterar foto">
-                        <i data-lucide="camera" class="w-4 h-4"></i>
-                    </button>
-                </div>
-
-                <!-- AÇÕES DO PERFIL -->
-                <div class="flex items-center gap-2.5" id="profileActions"></div>
-            </div>
-
-            <!-- IDENTIDADE -->
-            <div class="mb-4">
-                <h1 id="profileName" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Carregando perfil...</h1>
-                <p id="profileUsername" class="text-xs sm:text-sm text-gray-500 mt-0.5">@...</p>
-            </div>
-
-            <div class="text-slate-700 text-sm leading-relaxed mb-6 whitespace-pre-wrap break-words" id="profileBio"></div>
-
-            <div class="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-4 border-t border-gray-100">
-                <span id="profileLocation" hidden class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i><span></span></span>
-                <span id="profileDate" class="flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>No FaceCrato</span>
-                <span id="privacyLabel" class="flex items-center gap-1.5"><i data-lucide="globe" class="w-4 h-4 text-gray-400"></i>Perfil público</span>
+        <!-- LADO DIREITO: DETALHES E COMENTÁRIOS -->
+        <div class="w-full lg:w-[420px] bg-white flex flex-col h-[42vh] lg:h-full border-t lg:border-t-0 lg:border-l border-gray-200">
+            <div class="p-4 border-b border-gray-100 flex items-center gap-3" id="modalAuthorHeader"></div>
+            <div class="p-4 border-b border-gray-100 overflow-y-auto max-h-32 text-xs text-slate-800" id="modalPostContent"></div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 divide-y divide-gray-50" id="modalCommentsList"></div>
+            <div class="p-3 border-t border-gray-100 bg-gray-50/50">
+                <form id="modalCommentForm" class="flex gap-2">
+                    <input type="text" id="modalCommentInput" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
+                    <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:brightness-110 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+                </form>
             </div>
         </div>
-    </section>
 
-    <!-- CABEÇALHO PUBLICAÇÕES -->
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-black text-slate-900 tracking-tight">Publicações</h2>
-        <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-sm" id="refreshButton" title="Atualizar">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-        </button>
     </div>
-
-    <!-- FEED DO PERFIL -->
-    <section class="space-y-6" id="postsContainer">
-        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
-            Carregando publicações...
-        </div>
-    </section>
-
-</main>
+</div>
 
 <!-- MENU MOBILE DESLIZANTE (LIMPO E PROFISSIONAL) -->
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
@@ -123,7 +219,7 @@
         <div>
             <h3 class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider mb-2 px-3">Navegação</h3>
             <nav class="space-y-1">
-                <a href="./feed.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
+                <a href="./feed.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-cyan-50 text-cyan-700 font-bold text-sm transition">
                     <i data-lucide="home" class="w-5 h-5"></i> Feed Principal
                 </a>
                 <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
@@ -132,7 +228,7 @@
                 <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
                     <i data-lucide="bell" class="w-5 h-5"></i> Notificações
                 </a>
-                <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-cyan-50 text-cyan-700 font-bold text-sm transition">
+                <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
                     <i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil
                 </a>
             </nav>
@@ -147,68 +243,61 @@
     </div>
 </div>
 
-<!-- MODAL DE EDIÇÃO -->
-<div class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden items-center justify-center p-4" id="editModal">
-    <div class="bg-white border border-gray-200 rounded-2xl w-full max-w-lg p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
-        <div class="flex justify-between items-center pb-4 border-b border-gray-100 mb-5">
-            <h3 class="font-black text-base text-slate-900">Editar perfil</h3>
-            <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="cancelEditX"><i data-lucide="x" class="w-4 h-4"></i></button>
-        </div>
-
-        <form id="editForm" class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editName">Nome completo</label>
-                <input id="editName" maxlength="100" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editUsername">Nome de usuário</label>
-                <input id="editUsername" maxlength="30" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
-                <small class="text-[11px] text-gray-400 mt-1 block">Letras minúsculas, números e underline.</small>
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editBio">Biografia</label>
-                <textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você..." class="w-full min-h-[90px] resize-y bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition"></textarea>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editCity">Cidade</label>
-                    <input id="editCity" maxlength="100" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="editState">Estado (UF)</label>
-                    <input id="editState" maxlength="2" placeholder="CE" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
-                </div>
-            </div>
-            <div class="flex justify-end gap-2.5 pt-4 border-t border-gray-100 mt-6">
-                <button type="button" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-bold transition" id="cancelEdit">Cancelar</button>
-                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition" id="saveProfileButton">Salvar alterações</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
-<input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+<style>
+.reaction-wrapper { position: relative; display: flex; justify-content: center; }
+.reaction-popup {
+    position: absolute; bottom: 52px; left: 0;
+    background: #ffffff; border: 1px solid #cbd5e1;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 30px; padding: 6px 10px;
+    display: none; gap: 6px; z-index: 30; opacity: 0;
+    max-width: calc(100vw - 32px);
+    overflow-x: auto;
+    transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.reaction-wrapper:hover .reaction-popup, .reaction-popup.show {
+    display: flex; opacity: 1;
+}
+.react-emoji-btn { background: none; border: 0; font-size: 24px; padding: 2px; border-radius: 50%; cursor: pointer; transition: transform .15s ease; flex-shrink: 0; }
+.react-emoji-btn:hover { transform: scale(1.3); background: #f1f5f9; }
+.comments-area { display: none; }
+.comments-area.open { display: block; }
+</style>
 
 <script type="module">
 import { supabase } from "./supabase.js";
 
-const params = new URLSearchParams(location.search);
-const requestedId = params.get("id");
+const postsContainer = document.getElementById("postsContainer");
+const postContent = document.getElementById("postContent");
+const visibility = document.getElementById("visibility");
+const mediaInput = document.getElementById("mediaInput");
+const filePreview = document.getElementById("filePreview");
+const publishButton = document.getElementById("publishButton");
 
-let currentUser = null;
-let currentProfile = null;
-let profileId = null;
-let isOwnProfile = false;
-let friendship = null;
+const menuToggleBtn = document.getElementById("menuToggleBtn");
+const menuCloseBtn = document.getElementById("menuCloseBtn");
+const mobileMenuDrawer = document.getElementById("mobileMenuDrawer");
+const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
 
-const $ = id => document.getElementById(id);
-const postsContainer = $("postsContainer");
+const notificationsButton = document.getElementById("notificationsButton");
+const notifDropdown = document.getElementById("notifDropdown");
+const notifDropdownList = document.getElementById("notifDropdownList");
+const notifBadge = document.getElementById("notifBadge");
 
-const menuToggleBtn = $("menuToggleBtn");
-const menuCloseBtn = $("menuCloseBtn");
-const mobileMenuDrawer = $("mobileMenuDrawer");
-const mobileMenuOverlay = $("mobileMenuOverlay");
+const mediaModal = document.getElementById("mediaModal");
+const closeMediaModal = document.getElementById("closeMediaModal");
+const modalMediaContainer = document.getElementById("modalMediaContainer");
+const modalAuthorHeader = document.getElementById("modalAuthorHeader");
+const modalPostContent = document.getElementById("modalPostContent");
+const modalCommentsList = document.getElementById("modalCommentsList");
+const modalCommentForm = document.getElementById("modalCommentForm");
+const modalCommentInput = document.getElementById("modalCommentInput");
+const prevMediaBtn = document.getElementById("prevMediaBtn");
+const nextMediaBtn = document.getElementById("nextMediaBtn");
+
+let activeModalPost = null;
+let activeMediaIndex = 0;
+let notifsChannel = null;
 
 function toggleMobileMenu(open) {
     if (open) {
@@ -224,649 +313,599 @@ menuToggleBtn.addEventListener("click", () => toggleMobileMenu(true));
 menuCloseBtn.addEventListener("click", () => toggleMobileMenu(false));
 mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
+notificationsButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    notifDropdown.classList.toggle("hidden");
+    if (!notifDropdown.classList.contains("hidden")) {
+        fetchDropdownNotifications();
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (!notifDropdown.contains(e.target) && !notificationsButton.contains(e.target)) {
+        notifDropdown.classList.add("hidden");
+    }
+});
+
+let currentUser = null;
+let currentProfile = null;
+let currentFeed = "discover";
+let loadingFeed = false;
+let globalPostsCache = [];
+
+const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
+
 function escapeHTML(value = "") {
-    return String(value).replace(/[&<>"']/g, char => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#039;"
-    })[char]);
+    return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
+}
+
+function formatRichText(text = "") {
+    let safe = escapeHTML(text);
+    safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="text-cyan-600 underline font-semibold">$1</a>');
+    safe = safe.replace(/#([a-zA-Z0-9_á-úÁ-Ú]+)/g, '<span class="text-cyan-600 font-bold">#$1</span>');
+    safe = safe.replace(/@([a-zA-Z0-9_]+)/g, '<span class="text-violet-600 font-bold bg-violet-50 px-1.5 py-0.5 rounded">@$1</span>');
+    return safe;
 }
 
 function initials(name = "F") {
     return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
-function notify(text, icon = "success") {
-    Swal.fire({
-        toast:true,
-        position:"top",
-        icon,
-        title:text,
-        showConfirmButton:false,
-        timer:2200
-    });
-}
-
-function errorMessage(text) {
-    Swal.fire({ icon:"error", title:"Ops!", text });
-}
-
-function formatDate(value) {
-    if (!value) return "data indisponível";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "data indisponível";
-    return new Intl.DateTimeFormat("pt-BR", {
-        day:"2-digit",
-        month:"short",
-        year:"numeric"
-    }).format(date);
-}
-
-function showIcons() {
-    if (window.lucide) lucide.createIcons();
-}
-
-function showProfileError(message) {
-    $("profileName").textContent = "Erro ao carregar perfil";
-    $("profileUsername").textContent = message;
-    postsContainer.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-sm">
-            ${escapeHTML(message)}
-        </div>
-    `;
-    showIcons();
-}
-
-async function storageUrl(bucket, path) {
+async function getStorageUrl(bucket, path) {
     if (!path) return null;
     if (/^https?:\/\//i.test(path)) return path;
-
-    const { data, error } = await supabase.storage
-        .from(bucket)
-        .createSignedUrl(path, 3600);
-
+    const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600);
     if (error) return null;
     return data?.signedUrl || null;
 }
 
-// 1. INICIALIZAÇÃO
+async function renderAvatar(profile, classes = "") {
+    const name = profile?.full_name || profile?.username || "U";
+    const avatarPath = profile?.avatar_url;
+
+    if (avatarPath) {
+        const avatarUrl = await getStorageUrl("avatars", avatarPath);
+        if (avatarUrl) {
+            return `<div class="${classes} overflow-hidden"><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover"></div>`;
+        }
+    }
+    return `<div class="${classes} flex items-center justify-center font-bold">${escapeHTML(initials(name))}</div>`;
+}
+
+function formatDate(date) {
+    const d = new Date(date);
+    if(isNaN(d)) return "";
+    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(d);
+}
+
+function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
+function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
+
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
-
-    if (error || !data.session) {
-        location.replace("./login.html");
-        return;
-    }
-
+    if (error || !data.session) { window.location.replace("./login.html"); return; }
     currentUser = data.session.user;
-    profileId = requestedId || currentUser.id;
-    isOwnProfile = profileId === currentUser.id;
 
-    await loadProfile();
+    const { data: profile } = await supabase.from("profiles").select("id,username,full_name,avatar_url").eq("id", currentUser.id).maybeSingle();
+    currentProfile = profile || { id: currentUser.id, username: currentUser.email?.split("@")[0] || "usuario", full_name: currentUser.email?.split("@")[0] || "Usuário" };
+
+    document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
+    document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
+    
+    document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
+    document.getElementById("composerAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white");
+
+    // Preenche também o menu mobile
+    document.getElementById("mobileMenuName").textContent = currentProfile.full_name || "Usuário";
+    document.getElementById("mobileMenuUsername").textContent = "@" + (currentProfile.username || "usuario");
+    document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
+
+    await loadFeed();
+    await checkUnreadCount();
+    subscribeDropdownNotifications();
 }
 
-// 2. CARREGAR PERFIL
-async function loadProfile() {
-    const { data, error } = await supabase
-        .from("profiles")
-        .select("id,username,full_name,bio,avatar_url,cover_url,city,state,is_private,created_at")
-        .eq("id", profileId)
-        .maybeSingle();
-
-    if (error) throw error;
-
-    if (!data) {
-        showProfileError("Perfil não encontrado.");
-        return;
-    }
-
-    currentProfile = data;
-
-    // Preenche também o menu mobile com os dados do usuário logado
-    if (isOwnProfile || profileId === currentUser.id) {
-        $("mobileMenuName").textContent = currentProfile.full_name || "Usuário";
-        $("mobileMenuUsername").textContent = "@" + (currentProfile.username || "usuario");
-        const avatarSigned = await storageUrl("avatars", currentProfile.avatar_url);
-        if (avatarSigned) {
-            $("mobileMenuAvatar").innerHTML = `<img src="${escapeHTML(avatarSigned)}" class="w-full h-full object-cover">`;
-        } else {
-            $("mobileMenuAvatar").innerHTML = initials(currentProfile.full_name);
-        }
-    }
-
-    await renderProfile();
-    await loadUserPosts();
-}
-
-// 3. VERIFICAR AMIZADE
-async function loadFriendship() {
-    friendship = null;
-
-    if (isOwnProfile) return;
-
-    const { data, error } = await supabase
-        .from("friendships")
-        .select("id,user_a,user_b,requested_by,status,created_at")
-        .or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`)
-        .in("status", ["pending", "accepted"]);
-
-    if (error) throw error;
-
-    friendship = (data || []).find(item =>
-        item.user_a === profileId || item.user_b === profileId
-    ) || null;
-}
-
-// 4. BOTÃO DE AMIZADE
-function renderFriendButton() {
-    const button = $("friendButton");
-    if (!button) return;
-
-    let html = "";
-
-    if (!friendship) {
-        html = `
-            <button class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition flex items-center gap-2" id="friendAction">
-                <i data-lucide="user-plus" class="w-4 h-4"></i>
-                Adicionar amigo
-            </button>
-        `;
-    } else if (friendship.status === "accepted") {
-        html = `
-            <button class="px-4 py-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-xs font-bold flex items-center gap-2" id="friendAction">
-                <i data-lucide="users" class="w-4 h-4"></i>
-                Amigos
-            </button>
-        `;
-    } else if (friendship.status === "pending") {
-        if (friendship.requested_by === currentUser.id) {
-            html = `
-                <button class="px-4 py-2.5 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl text-xs font-bold flex items-center gap-2" id="friendAction">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                    Solicitação enviada
-                </button>
-            `;
-        } else {
-            html = `
-                <button class="px-4 py-2.5 bg-cyan-600 text-white rounded-xl text-xs font-bold flex items-center gap-2" id="friendAction">
-                    <i data-lucide="user-check" class="w-4 h-4"></i>
-                    Aceitar solicitação
-                </button>
-            `;
-        }
-    }
-
-    $("profileActions").innerHTML = html;
-    $("friendAction").onclick = handleFriendAction;
-    showIcons();
-}
-
-// 5. AÇÃO PRINCIPAL
-async function handleFriendAction() {
-    if (!friendship) {
-        await sendFriendRequest();
-        return;
-    }
-
-    if (friendship.status === "accepted") {
-        await removeFriendship();
-        return;
-    }
-
-    if (friendship.requested_by === currentUser.id) {
-        await cancelFriendRequest();
-        return;
-    }
-
-    await respondFriendRequest(true);
-}
-
-// 6. ENVIAR SOLICITAÇÃO
-async function sendFriendRequest() {
-    const button = $("friendAction");
-    if (button) button.disabled = true;
-
-    try {
-        const [userA, userB] = [currentUser.id, profileId].sort();
-
-        const { error } = await supabase
-            .from("friendships")
-            .insert({
-                user_a: userA,
-                user_b: userB,
-                requested_by: currentUser.id,
-                status: "pending"
-            });
-
-        if (error) throw error;
-
-        await supabase.from("notifications").insert({
-            recipient_id: profileId,
-            actor_id: currentUser.id,
-            notification_type: "friend_request",
-            message: `${currentProfile.full_name || "Alguém"} enviou uma solicitação de amizade.`
-        });
-
-        notify("Solicitação enviada!");
-
-        await loadFriendship();
-        renderFriendButton();
-
-    } catch (error) {
-        errorMessage(error.message);
-        if (button) button.disabled = false;
-    }
-}
-
-// 7. ACEITAR OU RECUSAR
-async function respondFriendRequest(accept) {
-    if (!friendship) return;
-
-    const confirm = await Swal.fire({
-        title: accept ? "Aceitar amizade?" : "Recusar solicitação?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: accept ? "Aceitar" : "Recusar",
-        cancelButtonText: "Voltar",
-        confirmButtonColor: accept ? "#0891b2" : "#dc2626"
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    try {
-        const { error } = await supabase.rpc("respond_friend_request", {
-            p_friendship_id: friendship.id,
-            p_accept: accept
-        });
-
-        if (error) throw error;
-
-        if (accept) {
-            await supabase.from("notifications").insert({
-                recipient_id: profileId,
-                actor_id: currentUser.id,
-                notification_type: "friend_accepted",
-                message: `${currentProfile.full_name || "Alguém"} aceitou sua solicitação de amizade.`
-            });
-
-            notify("Agora vocês são amigos!");
-        } else {
-            notify("Solicitação recusada.");
-        }
-
-        await loadFriendship();
-        renderFriendButton();
-
-    } catch (error) {
-        errorMessage(error.message);
-    }
-}
-
-// 8. CANCELAR SOLICITAÇÃO
-async function cancelFriendRequest() {
-    const confirm = await Swal.fire({
-        title: "Cancelar solicitação?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#dc2626"
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    try {
-        const { error } = await supabase.rpc("cancel_friend_request", {
-            p_friendship_id: friendship.id
-        });
-
-        if (error) throw error;
-
-        notify("Solicitação cancelada.");
-        await loadFriendship();
-        renderFriendButton();
-
-    } catch (error) {
-        errorMessage(error.message);
-    }
-}
-
-// 9. REMOVER AMIZADE
-async function removeFriendship() {
-    const confirm = await Swal.fire({
-        title: "Remover amizade?",
-        text: "Vocês deixarão de ser amigos.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#dc2626",
-        confirmButtonText: "Remover",
-        cancelButtonText: "Cancelar"
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    try {
-        const { error } = await supabase.rpc("remove_friendship", {
-            p_friendship_id: friendship.id
-        });
-
-        if (error) throw error;
-
-        notify("Amizade removida.");
-        await loadFriendship();
-        renderFriendButton();
-
-    } catch (error) {
-        errorMessage(error.message);
-    }
-}
-
-// 10. RENDERIZAR PERFIL
-async function renderProfile() {
-    const name = currentProfile.full_name || "Usuário";
-    const username = currentProfile.username || "usuario";
-
-    document.title = `${name} | FaceCrato`;
-    $("profileName").textContent = name;
-    $("profileUsername").textContent = "@" + username;
-
-    $("profileBio").textContent =
-        currentProfile.bio ||
-        (isOwnProfile ? "Adicione uma biografia para contar um pouco sobre você." : "");
-
-    const locationText = [currentProfile.city, currentProfile.state]
-        .filter(Boolean).join(" - ");
-
-    const locationElement = $("profileLocation");
-    locationElement.hidden = !locationText;
-
-    if (locationText) {
-        locationElement.querySelector("span").textContent = locationText;
-    }
-
-    $("profileDate").innerHTML = `
-        <i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>
-        No FaceCrato desde ${escapeHTML(formatDate(currentProfile.created_at))}
-    `;
-
-    $("privacyLabel").innerHTML = currentProfile.is_private
-        ? '<i data-lucide="lock" class="w-4 h-4 text-gray-400"></i> Perfil privado'
-        : '<i data-lucide="globe" class="w-4 h-4 text-gray-400"></i> Perfil público';
-
-    const avatar = await storageUrl("avatars", currentProfile.avatar_url);
-    const cover = await storageUrl("covers", currentProfile.cover_url);
-
-    const avatarImage = $("avatarImage");
-    const placeholder = $("avatarPlaceholder");
-
-    if (avatar) {
-        avatarImage.src = avatar;
-        avatarImage.hidden = false;
-        placeholder.hidden = true;
+async function checkUnreadCount() {
+    const { count, error } = await supabase.from("notifications").select("*", { count: "exact", head: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
+    if (!error && count > 0) {
+        notifBadge.textContent = count > 9 ? "9+" : count;
+        notifBadge.classList.remove("hidden");
     } else {
-        avatarImage.hidden = true;
-        placeholder.hidden = false;
-        placeholder.textContent = initials(name);
+        notifBadge.classList.add("hidden");
     }
-
-    if (cover) {
-        $("cover").style.backgroundImage = `url("${cover.replace(/"/g, "%22")}")`;
-        $("cover").style.backgroundSize = "cover";
-        $("cover").style.backgroundPosition = "center";
-    }
-
-    if (isOwnProfile) {
-        $("changeAvatarButton").hidden = false;
-        $("changeCoverButton").hidden = false;
-
-        $("profileActions").innerHTML = `
-            <button class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition flex items-center gap-2" id="editProfileButton">
-                <i data-lucide="pencil" class="w-4 h-4"></i>
-                Editar perfil
-            </button>
-        `;
-
-        $("editProfileButton").onclick = openEditModal;
-
-    } else {
-        await loadFriendship();
-
-        $("profileActions").innerHTML = `
-            <div id="friendButton"></div>
-        `;
-
-        renderFriendButton();
-    }
-
-    showIcons();
 }
 
-// 11. PUBLICAÇÕES (COM SUPORTE CORRETO À FOTO DE PERFIL)
-async function loadUserPosts() {
-    postsContainer.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
-            Carregando publicações...
-        </div>
-    `;
+async function fetchDropdownNotifications() {
+    notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Carregando...</div>`;
+    const { data, error } = await supabase.from("notifications").select("*").eq("recipient_id", currentUser.id).order("created_at", { ascending: false }).limit(6);
+
+    if (error || !data || data.length === 0) {
+        notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhuma notificação por enquanto.</div>`;
+        return;
+    }
+
+    notifDropdownList.innerHTML = data.map(item => {
+        const message = escapeHTML(item.message || "Nova atividade");
+        const date = formatDate(item.created_at);
+        const unreadClass = !item.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
+        let target = item.post_id ? `./feed.html?post=${encodeURIComponent(item.post_id)}` : "#";
+
+        return `
+            <a href="${target}" onclick="markOneReadModal('${item.id}')" class="block p-3 hover:bg-gray-50 transition ${unreadClass}">
+                <p class="text-xs text-slate-800 leading-relaxed">${message}</p>
+                <span class="text-[10px] text-gray-400 mt-1 block">${date}</span>
+            </a>
+        `;
+    }).join("");
+}
+
+window.markOneReadModal = async function(id) {
+    await supabase.from("notifications").update({ is_read: true }).eq("id", id).eq("recipient_id", currentUser.id);
+    await checkUnreadCount();
+}
+
+window.markAllReadFromDropdown = async function() {
+    await supabase.from("notifications").update({ is_read: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
+    await checkUnreadCount();
+    await fetchDropdownNotifications();
+}
+
+function subscribeDropdownNotifications() {
+    if (notifsChannel) supabase.removeChannel(notifsChannel);
+    notifsChannel = supabase.channel("feed-notifs-" + currentUser.id)
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: "recipient_id=eq." + currentUser.id }, async () => {
+            await checkUnreadCount();
+            if (!notifDropdown.classList.contains("hidden")) await fetchDropdownNotifications();
+        }).subscribe();
+}
+
+async function getFriendIds() {
+    const { data, error } = await supabase.from("friendships").select("user_a,user_b").eq("status", "accepted").or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
+    if (error) throw error;
+    const ids = new Set([currentUser.id]);
+    (data || []).forEach(f => ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a));
+    return [...ids];
+}
+
+async function loadFeed() {
+    if (loadingFeed) return;
+    loadingFeed = true;
 
     try {
-        const { data, error } = await supabase
-            .from("posts")
-            .select("*")
-            .eq("user_id", profileId)
-            .order("created_at", { ascending: false });
+        let query = supabase.from("posts").select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`).order("created_at", { ascending:false }).limit(40);
+        if (currentFeed === "friends") query = query.in("user_id", await getFriendIds());
 
+        const { data: posts, error } = await query;
         if (error) throw error;
 
-        if (!data || data.length === 0) {
-            postsContainer.innerHTML = `
-                <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
-                    <i data-lucide="images" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
-                    Nenhuma publicação encontrada.
-                </div>
-            `;
-            showIcons();
+        if (!posts || posts.length === 0) {
+            postsContainer.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-500"><i data-lucide="messages-square" class="w-10 h-10 mx-auto mb-3 text-gray-400"></i><strong class="block text-slate-800 text-base mb-1">Nenhuma publicação por aqui</strong><p class="text-xs">Quando houver publicações disponíveis no Cariri, elas aparecerão aqui.</p></div>`;
+            lucide.createIcons();
             return;
         }
 
-        // Pega a URL do avatar do perfil para exibir nos posts
-        const avatarSignedUrl = await storageUrl("avatars", currentProfile.avatar_url);
-        const name = currentProfile.full_name || "Usuário";
+        const postIds = posts.map(p => p.id);
+        const userIds = [...new Set(posts.map(p => p.user_id))];
 
-        let authorAvatarHTML = "";
-        if (avatarSignedUrl) {
-            authorAvatarHTML = `<img src="${escapeHTML(avatarSignedUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover">`;
-        } else {
-            authorAvatarHTML = escapeHTML(initials(name));
+        const [profilesRes, mediaRes, reactionsRes, commentsRes, savedRes] = await Promise.all([
+            supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", userIds),
+            supabase.from("post_media").select("id,post_id,media_url,media_type,position").in("post_id", postIds).order("position"),
+            supabase.from("reactions").select("post_id,user_id,reaction_type").in("post_id", postIds),
+            supabase.from("comments").select("id,post_id,user_id,content,created_at,parent_id").in("post_id", postIds).is("parent_id", null).order("created_at", { ascending:true }),
+            supabase.from("saved_posts").select("post_id").eq("user_id", currentUser.id).in("post_id", postIds)
+        ]);
+
+        const profileMap = Object.fromEntries((profilesRes.data || []).map(p => [p.id, p]));
+        const commentUserIds = [...new Set((commentsRes.data || []).map(c => c.user_id))].filter(id => !profileMap[id]);
+
+        if (commentUserIds.length) {
+            const { data: commentProfiles } = await supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", commentUserIds);
+            (commentProfiles || []).forEach(profile => { profileMap[profile.id] = profile; });
         }
 
-        postsContainer.innerHTML = data.map(post => {
-            const media = post.media_url
-                ? `<img class="w-full max-h-[450px] object-cover rounded-xl bg-gray-100 mt-4 border border-gray-200" src="${escapeHTML(post.media_url)}" alt="Mídia" loading="lazy">`
-                : "";
+        const mediaMap = {}; (mediaRes.data || []).forEach(m => { if (!mediaMap[m.post_id]) mediaMap[m.post_id] = []; mediaMap[m.post_id].push(m); });
+        const commentsMap = {}; (commentsRes.data || []).forEach(c => { if (!commentsMap[c.post_id]) commentsMap[c.post_id] = []; commentsMap[c.post_id].push(c); });
+        const reactionMap = {}; (reactionsRes.data || []).forEach(r => { if (!reactionMap[r.post_id]) reactionMap[r.post_id] = []; reactionMap[r.post_id].push(r); });
+        const saved = new Set((savedRes.data || []).map(s => s.post_id));
 
-            return `
-                <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                    <div class="flex items-center gap-3.5 mb-4">
-                        <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
-                            ${authorAvatarHTML}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <strong class="block text-sm font-bold text-slate-900">
-                                ${escapeHTML(name)}
-                            </strong>
-                            <small class="text-xs text-gray-400">
-                                ${escapeHTML(formatDate(post.created_at))}
-                            </small>
-                        </div>
-                    </div>
-                    <div class="text-slate-800 text-sm leading-relaxed whitespace-pre-wrap break-words">
-                        ${escapeHTML(post.content || "")}
-                    </div>
-                    ${media}
-                </article>
-            `;
-        }).join("");
+        const prepared = await Promise.all(posts.map(async post => {
+            const postMedia = mediaMap[post.id] || [];
+            const signedMedia = await Promise.all(postMedia.map(async item => {
+                const { data } = await supabase.storage.from("post-media").createSignedUrl(item.media_url, 3600);
+                return {...item, signedUrl: data?.signedUrl || null};
+            }));
+            return { ...post, author: profileMap[post.user_id], media: signedMedia, reactions: reactionMap[post.id] || [], comments: commentsMap[post.id] || [], saved: saved.has(post.id) };
+        }));
 
-        showIcons();
-
+        globalPostsCache = prepared;
+        window.__faceCratoProfiles = profileMap;
+        await renderPosts(prepared);
     } catch (error) {
-        postsContainer.innerHTML = `
-            <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-sm">
-                Erro ao carregar publicações: ${escapeHTML(error.message)}
-            </div>
-        `;
+        console.error("Erro feed:", error);
+    } finally {
+        loadingFeed = false;
     }
 }
 
-// 12. MODAL DE EDIÇÃO
-function openEditModal() {
-    $("editName").value = currentProfile.full_name || "";
-    $("editUsername").value = currentProfile.username || "";
-    $("editBio").value = currentProfile.bio || "";
-    $("editCity").value = currentProfile.city || "";
-    $("editState").value = currentProfile.state || "";
+async function renderPosts(posts) {
+    const postHTMLs = await Promise.all(posts.map(async post => {
+        const author = post.author || { full_name:"Usuário", username:"usuario" };
+        const userReaction = post.reactions.find(r => r.user_id === currentUser.id);
+        const reactionCount = post.reactions.length;
+        const commentCount = post.comments.length;
 
-    $("editModal").classList.remove("hidden");
-    $("editModal").classList.add("flex");
+        const reactionSummary = Object.entries(
+            post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
+        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
+
+        const mediaHTML = post.media.map((m, index) => {
+            if (!m.signedUrl) return "";
+            if (m.media_type === "video") return `
+                <div class="relative w-full bg-black rounded-2xl overflow-hidden mb-4 border border-gray-200 shadow-inner group cursor-pointer" onclick="openMediaModal('${post.id}', ${index})">
+                    <video class="w-full max-h-[520px] object-contain mx-auto pointer-events-none" preload="metadata"><source src="${escapeHTML(m.signedUrl)}"></video>
+                    <div class="absolute inset-0 bg-black/20 hover:bg-black/0 transition flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition"><i data-lucide="play" class="w-7 h-7 ml-0.5 fill-current"></i></div>
+                    </div>
+                </div>`;
+            return `
+                <div class="overflow-hidden rounded-2xl mb-4 border border-gray-200 cursor-pointer group" onclick="openMediaModal('${post.id}', ${index})">
+                    <img class="w-full max-h-[520px] object-cover bg-gray-100 group-hover:scale-[1.01] transition duration-300" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">
+                </div>`;
+        }).join("");
+
+        const commentsHTML = (await Promise.all(post.comments.map(async c => {
+            const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
+            const commentAvatarHTML = await renderAvatar(commentAuthor, "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs");
+            return `
+                <div class="flex gap-3 my-3">
+                    ${commentAvatarHTML}
+                    <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
+                        <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                        <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
+                    </div>
+                </div>
+            `;
+        }))).join("");
+
+        const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
+        const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
+
+        return `
+            <article class="bg-white border border-gray-200 rounded-2xl p-5 mb-5 shadow-xs" data-post-id="${post.id}">
+                <div class="flex items-center gap-3.5 mb-3">
+                    ${authorAvatarHTML}
+                    <div class="flex-1 min-w-0">
+                        <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+                        <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
+                    </div>
+                    ${post.user_id === currentUser.id ? `<button class="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-50 rounded-lg transition" data-action="delete-post" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ""}
+                </div>
+
+                ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-3 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
+                ${mediaHTML}
+
+                <div class="flex justify-between text-xs text-gray-500 py-2 border-b border-gray-100 mb-1">
+                    <span>${reactionSummary || " "}</span>
+                    <span>${commentCount} comentário(s)</span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-1 pt-1 relative">
+                    <div class="reaction-wrapper">
+                        <button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
+                            <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
+                            ${userReaction ? "Reagiu" : "Curtir"} (${reactionCount})
+                        </button>
+                        <div class="reaction-popup" id="popup-${post.id}">
+                            <button class="react-emoji-btn" data-reaction="like" data-post-id="${post.id}">👍</button>
+                            <button class="react-emoji-btn" data-reaction="love" data-post-id="${post.id}">❤️</button>
+                            <button class="react-emoji-btn" data-reaction="haha" data-post-id="${post.id}">😂</button>
+                            <button class="react-emoji-btn" data-reaction="wow" data-post-id="${post.id}">😮</button>
+                            <button class="react-emoji-btn" data-reaction="sad" data-post-id="${post.id}">😢</button>
+                            <button class="react-emoji-btn" data-reaction="angry" data-post-id="${post.id}">😡</button>
+                        </div>
+                    </div>
+
+                    <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition" data-action="toggle-comments">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Comentar
+                    </button>
+
+                    <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${post.saved ? 'text-violet-600' : ''}" data-action="save-post">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i> ${post.saved ? "Salvo" : "Salvar"}
+                    </button>
+                </div>
+
+                <div class="comments-area pt-3 border-t border-gray-100 mt-2" id="comments-${post.id}">
+                    ${commentsHTML || `<p class="text-xs text-gray-400">Nenhum comentário ainda.</p>`}
+                    <form class="flex gap-2 mt-3" data-post-id="${post.id}">
+                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-gray-100 border border-transparent focus:border-cyan-600 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none">
+                        <button type="submit" class="bg-cyan-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-cyan-700 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+                    </form>
+                </div>
+            </article>
+        `;
+    }));
+
+    postsContainer.innerHTML = postHTMLs.join("");
+    lucide.createIcons();
 }
 
-function closeEditModal() {
-    $("editModal").classList.remove("flex");
-    $("editModal").classList.add("hidden");
+window.openMediaModal = function(postId, mediaIndex = 0) {
+    const post = globalPostsCache.find(p => p.id === postId);
+    if (!post || !post.media || post.media.length === 0) return;
+
+    activeModalPost = post;
+    activeMediaIndex = mediaIndex;
+
+    updateModalContent();
+    mediaModal.classList.remove("hidden");
+    mediaModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
 }
 
-$("cancelEdit").onclick = closeEditModal;
-$("cancelEditX").onclick = closeEditModal;
+async function updateModalContent() {
+    if (!activeModalPost) return;
+    const media = activeModalPost.media[activeMediaIndex];
+    const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
 
-// 13. SALVAR PERFIL
-$("editForm").addEventListener("submit", async event => {
-    event.preventDefault();
+    if (media.media_type === "video") {
+        modalMediaContainer.innerHTML = `
+            <div class="relative w-full h-full flex items-center justify-center bg-black group custom-video-wrapper">
+                <video id="modalCustomVideo" class="max-w-full max-h-full object-contain mx-auto" preload="metadata"><source src="${escapeHTML(media.signedUrl)}"></video>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent p-4 flex flex-col gap-2 opacity-90 group-hover:opacity-100 transition">
+                    <div id="videoProgressContainer" class="w-full bg-white/30 h-1.5 rounded-full cursor-pointer relative overflow-hidden"><div id="videoProgressBar" class="bg-gradient-to-r from-cyan-500 to-violet-500 h-full w-0"></div></div>
+                    <div class="flex items-center justify-between text-white text-xs">
+                        <div class="flex items-center gap-3">
+                            <button id="modalPlayPauseBtn" class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 flex items-center justify-center hover:scale-105 transition shadow"><i data-lucide="play" class="w-4 h-4 fill-current ml-0.5" id="playPauseIcon"></i></button>
+                            <span id="videoTimeDisplay">0:00 / 0:00</span>
+                        </div>
+                        <button id="modalFullscreenBtn" class="p-2 hover:bg-white/20 rounded-lg transition"><i data-lucide="maximize" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>`;
+        setupCustomVideoPlayer();
+    } else {
+        modalMediaContainer.innerHTML = `<img class="max-w-full max-h-full object-contain mx-auto select-none" src="${escapeHTML(media.signedUrl)}" alt="Mídia ampliada">`;
+    }
 
-    const button = $("saveProfileButton");
-    button.disabled = true;
-    button.textContent = "Salvando...";
+    if (activeModalPost.media.length > 1) {
+        prevMediaBtn.classList.toggle("hidden", activeMediaIndex === 0);
+        nextMediaBtn.classList.toggle("hidden", activeMediaIndex === activeModalPost.media.length - 1);
+    } else {
+        prevMediaBtn.classList.add("hidden");
+        nextMediaBtn.classList.add("hidden");
+    }
 
-    try {
-        const username = $("editUsername").value.trim().toLowerCase();
+    const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
+    modalAuthorHeader.innerHTML = `
+        ${authorAvatarHTML}
+        <div class="flex-1 min-w-0">
+            <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+            <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(activeModalPost.created_at))}</small>
+        </div>
+    `;
 
-        if (!/^[a-z0-9_]{3,30}$/.test(username)) {
-            throw new Error("Use de 3 a 30 caracteres: letras minúsculas, números ou underline.");
+    modalPostContent.innerHTML = activeModalPost.content ? `<p class="text-slate-800 leading-relaxed whitespace-pre-wrap">${formatRichText(activeModalPost.content)}</p>` : `<span class="text-gray-400 italic">Sem legenda.</span>`;
+    await renderModalComments();
+    lucide.createIcons();
+}
+
+function setupCustomVideoPlayer() {
+    const video = document.getElementById("modalCustomVideo");
+    const playBtn = document.getElementById("modalPlayPauseBtn");
+    const progressBar = document.getElementById("videoProgressBar");
+    const progressContainer = document.getElementById("videoProgressContainer");
+    const timeDisplay = document.getElementById("videoTimeDisplay");
+    const fullscreenBtn = document.getElementById("modalFullscreenBtn");
+
+    if (!video) return;
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    video.addEventListener("loadedmetadata", () => { timeDisplay.textContent = `0:00 / ${formatTime(video.duration)}`; });
+
+    function togglePlay() {
+        if (video.paused) {
+            video.play();
+            playBtn.innerHTML = `<i data-lucide="pause" class="w-4 h-4 fill-current"></i>`;
+        } else {
+            video.pause();
+            playBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>`;
         }
+        lucide.createIcons();
+    }
 
-        const updates = {
-            full_name: $("editName").value.trim(),
-            username,
-            bio: $("editBio").value.trim(),
-            city: $("editCity").value.trim(),
-            state: $("editState").value.trim().toUpperCase()
-        };
+    playBtn.addEventListener("click", togglePlay);
+    video.addEventListener("click", togglePlay);
+    video.addEventListener("timeupdate", () => {
+        if (!video.duration) return;
+        progressBar.style.width = `${(video.currentTime / video.duration) * 100}%`;
+        timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+    });
+    progressContainer.addEventListener("click", (e) => {
+        const rect = progressContainer.getBoundingClientRect();
+        video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
+    });
+    fullscreenBtn.addEventListener("click", () => { if (video.requestFullscreen) video.requestFullscreen(); });
+}
 
-        const { error } = await supabase
-            .from("profiles")
-            .update(updates)
-            .eq("id", currentUser.id);
+async function renderModalComments() {
+    if (!activeModalPost) return;
+    const comments = activeModalPost.comments || [];
+    if (comments.length === 0) {
+        modalCommentsList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhum comentário ainda. Seja o primeiro a comentar!</div>`;
+        return;
+    }
+    const commentsHTMLs = await Promise.all(comments.map(async c => {
+        const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
+        const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs");
+        return `
+            <div class="flex gap-3 py-2">
+                ${commentAvatarHTML}
+                <div class="flex-1 bg-gray-50 border border-gray-100 p-3 rounded-2xl text-xs">
+                    <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                    <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
+                </div>
+            </div>
+        `;
+    }));
+    modalCommentsList.innerHTML = commentsHTMLs.join("");
+}
 
-        if (error) throw error;
+prevMediaBtn.addEventListener("click", () => { if (activeMediaIndex > 0) { activeMediaIndex--; updateModalContent(); } });
+nextMediaBtn.addEventListener("click", () => { if (activeModalPost && activeMediaIndex < activeModalPost.media.length - 1) { activeMediaIndex++; updateModalContent(); } });
 
-        closeEditModal();
-        notify("Perfil atualizado!");
-        await loadProfile();
+closeMediaModal.addEventListener("click", closeModal);
+mediaModal.addEventListener("click", (e) => { if (e.target === mediaModal) closeModal(); });
 
-    } catch (error) {
-        errorMessage(error.message);
-    } finally {
-        button.disabled = false;
-        button.textContent = "Salvar alterações";
+function closeModal() {
+    mediaModal.classList.add("hidden");
+    mediaModal.classList.remove("flex");
+    document.body.style.overflow = "auto";
+    modalMediaContainer.innerHTML = "";
+    activeModalPost = null;
+}
+
+modalCommentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!activeModalPost) return;
+    const content = modalCommentInput.value.trim();
+    if (!content) return;
+
+    const { data, error } = await supabase.from("comments").insert({ post_id: activeModalPost.id, user_id: currentUser.id, content }).select("id, post_id, user_id, content, created_at").single();
+    if (!error && data) {
+        activeModalPost.comments.push(data);
+        modalCommentInput.value = "";
+        await renderModalComments();
+        await loadFeed();
     }
 });
 
-// 14. UPLOAD DE IMAGENS
-async function uploadImage(file, bucket) {
-    if (!file) return;
+mediaInput.addEventListener("change", () => {
+    const file = mediaInput.files[0];
+    if (!file) { filePreview.classList.add("hidden"); return; }
+    filePreview.classList.remove("hidden");
+    filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+});
 
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-        throw new Error("Formato não permitido.");
+publishButton.addEventListener("click", async () => {
+    const content = postContent.value.trim();
+    const file = mediaInput.files[0];
+    if (!content && !file) { showError("Escreva alguma coisa ou escolha um arquivo."); return; }
+
+    publishButton.disabled = true;
+    publishButton.textContent = "Publicando...";
+
+    try {
+        const postType = file ? (file.type.startsWith("video/") ? "video" : "photo") : "text";
+        const { data: post, error: postErr } = await supabase.from("posts").insert({ user_id: currentUser.id, content, post_type: postType, visibility: visibility.value, comments_permission: "everyone" }).select("id").single();
+        if (postErr) throw postErr;
+
+        if (file) {
+            const ext = file.name.split(".").pop();
+            const filePath = `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
+            const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, file, { contentType: file.type });
+            if (upErr) throw upErr;
+            await supabase.from("post_media").insert({ post_id: post.id, media_url: filePath, media_type: file.type.startsWith("video/") ? "video" : "image", position: 0 });
+        }
+
+        postContent.value = ""; mediaInput.value = ""; filePreview.classList.add("hidden");
+        showSuccess("Publicado com sucesso!");
+        await loadFeed();
+    } catch (err) {
+        showError(err.message || "Erro ao publicar.");
+    } finally {
+        publishButton.disabled = false;
+        publishButton.textContent = "Publicar";
+    }
+});
+
+postsContainer.addEventListener("click", async event => {
+    const target = event.target;
+    const button = target.closest("[data-action]");
+    const postElement = target.closest("[data-post-id]");
+    
+    if (target.classList.contains("react-emoji-btn")) {
+        await applyReaction(target.dataset.postId, target.dataset.reaction);
+        return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-        throw new Error("A imagem deve ter no máximo 5 MB.");
+    if (!button || !postElement) return;
+    const postId = postElement.dataset.postId;
+    const action = button.dataset.action;
+
+    if (action === "like-click") {
+        const popup = document.getElementById(`popup-${postId}`);
+        if (window.innerWidth <= 768) {
+            const isVisible = popup.classList.contains("show");
+            document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+            if (!isVisible) popup.classList.add("show");
+        } else {
+            await applyReaction(postId, "like");
+        }
+        return;
     }
 
-    const ext = file.type.split("/")[1];
-    const path = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
-
-    const { error: uploadError } = await supabase.storage
-        .from(bucket)
-        .upload(path, file, { contentType: file.type });
-
-    if (uploadError) throw uploadError;
-
-    const field = bucket === "avatars" ? "avatar_url" : "cover_url";
-
-    const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ [field]: path })
-        .eq("id", currentUser.id);
-
-    if (updateError) {
-        await supabase.storage.from(bucket).remove([path]);
-        throw updateError;
+    if (action === "toggle-comments") { 
+        document.getElementById(`comments-${postId}`)?.classList.toggle("open"); 
     }
 
-    notify("Imagem atualizada!");
-    await loadProfile();
+    if (action === "save-post") {
+        const { data: existing } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+        if (existing) { await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id); }
+        else { await supabase.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id }); }
+        await loadFeed();
+    }
+
+    if (action === "delete-post") {
+        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626" });
+        if (!confirm.isConfirmed) return;
+        await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
+        showSuccess("Excluído com sucesso.");
+        await loadFeed();
+    }
+});
+
+async function applyReaction(postId, reactionType) {
+    document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+
+    if (existing) {
+        if (existing.reaction_type === reactionType) await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
+        else await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
+    } else {
+        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
+    }
+    await loadFeed();
 }
 
-// 15. EVENTOS DE IMAGEM
-$("changeAvatarButton").onclick = () => $("avatarFile").click();
-$("changeCoverButton").onclick = () => $("coverFile").click();
+postsContainer.addEventListener("submit", async event => {
+    const form = event.target.closest("form");
+    if (!form || !form.dataset.postId) return;
+    event.preventDefault();
 
-$("avatarFile").onchange = async event => {
-    try {
-        await uploadImage(event.target.files[0], "avatars");
-    } catch (error) {
-        errorMessage(error.message);
-    }
-    event.target.value = "";
-};
+    const postId = form.dataset.postId;
+    const input = form.querySelector("input[name='comment']");
+    const content = input.value.trim();
+    if (!content) return;
 
-$("coverFile").onchange = async event => {
-    try {
-        await uploadImage(event.target.files[0], "covers");
-    } catch (error) {
-        errorMessage(error.message);
-    }
-    event.target.value = "";
-};
+    await supabase.from("comments").insert({ post_id: postId, user_id: currentUser.id, content });
+    await loadFeed();
+    document.getElementById(`comments-${postId}`)?.classList.add("open");
+});
 
-// 16. ATUALIZAR PUBLICAÇÕES
-$("refreshButton").onclick = loadUserPosts;
+document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
-// 17. SAIR DA CONTA
 const handleLogout = async () => {
-    const confirm = await Swal.fire({
-        title: "Sair da conta?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#0891b2"
-    });
-
-    if (confirm.isConfirmed) {
-        await supabase.auth.signOut();
-        window.location.replace("./login.html");
-    }
+    const confirm = await Swal.fire({ title:"Sair da conta?", icon:"question", showCancelButton:true, confirmButtonColor:"#0891b2" });
+    if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
 };
 
-$("logoutButton")?.addEventListener("click", handleLogout);
-$("logoutButtonMobile")?.addEventListener("click", handleLogout);
+document.getElementById("logoutButtonMobile").addEventListener("click", handleLogout);
 
-// 18. INICIAR
-initialize().catch(error =>
-    showProfileError(error.message || "Erro ao iniciar perfil.")
-);
-
-showIcons();
+initialize();
 </script>
 
 </body>
