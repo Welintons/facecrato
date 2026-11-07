@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. IMPORTAÇÕES E CONFIGURAÇÕES INICIAIS
+   ========================================================================== */
 import { supabase } from "./supabase.js";
 
 const postsContainer = document.getElementById("postsContainer");
@@ -41,11 +44,14 @@ let notificationsChannel = null;
 let postLimit = 10;
 let globalPostsCache = [];
 
-// CACHES EM MEMÓRIA PARA MÁXIMA VELOCIDADE
+// CACHES EM MEMÓRIA PARA MÁXIMA VELOCIDADE (Evita requisições repetidas)
 const storageUrlCache = new Map();
 const avatarUrlCache = new Map();
 
-// SISTEMA DE EFEITOS SONOROS (Web Audio API)
+
+/* ==========================================================================
+   2. SISTEMA DE EFEITOS SONOROS (Web Audio API)
+   ========================================================================== */
 const soundFx = {
     ctx: null,
     init() {
@@ -110,6 +116,10 @@ const soundFx = {
     }
 };
 
+
+/* ==========================================================================
+   3. MENU MOBILE E INTERFACES DE TOPO
+   ========================================================================== */
 function toggleMobileMenu(open) {
     if (open) {
         mobileMenuOverlay.classList.remove("hidden");
@@ -138,6 +148,10 @@ document.addEventListener("click", (e) => {
     }
 });
 
+
+/* ==========================================================================
+   4. FUNÇÕES UTILITÁRIAS E SEGURANÇA (HTML Escape, RichText, Datas)
+   ========================================================================== */
 let currentUser = null;
 let currentProfile = null;
 let loadingFeed = false;
@@ -160,6 +174,19 @@ function initials(name = "F") {
     return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
+function formatDate(date) {
+    const d = new Date(date);
+    if(isNaN(d)) return "";
+    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(d);
+}
+
+function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
+function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
+
+
+/* ==========================================================================
+   5. GERENCIAMENTO DE STORAGE E CACHE DE AVATARES
+   ========================================================================== */
 async function getStorageUrl(bucket, path) {
     if (!path) return null;
     if (/^https?:\/\//i.test(path)) return path;
@@ -174,7 +201,7 @@ async function getStorageUrl(bucket, path) {
     return data.signedUrl;
 }
 
-// CACHE GLOBAL DE AVATARES EM MEMÓRIA
+// Cache global de avatares em memória para evitar reprocessamento
 async function getCachedAvatarUrl(profile) {
     if (!profile || !profile.avatar_url) return null;
     const userId = profile.id;
@@ -222,47 +249,10 @@ window.closeAvatarModal = function() {
     }
 }
 
-function formatDate(date) {
-    const d = new Date(date);
-    if(isNaN(d)) return "";
-    return new Intl.DateTimeFormat("pt-BR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" }).format(d);
-}
 
-function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
-function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
-
-async function compressAvatarImage(file) {
-    return new Promise((resolve) => {
-        if (!file.type.startsWith("image/")) { resolve(file); return; }
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => {
-                const canvas = document.createElement("canvas");
-                let width = img.width;
-                let height = img.height;
-                const maxDim = 512;
-                if (width > height) {
-                    if (width > maxDim) { height *= maxDim / width; width = maxDim; }
-                } else {
-                    if (height > maxDim) { width *= maxDim / height; height = maxDim; }
-                }
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-                canvas.toBlob((blob) => {
-                    resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: "image/webp" }));
-                }, "image/webp", 0.78);
-            };
-            img.onerror = () => resolve(file);
-        };
-        reader.onerror = () => resolve(file);
-    });
-}
-
+/* ==========================================================================
+   6. INICIALIZAÇÃO DA SESSÃO E DADOS DO USUÁRIO
+   ========================================================================== */
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
     if (error || !data.session) { window.location.replace("./login.html"); return; }
@@ -286,6 +276,10 @@ async function initialize() {
     subscribeNotifications();
 }
 
+
+/* ==========================================================================
+   7. SISTEMA DE NOTIFICAÇÕES (Realtime)
+   ========================================================================== */
 async function checkUnreadCount() {
     const { count, error } = await supabase.from("notifications").select("*", { count: "exact", head: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
     if (!error && count > 0) {
@@ -387,6 +381,10 @@ window.markAllReadFromDropdown = async function() {
     await fetchDropdownNotifications();
 }
 
+
+/* ==========================================================================
+   8. CARREGAMENTO E RENDERIZAÇÃO DO FEED DE POSTS
+   ========================================================================== */
 async function loadFeed() {
     if (loadingFeed) return;
     loadingFeed = true;
@@ -546,7 +544,10 @@ async function renderPosts(posts) {
     lucide.createIcons();
 }
 
-// ATUALIZAÇÃO CIRÚRGICA DA INTERFACE DE CURTIDAS (SEM RECARREGAR O FEED)
+
+/* ==========================================================================
+   9. SISTEMA DE CURTIDAS E REAÇÕES (Atualização Instantânea Otimista)
+   ========================================================================== */
 function updatePostUIOptimistically(postId, newReactions) {
     const post = globalPostsCache.find(p => p.id === postId);
     if (!post) return;
@@ -612,6 +613,10 @@ async function applyReaction(postId, reactionType) {
     }
 }
 
+
+/* ==========================================================================
+   10. MODAL DE MÍDIA, VÍDEO E COMENTÁRIOS
+   ========================================================================== */
 window.openCommentsModalOnly = function(postId) {
     const post = globalPostsCache.find(p => p.id === postId);
     if (!post) return;
@@ -816,12 +821,48 @@ modalCommentForm.addEventListener("submit", async (e) => {
     }
 });
 
+
+/* ==========================================================================
+   11. CRIAÇÃO, EDIÇÃO E EXCLUSÃO DE PUBLICAÇÕES
+   ========================================================================== */
 mediaInput.addEventListener("change", () => {
     const file = mediaInput.files[0];
     if (!file) { filePreview.classList.add("hidden"); return; }
     filePreview.classList.remove("hidden");
     filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 });
+
+async function compressAvatarImage(file) {
+    return new Promise((resolve) => {
+        if (!file.type.startsWith("image/")) { resolve(file); return; }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                let width = img.width;
+                let height = img.height;
+                const maxDim = 512;
+                if (width > height) {
+                    if (width > maxDim) { height *= maxDim / width; width = maxDim; }
+                } else {
+                    if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob((blob) => {
+                    resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: "image/webp" }));
+                }, "image/webp", 0.78);
+            };
+            img.onerror = () => resolve(file);
+        };
+        reader.onerror = () => resolve(file);
+    });
+}
 
 publishButton.addEventListener("click", async () => {
     const content = postContent.value.trim();
@@ -861,6 +902,10 @@ publishButton.addEventListener("click", async () => {
     }
 });
 
+
+/* ==========================================================================
+   12. EVENT LISTENERS DO FEED (Cliques em botões, reações, menu de opções)
+   ========================================================================== */
 postsContainer.addEventListener("click", async event => {
     const target = event.target;
     const button = target.closest("[data-action]");
@@ -938,6 +983,10 @@ window.submitEditPost = async function() {
     }
 }
 
+
+/* ==========================================================================
+   13. PERFIL E LOGOUT
+   ========================================================================== */
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
 const handleLogout = async () => {
@@ -947,4 +996,8 @@ const handleLogout = async () => {
 
 document.getElementById("logoutButtonMobile").addEventListener("click", handleLogout);
 
+
+/* ==========================================================================
+   14. START DA APLICAÇÃO
+   ========================================================================== */
 initialize();
