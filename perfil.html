@@ -53,29 +53,31 @@
         </div>
 
         <div class="px-6 sm:px-8 pb-6">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 sm:-mt-20 relative z-10 mb-6">
-                <!-- AVATAR -->
-                <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-4 border-white bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black text-4xl flex items-center justify-center overflow-hidden relative shadow-md">
-                    <div id="avatarPlaceholder" class="w-full h-full flex items-center justify-center">F</div>
-                    <img id="avatarImage" alt="Foto de perfil" class="w-full h-full object-cover" hidden>
-                    <button class="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-slate-900 text-white border-2 border-white flex items-center justify-center shadow hover:bg-slate-800 transition" id="changeAvatarButton" hidden title="Alterar foto">
-                        <i data-lucide="camera" class="w-4 h-4"></i>
-                    </button>
+            <!-- AVATAR CENTRALIZADO CORRIGIDO -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 relative z-10 mb-6">
+                <div class="flex flex-col items-center sm:items-start -mt-16 sm:-mt-20">
+                    <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-4 border-white bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black text-4xl flex items-center justify-center overflow-hidden relative shadow-md">
+                        <div id="avatarPlaceholder" class="w-full h-full flex items-center justify-center">F</div>
+                        <img id="avatarImage" alt="Foto de perfil" class="w-full h-full object-cover" hidden>
+                        <button class="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-slate-900 text-white border-2 border-white flex items-center justify-center shadow hover:bg-slate-800 transition" id="changeAvatarButton" hidden title="Alterar foto">
+                            <i data-lucide="camera" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- AÇÕES DO PERFIL -->
-                <div class="flex items-center gap-2.5" id="profileActions"></div>
+                <div class="flex items-center justify-center sm:justify-end gap-2.5" id="profileActions"></div>
             </div>
 
             <!-- IDENTIDADE -->
-            <div class="mb-4">
+            <div class="mb-4 text-center sm:text-left">
                 <h1 id="profileName" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Carregando perfil...</h1>
                 <p id="profileUsername" class="text-xs sm:text-sm text-gray-500 mt-0.5">@...</p>
             </div>
 
-            <div class="text-slate-700 text-sm leading-relaxed mb-6 whitespace-pre-wrap break-words" id="profileBio"></div>
+            <div class="text-slate-700 text-sm leading-relaxed mb-6 whitespace-pre-wrap break-words text-center sm:text-left" id="profileBio"></div>
 
-            <div class="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-4 border-t border-gray-100">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-gray-500 pt-4 border-t border-gray-100">
                 <span id="profileLocation" hidden class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i><span></span></span>
                 <span id="profileDate" class="flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>No FaceCrato</span>
                 <span id="privacyLabel" class="flex items-center gap-1.5"><i data-lucide="globe" class="w-4 h-4 text-gray-400"></i>Perfil público</span>
@@ -175,6 +177,7 @@ let currentProfile = null;
 let profileId = null;
 let isOwnProfile = false;
 let friendship = null;
+let notificationsChannel = null;
 
 const $ = id => document.getElementById(id);
 const postsContainer = $("postsContainer");
@@ -183,6 +186,71 @@ const menuToggleBtn = $("menuToggleBtn");
 const menuCloseBtn = $("menuCloseBtn");
 const mobileMenuDrawer = $("mobileMenuDrawer");
 const mobileMenuOverlay = $("mobileMenuOverlay");
+
+// SISTEMA DE EFEITOS SONOROS (Web Audio API)
+const soundFx = {
+    ctx: null,
+    init() {
+        if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    },
+    playPop() {
+        try {
+            this.init();
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.08);
+        } catch(e) {}
+    },
+    playSuccess() {
+        try {
+            this.init();
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+        } catch(e) {}
+    },
+    playNotification() {
+        try {
+            this.init();
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.setValueAtTime(1318.51, now + 0.12);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        } catch(e) {}
+    }
+};
 
 function toggleMobileMenu(open) {
     if (open) {
@@ -279,6 +347,30 @@ async function initialize() {
     isOwnProfile = profileId === currentUser.id;
 
     await loadProfile();
+    subscribeNotifications();
+}
+
+// REALTIME DE NOTIFICAÇÕES
+async function subscribeNotifications() {
+    if (notificationsChannel) {
+        supabase.removeChannel(notificationsChannel);
+    }
+
+    notificationsChannel = supabase.channel(`public:notifications:recipient_id=eq.${currentUser.id}`)
+        .on(
+            'postgres_changes',
+            {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'notifications',
+                filter: `recipient_id=eq.${currentUser.id}`
+            },
+            async (payload) => {
+                soundFx.playNotification();
+                notify("Você recebeu uma nova notificação!", "info");
+            }
+        )
+        .subscribe();
 }
 
 // 2. CARREGAR PERFIL
@@ -367,6 +459,7 @@ function renderFriendButton() {
 
 // 5. AÇÃO PRINCIPAL
 async function handleFriendAction() {
+    soundFx.playPop();
     if (!friendship) {
         await sendFriendRequest();
         return;
@@ -412,6 +505,7 @@ async function sendFriendRequest() {
         });
 
         notify("Solicitação enviada!");
+        soundFx.playSuccess();
 
         await loadFriendship();
         renderFriendButton();
@@ -454,6 +548,7 @@ async function respondFriendRequest(accept) {
             });
 
             notify("Agora vocês são amigos!");
+            soundFx.playSuccess();
         } else {
             notify("Solicitação recusada.");
         }
@@ -588,7 +683,7 @@ async function renderProfile() {
             </button>
         `;
 
-        $("editProfileButton").onclick = openEditModal;
+        $("editProfileButton").onclick = () => { soundFx.playPop(); openEditModal(); };
 
     } else {
         await loadFriendship();
@@ -603,7 +698,7 @@ async function renderProfile() {
     showIcons();
 }
 
-// 11. PUBLICAÇÕES
+// 11. PUBLICAÇÕES DO PERFIL (Otimizadas com limite inicial)
 async function loadUserPosts() {
     postsContainer.innerHTML = `
         <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
@@ -612,15 +707,16 @@ async function loadUserPosts() {
     `;
 
     try {
-        const { data, error } = await supabase
+        const { data: posts, error } = await supabase
             .from("posts")
-            .select("*")
+            .select("id, user_id, content, created_at")
             .eq("user_id", profileId)
-            .order("created_at", { ascending: false });
+            .order("created_at", { ascending: false })
+            .limit(10);
 
         if (error) throw error;
 
-        if (!data || data.length === 0) {
+        if (!posts || posts.length === 0) {
             postsContainer.innerHTML = `
                 <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
                     <i data-lucide="images" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
@@ -631,10 +727,32 @@ async function loadUserPosts() {
             return;
         }
 
-        postsContainer.innerHTML = data.map(post => {
-            const media = post.media_url
-                ? `<img class="w-full max-h-[450px] object-cover rounded-xl bg-gray-100 mt-4 border border-gray-200" src="${escapeHTML(post.media_url)}" alt="Mídia" loading="lazy">`
-                : "";
+        const postIds = posts.map(p => p.id);
+        const { data: mediaRes } = await supabase
+            .from("post_media")
+            .select("post_id, media_url, media_type")
+            .in("post_id", postIds);
+
+        const mediaMap = {};
+        (mediaRes || []).forEach(m => {
+            if (!mediaMap[m.post_id]) mediaMap[m.post_id] = [];
+            mediaMap[m.post_id].push(m);
+        });
+
+        const prepared = await Promise.all(posts.map(async post => {
+            const items = mediaMap[post.id] || [];
+            const signedMedia = await Promise.all(items.map(async item => {
+                const { data } = await supabase.storage.from("post-media").createSignedUrl(item.media_url, 3600);
+                return { ...item, signedUrl: data?.signedUrl || null };
+            }));
+            return { ...post, media: signedMedia };
+        }));
+
+        postsContainer.innerHTML = prepared.map(post => {
+            const mediaHTML = post.media.map(m => {
+                if (!m.signedUrl) return "";
+                return `<img class="w-full max-h-[450px] object-cover rounded-xl bg-gray-100 mt-4 border border-gray-200" src="${escapeHTML(m.signedUrl)}" alt="Mídia" loading="lazy">`;
+            }).join("");
 
             return `
                 <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
@@ -654,7 +772,7 @@ async function loadUserPosts() {
                     <div class="text-slate-800 text-sm leading-relaxed whitespace-pre-wrap break-words">
                         ${escapeHTML(post.content || "")}
                     </div>
-                    ${media}
+                    ${mediaHTML}
                 </article>
             `;
         }).join("");
@@ -683,6 +801,7 @@ function openEditModal() {
 }
 
 function closeEditModal() {
+    soundFx.playPop();
     $("editModal").classList.remove("flex");
     $("editModal").classList.add("hidden");
 }
@@ -721,6 +840,7 @@ $("editForm").addEventListener("submit", async event => {
         if (error) throw error;
 
         closeEditModal();
+        soundFx.playSuccess();
         notify("Perfil atualizado!");
         await loadProfile();
 
@@ -765,6 +885,7 @@ async function uploadImage(file, bucket) {
         throw updateError;
     }
 
+    soundFx.playSuccess();
     notify("Imagem atualizada!");
     await loadProfile();
 }
@@ -792,7 +913,7 @@ $("coverFile").onchange = async event => {
 };
 
 // 16. ATUALIZAR PUBLICAÇÕES
-$("refreshButton").onclick = loadUserPosts;
+$("refreshButton").onclick = () => { soundFx.playPop(); loadUserPosts(); };
 
 // 17. SAIR DA CONTA
 const handleLogout = async () => {
