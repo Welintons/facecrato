@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
 
-<title>Criar conta | FaceCrato</title>
+<title>Criar conta | FaceCrato - A rede do Cariri</title>
 
 <link rel="manifest" href="./manifest.json">
 
@@ -13,174 +13,150 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
+<body class="bg-slate-950 text-slate-900 font-sans antialiased min-h-screen relative flex items-center justify-center p-4 sm:p-6">
 
-<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+    <!-- IMAGEM DE FUNDO DA TELA INTEIRA -->
+    <div class="absolute inset-0 bg-cover bg-center z-0 filter brightness-40 contrast-125" style="background-image: url('https://raw.githubusercontent.com/Welintons/wsinforcrato/main/77c47f9b19a16142691c7837c67f08c2.jpg');"></div>
+    <!-- Camada escura por cima para o formulário destacar bem -->
+    <div class="absolute inset-0 bg-slate-950/70 z-0"></div>
 
-    <!-- LADO ESQUERDO: BRANDING -->
-    <section class="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-950 text-white border-r border-gray-200">
-        <div class="flex items-center gap-3 text-2xl font-black tracking-tight">
-            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                <i data-lucide="users" class="w-6 h-6"></i>
+    <!-- CAIXA DO FORMULÁRIO FLUTUANTE NO CENTRO -->
+    <div class="w-full max-w-lg bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-10 relative z-10 border border-white/20 my-8">
+
+        <!-- LOGO E NOME NO TOPO -->
+        <div class="flex items-center gap-3.5 mb-6">
+            <div class="w-14 h-14 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
             </div>
-            FaceCrato
+            <div class="flex flex-col">
+                <span class="text-2xl font-black tracking-tight text-slate-900 leading-none">FaceCrato</span>
+                <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase mt-0.5">Cariri · Ceará</span>
+            </div>
         </div>
 
-        <div class="max-w-md">
-            <h1 class="text-4xl xl:text-5xl font-black tracking-tight leading-tight mb-6">
-                Sua história.<br>
-                Suas conexões.<br>
-                <span class="text-cyan-400">Seu espaço.</span>
-            </h1>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-1">Chegue mais, cabra da peste!</h2>
+        <p class="text-xs sm:text-sm text-gray-500 mb-6">Preencha os dados abaixo para fincar seu pé na rede do Cariri.</p>
 
-            <p class="text-slate-300 text-sm xl:text-base leading-relaxed">
-                Crie sua conta e faça parte de uma comunidade onde pessoas compartilham ideias, momentos e experiências com total estilo.
-            </p>
-        </div>
+        <form id="registerForm" class="space-y-3.5">
 
-        <div class="text-xs text-slate-400 tracking-wider font-medium">
-            FACECRATO © 2026 — UMA NOVA FORMA DE SE CONECTAR.
-        </div>
-    </section>
-
-    <!-- LADO DIREITO: FORMULÁRIO -->
-    <section class="flex items-center justify-center p-6 sm:p-12">
-        <div class="w-full max-w-md">
-
-            <!-- LOGO MOBILE -->
-            <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 mb-8 lg:hidden">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">
-                    <i data-lucide="users" class="w-5 h-5"></i>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="fullName">Como te chamam por aí?</label>
+                <div class="relative">
+                    <input
+                        id="fullName"
+                        type="text"
+                        placeholder="Digite seu nome completo..."
+                        autocomplete="name"
+                        maxlength="100"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <i data-lucide="user" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                 </div>
-                FaceCrato
             </div>
 
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Crie sua conta</h2>
-            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre para a comunidade FaceCrato.</p>
-
-            <form id="registerForm" class="space-y-4">
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="fullName">Nome completo</label>
-                    <div class="relative">
-                        <input
-                            id="fullName"
-                            type="text"
-                            placeholder="Como você se chama?"
-                            autocomplete="name"
-                            maxlength="100"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <i data-lucide="user" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
-                    </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="username">Apelido ou alcunha na rede</label>
+                <div class="relative">
+                    <input
+                        id="username"
+                        type="text"
+                        placeholder="exemplo: cicero_raiz"
+                        autocomplete="username"
+                        maxlength="30"
+                        pattern="[a-z0-9_]{3,30}"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="username">Nome de usuário</label>
-                    <div class="relative">
-                        <input
-                            id="username"
-                            type="text"
-                            placeholder="exemplo: welington123"
-                            autocomplete="username"
-                            maxlength="30"
-                            pattern="[a-z0-9_]{3,30}"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
-                    </div>
-                    <small class="text-[11px] text-gray-400 mt-1 block">Use letras minúsculas, números e underline. De 3 a 30 caracteres.</small>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">E-mail</label>
-                    <div class="relative">
-                        <input
-                            id="email"
-                            type="email"
-                            placeholder="seuemail@exemplo.com"
-                            autocomplete="email"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <i data-lucide="mail" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Senha</label>
-                    <div class="relative">
-                        <input
-                            id="password"
-                            type="password"
-                            placeholder="Crie uma senha"
-                            autocomplete="new-password"
-                            minlength="8"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <button
-                            type="button"
-                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
-                            data-target="password"
-                            aria-label="Mostrar senha"
-                        >
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <small class="text-[11px] text-gray-400 mt-1 block">Mínimo de 8 caracteres.</small>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="confirmPassword">Confirmar senha</label>
-                    <div class="relative">
-                        <input
-                            id="confirmPassword"
-                            type="password"
-                            placeholder="Digite a senha novamente"
-                            autocomplete="new-password"
-                            minlength="8"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <button
-                            type="button"
-                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
-                            data-target="confirmPassword"
-                            aria-label="Mostrar confirmação"
-                        >
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button
-                    type="submit"
-                    id="registerButton"
-                    class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2"
-                >
-                    Criar minha conta
-                </button>
-
-                <div id="message" class="hidden mt-4 p-3.5 rounded-xl text-xs leading-relaxed"></div>
-
-            </form>
-
-            <div class="text-center text-xs text-gray-500 mt-6">
-                Já tem uma conta?
-                <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar</a>
+                <small class="text-[10px] text-gray-400 mt-0.5 block">Só letra minúscula, número e traço embaixo. De 3 a 30 letras.</small>
             </div>
 
-            <div class="text-center text-[11px] text-gray-400 mt-10">
-                FaceCrato — Conectando pessoas.
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="email">Onde mandamos recado (E-mail)</label>
+                <div class="relative">
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="seuemail@exemplo.com"
+                        autocomplete="email"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <i data-lucide="mail" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                </div>
             </div>
 
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="password">Crie uma senha de respeito</label>
+                <div class="relative">
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Sua chave secreta"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <button
+                        type="button"
+                        class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
+                        data-target="password"
+                        aria-label="Mostrar senha"
+                    >
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <small class="text-[10px] text-gray-400 mt-0.5 block">No mínimo 8 dígitos para ninguém roubar sua prosa.</small>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="confirmPassword">Confirme a senha</label>
+                <div class="relative">
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        placeholder="Digite de novo pra garantir"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <button
+                        type="button"
+                        class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
+                        data-target="confirmPassword"
+                        aria-label="Mostrar confirmação"
+                    >
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                id="registerButton"
+                class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2 cursor-pointer"
+            >
+                Registrar meu nome na bodega
+            </button>
+
+            <div id="message" class="hidden mt-3 p-3 rounded-xl text-xs leading-relaxed"></div>
+
+        </form>
+
+        <div class="text-center text-xs text-gray-500 mt-5">
+            Já tem conta por aqui?
+            <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar na rede</a>
         </div>
-    </section>
 
-</div>
+        <div class="text-center text-[10px] text-gray-400 mt-6 border-t border-gray-100 pt-4">
+            FaceCrato © 2026 — Conectando o Cariri com estilo.
+        </div>
+
+    </div>
 
 <script>
 lucide.createIcons();
@@ -225,7 +201,7 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
 
 function showMessage(text, type = "error") {
     message.textContent = text;
-    message.className = `mt-4 p-3.5 rounded-xl text-xs leading-relaxed block ${
+    message.className = `mt-3 p-3 rounded-xl text-xs leading-relaxed block ${
         type === "success"
             ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
             : "bg-red-50 border border-red-200 text-red-700"
@@ -267,27 +243,27 @@ form.addEventListener("submit", async event => {
     const confirmacao = confirmPassword.value;
 
     if (nome.length < 2) {
-        showMessage("Informe seu nome completo.");
+        showMessage("Opa, bote seu nome completo aí direito!");
         return;
     }
 
     if (!/^[a-z0-9_]{3,30}$/.test(usuario)) {
-        showMessage("Nome de usuário inválido. Use letras minúsculas, números e underline.");
+        showMessage("Esse apelido não tá valendo. Use só letras minúsculas, números e traço embaixo.");
         return;
     }
 
     if (senha.length < 8) {
-        showMessage("Sua senha precisa ter pelo menos 8 caracteres.");
+        showMessage("Essa senha tá muito fraca, meu nobre! Bote pelo menos 8 dígitos.");
         return;
     }
 
     if (senha !== confirmacao) {
-        showMessage("As senhas não são iguais.");
+        showMessage("As senhas tão batendo diferente. Confere aí!");
         return;
     }
 
     button.disabled = true;
-    button.textContent = "Criando sua conta...";
+    button.textContent = "Arrumando seu canto...";
     message.className = "hidden";
 
     try {
@@ -310,18 +286,18 @@ form.addEventListener("submit", async event => {
         if (error) throw error;
 
         if (!data.user) {
-            throw new Error("O Supabase não retornou os dados do usuário.");
+            throw new Error("O sistema não conseguiu puxar os dados do cabra.");
         }
 
         if (data.session) {
             showMessage(
-                "Conta criada! Seu perfil está sendo preparado. Redirecionando...",
+                "Tudo pronto! Seu canto tá arrumado. Entrando na rede...",
                 "success"
             );
             window.location.replace("./feed.html");
         } else {
             showMessage(
-                "Cadastro realizado! Verifique seu e-mail para confirmar a conta antes de entrar.",
+                "Cadastro feito com sucesso! Dá uma olhada no seu e-mail para confirmar a conta.",
                 "success"
             );
             form.reset();
@@ -330,22 +306,22 @@ form.addEventListener("submit", async event => {
     } catch (error) {
         console.error("Erro no cadastro:", error);
 
-        let texto = "Não foi possível criar sua conta.";
+        let texto = "Não deu certo criar sua conta. Tente de novo.";
         const erro = (error.message || "").toLowerCase();
 
         if (
             erro.includes("already registered") ||
             erro.includes("user already registered")
         ) {
-            texto = "Este e-mail já está cadastrado.";
+            texto = "Eita! Esse e-mail já tá cadastrado por aqui.";
         } else if (erro.includes("username")) {
-            texto = "Não foi possível utilizar esse nome de usuário.";
+            texto = "Esse apelido já tem dono. Escolha outro!";
         } else if (erro.includes("password")) {
-            texto = "A senha não atende aos requisitos.";
+            texto = "A senha não passou nos conformes.";
         } else if (erro.includes("email")) {
-            texto = "Verifique se o e-mail foi digitado corretamente.";
+            texto = "Confirme se esse e-mail tá escrito certo.";
         } else if (erro.includes("network")) {
-            texto = "Erro de conexão. Verifique sua internet.";
+            texto = "A internet caiu ou tá lerdinha. Confere aí!";
         } else {
             texto = error.message || texto;
         }
@@ -354,7 +330,7 @@ form.addEventListener("submit", async event => {
 
     } finally {
         button.disabled = false;
-        button.textContent = "Criar minha conta";
+        button.textContent = "Registrar meu nome na bodega";
     }
 });
 
