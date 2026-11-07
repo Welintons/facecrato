@@ -299,6 +299,71 @@ let activeModalPost = null;
 let activeMediaIndex = 0;
 let notifsChannel = null;
 
+// SISTEMA DE EFEITOS SONOROS (Web Audio API)
+const soundFx = {
+    ctx: null,
+    init() {
+        if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    },
+    playPop() {
+        try {
+            this.init();
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.08);
+        } catch(e) {}
+    },
+    playSuccess() {
+        try {
+            this.init();
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+        } catch(e) {}
+    },
+    playNotification() {
+        try {
+            this.init();
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.setValueAtTime(1318.51, now + 0.12);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        } catch(e) {}
+    }
+};
+
 function toggleMobileMenu(open) {
     if (open) {
         mobileMenuOverlay.classList.remove("hidden");
@@ -395,7 +460,6 @@ async function initialize() {
     document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
     document.getElementById("composerAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white");
 
-    // Preenche também o menu mobile
     document.getElementById("mobileMenuName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("mobileMenuUsername").textContent = "@" + (currentProfile.username || "usuario");
     document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
@@ -468,16 +532,23 @@ async function fetchDropdownNotifications() {
     try {
         const notificationsHTML = await Promise.all(
             notifications.map(async (n) => {
+                const actor = n.actor || {};
+                const actorName = actor.full_name || actor.username || "Alguém";
+
                 const avatar = await renderAvatar(
-                    n.actor || {},
+                    actor,
                     'w-9 h-9 rounded-full object-cover shrink-0'
                 );
 
-                const messageSpan = document.createElement('span');
-                messageSpan.textContent = n.message || 'Você recebeu uma notificação.';
-                const safeMessage = messageSpan.innerHTML;
+                let actionText = "interagiu com você.";
+                if (n.notification_type === "like") actionText = "curtiu sua publicação.";
+                else if (n.notification_type === "comment") actionText = "comentou na sua publicação.";
+                else if (n.notification_type === "friend_request") actionText = "enviou uma solicitação de amizade.";
+                else if (n.notification_type === "friend_accepted") actionText = "aceitou sua solicitação de amizade.";
+                else if (n.message) actionText = n.message;
+
                 const unreadClass = !n.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
-                let target = n.post_id ? `./feed.html?post=${encodeURIComponent(n.post_id)}` : "#";
+                let target = n.post_id ? `./feed.html?post=${encodeURIComponent(n.post_id)}` : "./perfil.html";
 
                 return `
                     <a href="${target}" onclick="markOneReadModal('${n.id}')" class="flex items-start gap-3 p-3 hover:bg-gray-50 transition ${unreadClass}">
@@ -486,7 +557,7 @@ async function fetchDropdownNotifications() {
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs text-slate-800 leading-relaxed break-words">
-                                ${safeMessage}
+                                <strong class="font-bold text-slate-900">${escapeHTML(actorName)}</strong> ${escapeHTML(actionText)}
                             </p>
                             <span class="text-[10px] text-gray-400 mt-1 block">
                                 ${formatDate(n.created_at)}
@@ -523,6 +594,7 @@ function subscribeDropdownNotifications() {
     if (notifsChannel) supabase.removeChannel(notifsChannel);
     notifsChannel = supabase.channel("feed-notifs-" + currentUser.id)
         .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: "recipient_id=eq." + currentUser.id }, async () => {
+            soundFx.playNotification();
             await checkUnreadCount();
             if (!notifDropdown.classList.contains("hidden")) await fetchDropdownNotifications();
         }).subscribe();
@@ -843,6 +915,7 @@ modalCommentForm.addEventListener("submit", async (e) => {
     const content = modalCommentInput.value.trim();
     if (!content) return;
 
+    soundFx.playPop();
     const { data, error } = await supabase.from("comments").insert({ post_id: activeModalPost.id, user_id: currentUser.id, content }).select("id, post_id, user_id, content, created_at").single();
     if (!error && data) {
         activeModalPost.comments.push(data);
@@ -881,6 +954,7 @@ publishButton.addEventListener("click", async () => {
         }
 
         postContent.value = ""; mediaInput.value = ""; filePreview.classList.add("hidden");
+        soundFx.playSuccess();
         showSuccess("Publicado com sucesso!");
         await loadFeed();
     } catch (err) {
@@ -922,6 +996,7 @@ postsContainer.addEventListener("click", async event => {
     }
 
     if (action === "save-post") {
+        soundFx.playPop();
         const { data: existing } = await supabase.from("saved_posts").select("post_id").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
         if (existing) { await supabase.from("saved_posts").delete().eq("post_id", postId).eq("user_id", currentUser.id); }
         else { await supabase.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id }); }
@@ -939,6 +1014,7 @@ postsContainer.addEventListener("click", async event => {
 
 async function applyReaction(postId, reactionType) {
     document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+    soundFx.playPop();
     const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
 
     if (existing) {
@@ -960,6 +1036,7 @@ postsContainer.addEventListener("submit", async event => {
     const content = input.value.trim();
     if (!content) return;
 
+    soundFx.playPop();
     await supabase.from("comments").insert({ post_id: postId, user_id: currentUser.id, content });
     await loadFeed();
     document.getElementById(`comments-${postId}`)?.classList.add("open");
