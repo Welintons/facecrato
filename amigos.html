@@ -4,49 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>Amigos | FaceCrato</title>
+<title>Amigos & Conexões | FaceCrato - A rede do Cariri</title>
 
 <link rel="manifest" href="./manifest.json">
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
+<body class="bg-gray-100 text-slate-900 font-sans antialiased min-h-screen">
 
-<!-- TOPO -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
-    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <!-- LOGO / BOTÃO HOME -->
-        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
-                <i data-lucide="home" class="w-5 h-5"></i>
+<!-- TOPO PADRONIZADO IDÊNTICO AO FEED E PERFIL -->
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
+    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-4">
+        
+        <!-- LOGO E PESQUISA -->
+        <div class="flex items-center gap-3">
+            <a href="./feed.html" class="flex items-center gap-2.5 group cursor-pointer" title="Início - FaceCrato">
+                <div class="w-10 h-10 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 group-hover:scale-105 transition shrink-0 border-2 border-cyan-500">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-cyan-600 leading-none">FaceCrato</span>
+                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase">Cariri · CE</span>
+                </div>
+            </a>
+
+            <div class="relative hidden sm:block">
+                <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                <input type="search" placeholder="Pesquisar no Cariri..." disabled class="w-48 lg:w-64 h-10 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
             </div>
-            FaceCrato
-        </a>
-
-        <div class="flex-1 max-w-md relative hidden sm:block">
-            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
-            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
-        <div class="ml-auto flex items-center gap-2.5">
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" onclick="location.href='./notificacoes.html'" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
-
-            <!-- BOTÃO SANDUÍCHE (Mobile) -->
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+        <!-- BOTÕES DA DIREITA -->
+        <div class="flex items-center gap-2.5 relative">
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition relative" onclick="location.href='./notificacoes.html'" title="Notificações">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+            </button>
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition" id="profileButton" title="Meu perfil">
+                <i data-lucide="user-round" class="w-5 h-5"></i>
+            </button>
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition lg:hidden" id="menuToggleBtn" title="Menu">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
         </div>
     </div>
 </header>
 
-<!-- LAYOUT PRINCIPAL -->
-<main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-7 items-start relative">
+<!-- LAYOUT PRINCIPAL DE 3 COLUNAS -->
+<main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_300px] gap-6 items-start relative">
 
     <!-- SIDEBAR ESQUERDA -->
-    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
-        <div class="flex items-center gap-3.5 pb-5 border-b border-gray-100 mb-4">
+    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
+        <div class="flex items-center gap-3.5 pb-4 border-b border-gray-100 mb-3">
             <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
             <div class="min-w-0">
                 <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
@@ -54,88 +64,120 @@
             </div>
         </div>
 
-        <div class="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-500 leading-relaxed">
-            <strong class="text-slate-800">FACECRATO</strong><br>
-            Conectando pessoas em alto estilo.
-        </div>
+        <nav class="space-y-1">
+            <a href="./feed.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="home" class="w-5 h-5"></i> Feed Principal</a>
+            <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm transition"><i data-lucide="users" class="w-5 h-5"></i> Amigos</a>
+            <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</a>
+            <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil</a>
+        </nav>
     </aside>
 
-    <!-- CONTEÚDO CENTRAL (Amigos) -->
+    <!-- CONTEÚDO CENTRAL -->
     <section class="min-w-0">
-        <div class="mb-6">
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Amigos</h1>
-            <p class="text-xs text-gray-500 mt-0.5">Encontre pessoas e gerencie suas amizades.</p>
-        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-xs">
+            <h1 class="text-xl font-black text-slate-900 tracking-tight">Amigos & Conexões</h1>
+            <p class="text-xs text-gray-500 mt-0.5">Encontre novas pessoas da região do Cariri e gerencie sua rede.</p>
 
-        <!-- PESQUISA -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-sm flex items-center gap-3">
-            <i data-lucide="search" class="w-4 h-4 text-gray-400 shrink-0"></i>
-            <input type="search" id="searchInput" placeholder="Pesquisar pessoas pelo nome ou @username..." autocomplete="off" class="w-full bg-transparent border-0 outline-none text-xs text-slate-900 placeholder:text-gray-400">
+            <!-- CAMPO DE PESQUISA -->
+            <div class="mt-5 relative">
+                <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
+                <input type="search" id="searchInput" placeholder="Pesquisar pessoas pelo nome ou @username..." autocomplete="off" class="w-full h-11 pl-11 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+            </div>
         </div>
 
         <!-- RESULTADOS DA PESQUISA -->
-        <section class="search-results mb-6" id="searchResults"></section>
+        <section class="mb-6" id="searchResults"></section>
 
-        <!-- ABAS -->
+        <!-- ABAS DE NAVEGAÇÃO DE AMIZADES -->
         <div class="grid grid-cols-3 gap-2 mb-6">
-            <button class="tab-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-bold text-cyan-700 bg-cyan-50 border-cyan-200 flex items-center justify-center gap-2" data-tab="friends">
-                <i data-lucide="users" class="w-4 h-4"></i> Meus amigos <span class="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-[10px]" id="friendsCount">0</span>
+            <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-bold text-cyan-700 bg-cyan-50 border-cyan-200 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="friends">
+                <i data-lucide="users" class="w-4 h-4"></i> <span>Meus amigos</span> <span class="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-[10px]" id="friendsCount">0</span>
             </button>
-            <button class="tab-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-gray-500 hover:text-slate-900 flex items-center justify-center gap-2" data-tab="received">
-                <i data-lucide="user-plus" class="w-4 h-4"></i> Recebidas <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="receivedCount">0</span>
+            <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-semibold text-gray-600 hover:bg-gray-50 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="received">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> <span>Recebidas</span> <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="receivedCount">0</span>
             </button>
-            <button class="tab-btn rounded-xl p-3 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-gray-500 hover:text-slate-900 flex items-center justify-center gap-2" data-tab="sent">
-                <i data-lucide="send" class="w-4 h-4"></i> Enviadas <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="sentCount">0</span>
+            <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-semibold text-gray-600 hover:bg-gray-50 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="sent">
+                <i data-lucide="send" class="w-4 h-4"></i> <span>Enviadas</span> <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="sentCount">0</span>
             </button>
         </div>
 
-        <!-- CONTEÚDO -->
-        <div id="content" class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-            <div class="p-12 text-center text-gray-400 text-xs">
-                Carregando amizades...
-            </div>
+        <!-- LISTAGEM PRINCIPAL -->
+        <div id="content" class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs p-12 text-center text-gray-400 text-xs">
+            Carregando amizades...
         </div>
     </section>
 
-    <!-- SIDEBAR DIREITA (Navegação & Logout) -->
-    <aside class="sticky top-24 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hidden lg:block">
-        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Navegação</h3>
-        <nav class="space-y-1 mb-5">
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="feed"><i data-lucide="house" class="w-4 h-4"></i> Feed</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="friends"><i data-lucide="users" class="w-4 h-4"></i> Amigos</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</button>
-            <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-4 h-4"></i> Meu perfil</button>
-        </nav>
+    <!-- SIDEBAR DIREITA (Preenchendo o vazio com widgets úteis) -->
+    <aside class="sticky top-20 space-y-6 hidden lg:block">
+        
+        <!-- WIDGET DE ESTATÍSTICAS -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs">
+            <h3 class="text-sm font-extrabold text-slate-900 mb-3 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4 text-cyan-600"></i> Sua Rede
+            </h3>
+            <div class="space-y-3 text-xs text-gray-600">
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-gray-50">
+                    <span>Conexões ativas</span>
+                    <strong class="text-slate-900 font-bold" id="widgetFriendsCount">0</strong>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-gray-50">
+                    <span>Pendências</span>
+                    <strong class="text-slate-900 font-bold" id="widgetPendingCount">0</strong>
+                </div>
+            </div>
+        </div>
 
-        <div class="h-px bg-gray-100 my-4"></div>
+        <!-- WIDGET DE CONTATOS DO CARIRI -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs">
+            <h3 class="text-sm font-extrabold text-slate-900 mb-3">Destaques do Cariri</h3>
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                    <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">M</div>
+                    <span>Mila Ribeiro</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                    <div class="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold">R</div>
+                    <span>Raissa Ribeiro</span>
+                </div>
+            </div>
+        </div>
 
-        <h3 class="text-sm font-extrabold text-slate-900 mb-3">Sessão</h3>
-        <button class="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm transition" id="logoutButton"><i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta</button>
-
-        <div class="h-px bg-gray-100 my-4"></div>
-        <p class="text-[11px] text-gray-400">FaceCrato © 2026</p>
     </aside>
 
 </main>
 
 <!-- MENU MOBILE DESLIZANTE -->
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
-<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
-    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
-        <h3 class="text-base font-black text-slate-900">Menu</h3>
-        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="menuCloseBtn"><i data-lucide="x" class="w-5 h-5"></i></button>
+<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-80 bg-white border-l border-gray-200 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
+    <div class="p-6 bg-gradient-to-br from-cyan-50 via-white to-gray-50 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500" id="mobileMenuAvatar">F</div>
+            <div class="min-w-0">
+                <strong id="mobileMenuName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="mobileMenuUsername" class="text-xs text-gray-500 truncate block">@...</small>
+            </div>
+        </div>
+        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition shrink-0" id="menuCloseBtn">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
     </div>
 
-    <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
-    <nav class="space-y-1.5 mb-6">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="feed"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" data-nav="friends"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="notifications"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" data-nav="profile"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
-    </nav>
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+        <div>
+            <h3 class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider mb-2 px-3">Navegação</h3>
+            <nav class="space-y-1">
+                <a href="./feed.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="home" class="w-5 h-5"></i> Feed Principal</a>
+                <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-cyan-50 text-cyan-700 font-bold text-sm transition"><i data-lucide="users" class="w-5 h-5"></i> Amigos & Conexões</a>
+                <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</a>
+                <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil</a>
+            </nav>
+        </div>
+    </div>
 
-    <div class="mt-auto pt-4 border-t border-gray-100">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm transition" id="logoutButtonMobile"><i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta</button>
+    <div class="p-4 border-t border-gray-100 bg-gray-50/50">
+        <button class="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-red-600 bg-red-50 hover:bg-red-100 font-bold text-sm transition shadow-xs" id="logoutButtonMobile">
+            <i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta
+        </button>
     </div>
 </div>
 
@@ -153,11 +195,56 @@ const content = document.getElementById("content");
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
 
-// Controle do Menu Sanduíche Mobile
 const menuToggleBtn = document.getElementById("menuToggleBtn");
 const menuCloseBtn = document.getElementById("menuCloseBtn");
 const mobileMenuDrawer = document.getElementById("mobileMenuDrawer");
 const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+
+// SISTEMA DE EFEITOS SONOROS (Web Audio API)
+const soundFx = {
+    ctx: null,
+    init() {
+        if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') { this.ctx.resume(); }
+    },
+    playPop() {
+        try {
+            this.init();
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.08);
+        } catch(e) {}
+    },
+    playSuccess() {
+        try {
+            this.init();
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+        } catch(e) {}
+    }
+};
 
 function toggleMobileMenu(open) {
     if (open) {
@@ -187,37 +274,20 @@ function initials(name = "F") {
     return name.trim().split(/\s+/).slice(0,2).map(p => p[0] || "").join("").toUpperCase();
 }
 
-function renderAvatar(profile, classes = "") {
+async function renderAvatar(profile, classes = "") {
     const name = profile?.full_name || profile?.username || "U";
     const avatar = profile?.avatar_url;
 
     if (avatar && /^https?:\/\//i.test(avatar)) {
-        return `
-            <div class="${classes} overflow-hidden">
-                <img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover">
-            </div>
-        `;
+        return `<div class="${classes} overflow-hidden shrink-0"><img src="${escapeHTML(avatar)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover"></div>`;
     }
-
-    return `<div class="${classes}">${escapeHTML(initials(name))}</div>`;
-}
-
-async function loadAvatarImages() {
-    const elements = document.querySelectorAll("[data-avatar-user]");
-    for (const element of elements) {
-        const id = element.dataset.avatarUser;
-        const profile = profiles[id];
-        if (!profile?.avatar_url) continue;
-
-        const { data, error } = await supabase.storage.from("avatars").createSignedUrl(profile.avatar_url, 3600);
-        if (error || !data?.signedUrl) continue;
-
-        const img = document.createElement("img");
-        img.src = data.signedUrl;
-        img.alt = "Foto de perfil";
-        img.className = "w-full h-full object-cover";
-        element.replaceChildren(img);
+    if (avatar) {
+        const { data } = await supabase.storage.from("avatars").createSignedUrl(avatar, 3600);
+        if (data?.signedUrl) {
+            return `<div class="${classes} overflow-hidden shrink-0"><img src="${escapeHTML(data.signedUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover"></div>`;
+        }
     }
+    return `<div class="${classes} flex items-center justify-center font-bold shrink-0">${escapeHTML(initials(name))}</div>`;
 }
 
 function notify(message, icon = "success") {
@@ -246,7 +316,11 @@ async function initialize() {
 
     document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
-    document.getElementById("sideAvatar").innerHTML = renderAvatar(currentProfile, "w-full h-full rounded-full flex items-center justify-center");
+    document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
+    
+    document.getElementById("mobileMenuName").textContent = currentProfile.full_name || "Usuário";
+    document.getElementById("mobileMenuUsername").textContent = "@" + (currentProfile.username || "usuario");
+    document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
 
     await loadFriendships();
 }
@@ -262,7 +336,7 @@ async function loadFriendships() {
         .order("created_at",{ascending:false});
 
     if (error) {
-        content.innerHTML = `<div class="p-12 text-center text-red-500 text-xs">Erro ao carregar amizades: ${escapeHTML(error.message)}</div>`;
+        content.innerHTML = `<div class="p-12 text-center text-red-500 text-xs">Erro ao carregar amizades.</div>`;
         return;
     }
 
@@ -286,13 +360,21 @@ function getReceived() { return friendships.filter(item => item.status === "pend
 function getSent() { return friendships.filter(item => item.status === "pending" && item.requested_by === currentUser.id); }
 
 function updateCounts() {
-    document.getElementById("friendsCount").textContent = getFriends().length;
-    document.getElementById("receivedCount").textContent = getReceived().length;
-    document.getElementById("sentCount").textContent = getSent().length;
+    const friendsLen = getFriends().length;
+    const receivedLen = getReceived().length;
+    const sentLen = getSent().length;
+
+    document.getElementById("friendsCount").textContent = friendsLen;
+    document.getElementById("receivedCount").textContent = receivedLen;
+    document.getElementById("sentCount").textContent = sentLen;
+
+    document.getElementById("widgetFriendsCount").textContent = friendsLen;
+    document.getElementById("widgetPendingCount").textContent = receivedLen + sentLen;
 }
 
 document.querySelectorAll(".tab-btn").forEach(button => {
     button.addEventListener("click", () => {
+        soundFx.playPop();
         activeTab = button.dataset.tab;
         document.querySelectorAll(".tab-btn").forEach(tab => {
             const isCurrent = tab === button;
@@ -300,14 +382,14 @@ document.querySelectorAll(".tab-btn").forEach(button => {
             tab.classList.toggle("bg-cyan-50", isCurrent);
             tab.classList.toggle("border-cyan-200", isCurrent);
             tab.classList.toggle("font-bold", isCurrent);
-            tab.classList.toggle("text-gray-500", !isCurrent);
+            tab.classList.toggle("text-gray-600", !isCurrent);
             tab.classList.toggle("font-semibold", !isCurrent);
         });
         renderTab();
     });
 });
 
-function renderTab() {
+async function renderTab() {
     let list = [];
     if (activeTab === "friends") list = getFriends();
     if (activeTab === "received") list = getReceived();
@@ -323,7 +405,7 @@ function renderTab() {
         };
         content.innerHTML = `
             <div class="p-12 text-center">
-                <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4 border border-gray-200">
+                <div class="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-4 border border-gray-200">
                     <i data-lucide="users" class="w-7 h-7 text-gray-400"></i>
                 </div>
                 <h3 class="font-bold text-slate-800 mb-1">${titles[activeTab]}</h3>
@@ -334,20 +416,22 @@ function renderTab() {
         return;
     }
 
+    const cardsHTML = await Promise.all(list.map(async item => await renderPersonCard(item)));
+
     content.innerHTML = `
-        <div class="p-5 border-b border-gray-100 bg-gray-50/50">
+        <div class="p-4 border-b border-gray-100 bg-gray-50/50">
             <h2 class="font-bold text-sm text-slate-900">${titles[activeTab]}</h2>
         </div>
         <div class="divide-y divide-gray-100">
-            ${list.map(item => renderPersonCard(item)).join("")}
+            ${cardsHTML.join("")}
         </div>
     `;
 
     attachCardEvents();
-    loadAvatarImages();
+    lucide.createIcons();
 }
 
-function renderPersonCard(friendship) {
+async function renderPersonCard(friendship) {
     const id = getOtherUser(friendship);
     const profile = profiles[id];
     if (!profile) return `<div class="p-4 text-xs text-gray-400">Perfil indisponível.</div>`;
@@ -355,35 +439,34 @@ function renderPersonCard(friendship) {
     const name = profile.full_name || "Usuário";
     const username = profile.username || "usuario";
     const location = [profile.city, profile.state].filter(Boolean).join(" - ");
+    const avatarHTML = await renderAvatar(profile, "w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden shadow-sm");
 
     let actions = "";
     if (activeTab === "friends") {
         actions = `
-            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
-            <button class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="remove" data-id="${id}">Remover</button>
+            <button class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
+            <button class="px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="remove" data-id="${id}">Remover</button>
         `;
     } else if (activeTab === "received") {
         actions = `
-            <button class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-sm" data-action="accept" data-id="${id}">Aceitar</button>
-            <button class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="decline" data-id="${id}">Recusar</button>
-            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
+            <button class="px-3.5 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-xs" data-action="accept" data-id="${id}">Aceitar</button>
+            <button class="px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="decline" data-id="${id}">Recusar</button>
+            <button class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
         `;
     } else {
         actions = `
-            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
-            <button class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="cancel" data-id="${id}">Cancelar</button>
+            <button class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${id}">Ver perfil</button>
+            <button class="px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-semibold transition" data-action="cancel" data-id="${id}">Cancelar</button>
         `;
     }
 
     return `
         <div class="p-4 flex items-center gap-4 hover:bg-gray-50/80 transition">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm" data-avatar-user="${escapeHTML(id)}">
-                ${escapeHTML(initials(name))}
-            </div>
+            ${avatarHTML}
             <div class="flex-1 min-w-0">
                 <strong class="block text-sm font-bold text-slate-900 truncate">${escapeHTML(name)}</strong>
                 <small class="text-xs text-gray-500">@${escapeHTML(username)}${location ? ` · ${escapeHTML(location)}` : ""}</small>
-                <div class="flex items-center gap-2 mt-2">${actions}</div>
+                <div class="flex items-center gap-2 mt-2.5">${actions}</div>
             </div>
         </div>
     `;
@@ -392,6 +475,7 @@ function renderPersonCard(friendship) {
 function attachCardEvents() {
     content.querySelectorAll("[data-action]").forEach(button => {
         button.addEventListener("click", async () => {
+            soundFx.playPop();
             const action = button.dataset.action;
             const userId = button.dataset.id;
             const friendship = friendships.find(item => getOtherUser(item) === userId);
@@ -404,7 +488,6 @@ function attachCardEvents() {
             if (action === "remove") { await removeFriend(friendship); return; }
         });
     });
-    lucide.createIcons();
 }
 
 async function acceptRequest(friendship, targetId) {
@@ -418,6 +501,7 @@ async function acceptRequest(friendship, targetId) {
         message: `${currentProfile.full_name || 'Alguém'} aceitou sua solicitação de amizade.`
     });
 
+    soundFx.playSuccess();
     notify("Amizade confirmada!");
     await loadFriendships();
 }
@@ -458,7 +542,7 @@ searchInput.addEventListener("input", () => {
     const term = searchInput.value.trim();
     if (term.length < 2) { searchResults.innerHTML = ""; return; }
 
-    searchResults.innerHTML = `<div class="p-6 text-center text-gray-400 text-xs">Pesquisando pessoas...</div>`;
+    searchResults.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-6 text-center text-gray-400 text-xs">Pesquisando pessoas...</div>`;
     searchTimer = setTimeout(() => searchPeople(term), 400);
 });
 
@@ -479,46 +563,47 @@ async function searchPeople(term) {
     const friendshipMap = {};
     friendships.forEach(item => friendshipMap[getOtherUser(item)] = item);
 
+    const cardsHTML = await Promise.all(data.map(async profile => {
+        const relation = friendshipMap[profile.id];
+        let actionBtn = `<button class="px-3.5 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-xs" data-search-action="add" data-id="${profile.id}">Adicionar</button>`;
+
+        if (relation?.status === "accepted") {
+            actionBtn = `<span class="text-xs text-emerald-600 font-semibold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Amigos</span>`;
+        } else if (relation?.status === "pending") {
+            actionBtn = `<span class="text-xs text-amber-600 font-semibold">Pendente</span>`;
+        }
+
+        const avatarHTML = await renderAvatar(profile, "w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden shadow-sm");
+
+        return `
+            <div class="p-4 flex items-center gap-4 hover:bg-gray-50/80 transition">
+                ${avatarHTML}
+                <div class="flex-1 min-w-0">
+                    <strong class="block text-sm font-bold text-slate-900 truncate">${escapeHTML(profile.full_name || "Usuário")}</strong>
+                    <small class="text-xs text-gray-500">@${escapeHTML(profile.username || "usuario")}</small>
+                    <div class="flex items-center gap-2 mt-2.5">
+                        <button class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-search-action="profile" data-id="${profile.id}">Ver perfil</button>
+                        ${actionBtn}
+                    </div>
+                </div>
+            </div>
+        `;
+    }));
+
     searchResults.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-            <div class="p-5 border-b border-gray-100 bg-gray-50/50">
+        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs">
+            <div class="p-4 border-b border-gray-100 bg-gray-50/50">
                 <h2 class="font-bold text-sm text-slate-900">Resultados da pesquisa</h2>
             </div>
             <div class="divide-y divide-gray-100">
-                ${data.map(profile => {
-                    const relation = friendshipMap[profile.id];
-                    let actionBtn = `<button class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-sm" data-search-action="add" data-id="${profile.id}">Adicionar</button>`;
-
-                    if (relation?.status === "accepted") {
-                        actionBtn = `<span class="text-xs text-emerald-600 font-semibold">Amigos</span>`;
-                    } else if (relation?.status === "pending") {
-                        actionBtn = `<span class="text-xs text-amber-600 font-semibold">Pendente</span>`;
-                    }
-
-                    return `
-                        <div class="p-4 flex items-center gap-4 hover:bg-gray-50/80 transition">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm" data-avatar-user="${escapeHTML(profile.id)}">
-                                ${escapeHTML(initials(profile.full_name))}
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <strong class="block text-sm font-bold text-slate-900 truncate">${escapeHTML(profile.full_name || "Usuário")}</strong>
-                                <small class="text-xs text-gray-500">@${escapeHTML(profile.username || "usuario")}</small>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-search-action="profile" data-id="${profile.id}">Ver perfil</button>
-                                    ${actionBtn}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join("")}
+                ${cardsHTML.join("")}
             </div>
         </div>
     `;
 
-    data.forEach(p => profiles[p.id] = p);
-
     searchResults.querySelectorAll("[data-search-action]").forEach(button => {
         button.addEventListener("click", async () => {
+            soundFx.playPop();
             const action = button.dataset.searchAction;
             const id = button.dataset.id;
             if (action === "profile") { location.href = profileUrl(id); return; }
@@ -526,7 +611,6 @@ async function searchPeople(term) {
         });
     });
 
-    loadAvatarImages();
     lucide.createIcons();
 }
 
@@ -550,19 +634,12 @@ async function sendFriendRequest(targetId) {
         message: `${currentProfile.full_name || 'Alguém'} enviou uma solicitação de amizade.`
     });
 
+    soundFx.playSuccess();
     notify("Solicitação enviada!");
     await loadFriendships();
     const term = searchInput.value.trim();
     if (term.length >= 2) searchPeople(term);
 }
-
-// Navegação global
-document.querySelectorAll("[data-nav]").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const destinations = { feed:"./feed.html", friends:"./amigos.html", notifications:"./notificacoes.html", profile:"./perfil.html" };
-        if (destinations[btn.dataset.nav]) window.location.href = destinations[btn.dataset.nav];
-    });
-});
 
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
@@ -571,10 +648,9 @@ const handleLogout = async () => {
     if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
 };
 
-document.getElementById("logoutButton").addEventListener("click", handleLogout);
+document.getElementById("logoutButtonMobile").addEventListener("click", handleLogout);
 
 initialize().catch(error => showError(error.message || "Erro ao iniciar a página."));
-lucide.createIcons();
 </script>
 
 </body>
