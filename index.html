@@ -7,7 +7,7 @@
 
 <title>FaceCrato - A rede do Cariri</title>
 
-<link rel="manifest" href="./manifest.json">
+<link rel="manifest" href="/facecrato/manifest.json">
 
 <style>
 * {
@@ -27,7 +27,7 @@ body {
     overflow: hidden;
 }
 
-/* IMAGEM DE FUNDO DO SERTÃO (G.ITHUB) */
+/* IMAGEM DE FUNDO DO SERTÃO (GITHUB) */
 .bg-image {
     position: absolute;
     inset: 0;
@@ -250,7 +250,8 @@ supabase.auth.onAuthStateChange((event, session) => {
 <script>
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
+        navigator.serviceWorker.register("/facecrato/service-worker.js")
+            .then(reg => console.log("Service Worker registrado com sucesso!", reg.scope))
             .catch(error => console.error("Erro PWA:", error));
     });
 }
