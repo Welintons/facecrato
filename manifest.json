@@ -1,11 +1,11 @@
 {
-  "id": "/",
+  "id": "/facecrato/",
   "name": "FaceCrato",
   "short_name": "FaceCrato",
   "description": "Uma rede social independente, conectando pessoas e comunidades.",
   "lang": "pt-BR",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/facecrato/index.html",
+  "scope": "/facecrato/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#111827",
@@ -16,19 +16,19 @@
   ],
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "/facecrato/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "/facecrato/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-maskable-512.png",
+      "src": "/facecrato/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
