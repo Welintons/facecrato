@@ -140,6 +140,13 @@
                 <div class="w-full h-16 bg-gray-100 rounded-xl"></div>
             </div>
         </div>
+
+        <!-- BOTÃO CARREGAR MAIS -->
+        <div id="loadMoreContainer" class="text-center pb-8 hidden">
+            <button id="loadMoreBtn" onclick="loadMorePosts()" class="bg-white hover:bg-gray-50 border border-gray-200 text-slate-700 text-xs font-bold px-6 py-3 rounded-xl shadow-xs transition">
+                Carregar publicações anteriores...
+            </button>
+        </div>
     </section>
 
     <!-- SIDEBAR DIREITA -->
@@ -283,6 +290,7 @@ const notificationsButton = document.getElementById("notificationsButton");
 const notifDropdown = document.getElementById("notifDropdown");
 const notifDropdownList = document.getElementById("notifDropdownList");
 const notifBadge = document.getElementById("notifBadge");
+const loadMoreContainer = document.getElementById("loadMoreContainer");
 
 const mediaModal = document.getElementById("mediaModal");
 const closeMediaModal = document.getElementById("closeMediaModal");
@@ -297,7 +305,8 @@ const nextMediaBtn = document.getElementById("nextMediaBtn");
 
 let activeModalPost = null;
 let activeMediaIndex = 0;
-let notificationsChannel = null; // Instância única do canal Realtime
+let notificationsChannel = null;
+let postLimit = 10; // Reduzido inicialmente para poupar requisições e banda do Supabase
 
 // SISTEMA DE EFEITOS SONOROS (Web Audio API)
 const soundFx = {
@@ -431,10 +440,10 @@ async function renderAvatar(profile, classes = "") {
     if (avatarPath) {
         const avatarUrl = await getStorageUrl("avatars", avatarPath);
         if (avatarUrl) {
-            return `<div class="${classes} overflow-hidden"><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover"></div>`;
+            return `<div class="${classes} overflow-hidden shrink-0"><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover" loading="lazy"></div>`;
         }
     }
-    return `<div class="${classes} flex items-center justify-center font-bold">${escapeHTML(initials(name))}</div>`;
+    return `<div class="${classes} flex items-center justify-center font-bold shrink-0">${escapeHTML(initials(name))}</div>`;
 }
 
 function formatDate(date) {
@@ -466,8 +475,6 @@ async function initialize() {
 
     await loadFeed();
     await checkUnreadCount();
-    
-    // Inicialização do Supabase Realtime de Notificações pós-autenticação
     subscribeNotifications();
 }
 
@@ -481,17 +488,14 @@ async function checkUnreadCount() {
     }
 }
 
-// ATUALIZAÇÃO DA BADGE DE NOTIFICAÇÕES (Exigida na especificação)
 async function updateNotificationBadge() {
     await checkUnreadCount();
 }
 
-// 1. SUPABASE REALTIME DE NOTIFICAÇÕES
 async function subscribeNotifications() {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) return;
 
-    // Remover canal duplicado anterior antes de criar outro
     if (notificationsChannel) {
         supabase.removeChannel(notificationsChannel);
     }
@@ -506,7 +510,6 @@ async function subscribeNotifications() {
                 filter: `recipient_id=eq.${user.id}`
             },
             async (payload) => {
-                console.log('Nova notificação recebida em tempo real:', payload);
                 soundFx.playNotification();
                 await fetchDropdownNotifications();
                 if (typeof updateNotificationBadge === 'function') {
@@ -514,23 +517,14 @@ async function subscribeNotifications() {
                 }
             }
         )
-        .subscribe((status, err) => {
-            console.log('Status da conexão Realtime (notificações):', status);
-            if (err) {
-                console.error('Erro na subscrição Realtime:', err);
-            }
-        });
+        .subscribe();
 }
 
 async function fetchDropdownNotifications() {
     const container = document.getElementById('notifDropdownList');
     if (!container) return;
 
-    container.innerHTML = `
-        <div class="p-5 text-center text-xs text-gray-400">
-            Carregando notificações...
-        </div>
-    `;
+    container.innerHTML = `<div class="p-5 text-center text-xs text-gray-400">Carregando notificações...</div>`;
 
     const { data: notifications, error } = await supabase
         .from('notifications')
@@ -551,24 +545,10 @@ async function fetchDropdownNotifications() {
         `)
         .eq('recipient_id', currentUser.id)
         .order('created_at', { ascending: false })
-        .limit(10);
+        .limit(6); // Limitado para economizar banda do Supabase
 
-    if (error) {
-        console.error('Erro ao buscar notificações:', error);
-        container.innerHTML = `
-            <div class="p-5 text-center text-xs text-red-500">
-                Erro ao carregar notificações.
-            </div>
-        `;
-        return;
-    }
-
-    if (!notifications || notifications.length === 0) {
-        container.innerHTML = `
-            <div class="p-5 text-center text-xs text-gray-400">
-                Nenhuma notificação por enquanto.
-            </div>
-        `;
+    if (error || !notifications || notifications.length === 0) {
+        container.innerHTML = `<div class="p-5 text-center text-xs text-gray-400">Nenhuma notificação por enquanto.</div>`;
         return;
     }
 
@@ -580,14 +560,14 @@ async function fetchDropdownNotifications() {
 
                 const avatar = await renderAvatar(
                     actor,
-                    'w-9 h-9 rounded-full object-cover shrink-0'
+                    'w-8 h-8 rounded-full object-cover shrink-0'
                 );
 
                 let actionText = "interagiu com você.";
                 if (n.notification_type === "like") actionText = "curtiu sua publicação.";
                 else if (n.notification_type === "comment") actionText = "comentou na sua publicação.";
-                else if (n.notification_type === "friend_request") actionText = "enviou uma solicitação de amizade.";
-                else if (n.notification_type === "friend_accepted") actionText = "aceitou sua solicitação de amizade.";
+                else if (n.notification_type === "friend_request") actionText = "enviou solicitação de amizade.";
+                else if (n.notification_type === "friend_accepted") actionText = "aceitou sua amizade.";
                 else if (n.message) actionText = n.message;
 
                 const unreadClass = !n.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
@@ -595,16 +575,12 @@ async function fetchDropdownNotifications() {
 
                 return `
                     <a href="${target}" onclick="markOneReadModal('${n.id}')" class="flex items-start gap-3 p-3 hover:bg-gray-50 transition ${unreadClass}">
-                        <div class="flex-shrink-0">
-                            ${avatar || ''}
-                        </div>
+                        <div class="flex-shrink-0">${avatar || ''}</div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs text-slate-800 leading-relaxed break-words">
                                 <strong class="font-bold text-slate-900">${escapeHTML(actorName)}</strong> ${escapeHTML(actionText)}
                             </p>
-                            <span class="text-[10px] text-gray-400 mt-1 block">
-                                ${formatDate(n.created_at)}
-                            </span>
+                            <span class="text-[10px] text-gray-400 mt-1 block">${formatDate(n.created_at)}</span>
                         </div>
                     </a>
                 `;
@@ -612,13 +588,8 @@ async function fetchDropdownNotifications() {
         );
 
         container.innerHTML = notificationsHTML.join('');
-    } catch (error) {
-        console.error('Erro ao renderizar notificações:', error);
-        container.innerHTML = `
-            <div class="p-5 text-center text-xs text-red-500">
-                Erro ao exibir notificações.
-            </div>
-        `;
+    } catch (err) {
+        container.innerHTML = `<div class="p-5 text-center text-xs text-red-500">Erro ao carregar.</div>`;
     }
 }
 
@@ -646,7 +617,7 @@ async function loadFeed() {
     loadingFeed = true;
 
     try {
-        let query = supabase.from("posts").select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`).order("created_at", { ascending:false }).limit(40);
+        let query = supabase.from("posts").select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`).order("created_at", { ascending:false }).limit(postLimit);
         if (currentFeed === "friends") query = query.in("user_id", await getFriendIds());
 
         const { data: posts, error } = await query;
@@ -654,8 +625,16 @@ async function loadFeed() {
 
         if (!posts || posts.length === 0) {
             postsContainer.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-500"><i data-lucide="messages-square" class="w-10 h-10 mx-auto mb-3 text-gray-400"></i><strong class="block text-slate-800 text-base mb-1">Nenhuma publicação por aqui</strong><p class="text-xs">Quando houver publicações disponíveis no Cariri, elas aparecerão aqui.</p></div>`;
+            loadMoreContainer.classList.add("hidden");
             lucide.createIcons();
             return;
+        }
+
+        // Se retornou a quantidade limite, exibe o botão para carregar mais
+        if (posts.length >= postLimit) {
+            loadMoreContainer.classList.remove("hidden");
+        } else {
+            loadMoreContainer.classList.add("hidden");
         }
 
         const postIds = posts.map(p => p.id);
@@ -701,6 +680,14 @@ async function loadFeed() {
     }
 }
 
+window.loadMorePosts = async function() {
+    postLimit += 10;
+    const btn = document.getElementById("loadMoreBtn");
+    if(btn) btn.textContent = "Carregando...";
+    await loadFeed();
+    if(btn) btn.textContent = "Carregar publicações anteriores...";
+}
+
 async function renderPosts(posts) {
     const postHTMLs = await Promise.all(posts.map(async post => {
         const author = post.author || { full_name:"Usuário", username:"usuario" };
@@ -727,14 +714,15 @@ async function renderPosts(posts) {
                 </div>`;
         }).join("");
 
-        const commentsHTML = (await Promise.all(post.comments.map(async c => {
+        // Miniaturas de comentários otimizadas (menor tamanho e carregamento preguiçoso)
+        const commentsHTML = (await Promise.all(post.comments.slice(0, 5).map(async c => {
             const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
-            const commentAvatarHTML = await renderAvatar(commentAuthor, "w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs");
+            const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-[10px]");
             return `
-                <div class="flex gap-3 my-3">
+                <div class="flex gap-2.5 my-2.5">
                     ${commentAvatarHTML}
-                    <div class="flex-1 bg-gray-50 border border-gray-200 p-3.5 rounded-2xl text-xs">
-                        <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                    <div class="flex-1 bg-gray-50 border border-gray-200 p-3 rounded-2xl text-xs">
+                        <strong class="block text-cyan-700 font-bold mb-0.5">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
                         <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
                     </div>
                 </div>
