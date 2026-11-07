@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+
+<title>Instalando FaceCrato</title>
+
+<link rel="manifest" href="/facecrato/manifest.json">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b1120;
+    color: #f8fafc;
+    font-family: Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+/* IMAGEM DE FUNDO DO SERTÃO */
+.bg-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(35%) contrast(125%);
+    background-image: url('https://raw.githubusercontent.com/Welintons/wsinforcrato/main/77c47f9b19a16142691c7837c67f08c2.jpg');
+    z-index: 0;
+}
+
+.bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 17, 32, 0.85);
+    z-index: 1;
+}
+
+.container {
+    text-align: center;
+    padding: 35px 25px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #0f172a;
+}
+
+.logo-wrapper {
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
+    border: 3px solid #0891b2;
+}
+
+.logo-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+h1 {
+    font-size: 26px;
+    margin: 0 0 4px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #0891b2;
+}
+
+.subtitle {
+    font-size: 11px;
+    font-weight: 800;
+    color: #d97706;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* BOTÃO DE INSTALAÇÃO */
+#installBtn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #0891b2, #0e7490);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(8, 145, 178, 0.4);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#installBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(8, 145, 178, 0.6);
+}
+
+/* ÁREA DA ANIMAÇÃO DE INSTALAÇÃO (INICIALMENTE OCULTA) */
+#installingArea {
+    display: none;
+    margin-top: 15px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #0891b2, #10b981);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+#statusText {
+    font-size: 12px;
+    font-weight: bold;
+    color: #0e7490;
+    min-height: 18px;
+}
+
+.voltar-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #0891b2;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.voltar-link:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+
+<div class="container">
+
+    <div class="logo-wrapper">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="FaceCrato Logo">
+    </div>
+
+    <h1>FaceCrato</h1>
+    <div class="subtitle">Cariri · Ceará</div>
+
+    <p id="infoText">Tenha a rede social do Cariri direto na tela inicial do seu celular, com acesso rápido e offline.</p>
+
+    <!-- BOTÃO GIGANTE -->
+    <button id="installBtn">Instalar Aplicativo</button>
+
+    <!-- ANIMAÇÃO DE CARREGAMENTO / INSTALAÇÃO -->
+    <div id="installingArea">
+        <div class="progress-bar-container">
+            <div id="progressFill" class="progress-bar-fill"></div>
+        </div>
+        <div id="statusText">Iniciando download...</div>
+    </div>
+
+    <div>
+        <a href="/facecrato/feed.html" class="voltar-link">← Ir para o Feed</a>
+    </div>
+
+</div>
+
+<script>
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+const installingArea = document.getElementById("installingArea");
+const progressFill = document.getElementById("progressFill");
+const statusText = document.getElementById("statusText");
+const infoText = document.getElementById("infoText");
+
+// Captura o evento nativo do PWA
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+// Ação ao clicar no botão de instalar
+installBtn.addEventListener("click", async () => {
+    // Esconde o botão e revela a barra de progresso estilizada
+    installBtn.style.display = "none";
+    installingArea.style.display = "block";
+    infoText.textContent = "Preparando os arquivos do FaceCrato...";
+
+    // Sequência de animação "fake" super charmosa (estilo loja oficial)
+    setTimeout(() => {
+        progressFill.style.width = "35%";
+        statusText.textContent = "Baixando recursos e dados do Cariri...";
+    }, 600);
+
+    setTimeout(() => {
+        progressFill.style.width = "70%";
+        statusText.textContent = "Configurando ambiente seguro...";
+    }, 1500);
+
+    setTimeout(() => {
+        progressFill.style.width = "95%";
+        statusText.textContent = "Quase pronto para instalar...";
+    }, 2400);
+
+    // Quando a barra chega perto do fim, disparamos a instalação real debaixo dos panos!
+    setTimeout(async () => {
+        progressFill.style.width = "100%";
+        statusText.textContent = "Finalizando instalação no dispositivo!";
+
+        if (deferredPrompt) {
+            // Chama a gaveta oficial de instalação do celular
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === "accepted") {
+                infoText.textContent = "Sucesso! O FaceCrato foi instalado na sua tela inicial.";
+            } else {
+                infoText.textContent = "Instalação cancelada. Você pode tentar de novo quando quiser!";
+                installBtn.style.display = "block";
+                installingArea.style.display = "none";
+                progressFill.style.width = "0%";
+            }
+            deferredPrompt = null;
+        } else {
+            // Caso o navegador gerencie por fora, dá uma mensagem amigável após a animação
+            setTimeout(() => {
+                infoText.textContent = "Tudo pronto! Verifique a tela inicial ou o menu do seu navegador.";
+                installingArea.style.display = "none";
+            }, 1000);
+        }
+    }, 3200);
+});
+
+// Detecta se já foi instalado
+window.addEventListener("appinstalled", () => {
+    infoText.textContent = "O FaceCrato já faz parte do seu celular!";
+    installingArea.style.display = "none";
+    installBtn.style.display = "none";
+});
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/facecrato/service-worker.js")
+            .catch(error => console.error("Erro PWA:", error));
+    });
+}
+</script>
+
+</body>
+</html>
