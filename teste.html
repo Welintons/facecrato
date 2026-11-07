@@ -85,7 +85,7 @@
     <!-- SIDEBAR ESQUERDA -->
     <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
         <div class="flex items-center gap-3.5 pb-4 border-b border-gray-100 mb-3">
-            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm cursor-pointer" id="sideAvatar">F</div>
             <div class="min-w-0">
                 <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
                 <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
@@ -106,7 +106,7 @@
         <!-- CRIAR PUBLICAÇÃO -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-xs">
             <div class="flex gap-3 items-center pb-3 border-b border-gray-100">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs" id="composerAvatar">F</div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs cursor-pointer" id="composerAvatar">F</div>
                 <textarea id="postContent" maxlength="5000" placeholder="No que você está pensando por estas bandas?" class="w-full bg-gray-100 hover:bg-gray-200/50 focus:bg-white border border-transparent focus:border-cyan-600 rounded-full px-4 py-2.5 text-sm text-slate-900 focus:outline-none transition resize-none h-11 placeholder:text-gray-500"></textarea>
             </div>
 
@@ -166,7 +166,7 @@
 
 </main>
 
-<!-- MODAL DE MÍDIA COM PLAYER PERSONALIZADO E COMENTÁRIOS PAGINADOS -->
+<!-- MODAL DE MÍDIA / COMENTÁRIOS -->
 <div id="mediaModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[200] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
     <div class="bg-white w-full max-w-6xl h-[92vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
         
@@ -175,8 +175,8 @@
             <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
-        <!-- LADO ESQUERDO: MÍDIA E PLAYER -->
-        <div class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
+        <!-- LADO ESQUERDO: MÍDIA OU MENSAGEM -->
+        <div id="modalLeftPane" class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
             <div id="modalMediaContainer" class="w-full h-full flex items-center justify-center relative"></div>
             
             <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
@@ -187,7 +187,7 @@
             </button>
         </div>
 
-        <!-- LADO DIREITO: DETALHES E COMENTÁRIOS COM PAGINAÇÃO -->
+        <!-- LADO DIREITO: DETALHES E COMENTÁRIOS -->
         <div class="w-full lg:w-[420px] bg-white flex flex-col h-[42vh] lg:h-full border-t lg:border-t-0 lg:border-l border-gray-200">
             <div class="p-4 border-b border-gray-100 flex items-center gap-3" id="modalAuthorHeader"></div>
             <div class="p-4 border-b border-gray-100 overflow-y-auto max-h-32 text-xs text-slate-800" id="modalPostContent"></div>
@@ -206,6 +206,18 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<!-- MODAL DE AVATAR AMPLIADO -->
+<div id="avatarModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[350] hidden items-center justify-center p-4">
+    <div class="relative max-w-lg w-full flex flex-col items-center">
+        <button onclick="closeAvatarModal()" class="absolute -top-12 right-0 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center transition">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-cyan-500 bg-black flex items-center justify-center">
+            <img id="modalAvatarImage" src="" alt="Foto de perfil" class="w-full h-full object-cover">
+        </div>
     </div>
 </div>
 
@@ -228,7 +240,7 @@
     
     <div class="p-6 bg-gradient-to-br from-cyan-50 via-white to-gray-50 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-3.5 min-w-0">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500" id="mobileMenuAvatar">F</div>
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500 cursor-pointer" id="mobileMenuAvatar">F</div>
             <div class="min-w-0">
                 <strong id="mobileMenuName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
                 <small id="mobileMenuUsername" class="text-xs text-gray-500 truncate block">@...</small>
@@ -310,6 +322,7 @@ const loadMoreContainer = document.getElementById("loadMoreContainer");
 
 const mediaModal = document.getElementById("mediaModal");
 const closeMediaModal = document.getElementById("closeMediaModal");
+const modalLeftPane = document.getElementById("modalLeftPane");
 const modalMediaContainer = document.getElementById("modalMediaContainer");
 const modalAuthorHeader = document.getElementById("modalAuthorHeader");
 const modalPostContent = document.getElementById("modalPostContent");
@@ -319,6 +332,9 @@ const modalCommentForm = document.getElementById("modalCommentForm");
 const modalCommentInput = document.getElementById("modalCommentInput");
 const prevMediaBtn = document.getElementById("prevMediaBtn");
 const nextMediaBtn = document.getElementById("nextMediaBtn");
+
+const avatarModal = document.getElementById("avatarModal");
+const modalAvatarImage = document.getElementById("modalAvatarImage");
 
 let activeModalPost = null;
 let activeMediaIndex = 0;
@@ -458,17 +474,36 @@ async function getStorageUrl(bucket, path) {
     return data.signedUrl;
 }
 
-async function renderAvatar(profile, classes = "") {
+async function renderAvatar(profile, classes = "", onClickJs = "") {
     const name = profile?.full_name || profile?.username || "U";
     const avatarPath = profile?.avatar_url;
+    const userId = profile?.id || "";
 
     if (avatarPath) {
         const avatarUrl = await getStorageUrl("avatars", avatarPath);
         if (avatarUrl) {
-            return `<div class="${classes} overflow-hidden shrink-0"><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover" loading="lazy"></div>`;
+            const clickAttr = onClickJs ? `onclick="${onClickJs}"` : `onclick="openAvatarModalFromUrl('${escapeHTML(avatarUrl)}')"`;
+            return `<div class="${classes} overflow-hidden shrink-0 cursor-pointer hover:opacity-90 transition" ${clickAttr}><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover" loading="lazy"></div>`;
         }
     }
-    return `<div class="${classes} flex items-center justify-center font-bold shrink-0">${escapeHTML(initials(name))}</div>`;
+    const defaultClick = onClickJs ? `onclick="${onClickJs}"` : "";
+    return `<div class="${classes} flex items-center justify-center font-bold shrink-0 cursor-pointer hover:opacity-90 transition bg-gradient-to-tr from-cyan-600 to-violet-600 text-white" ${defaultClick}>${escapeHTML(initials(name))}</div>`;
+}
+
+window.openAvatarModalFromUrl = function(url) {
+    if (!url) return;
+    modalAvatarImage.src = url;
+    avatarModal.classList.remove("hidden");
+    avatarModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+}
+
+window.closeAvatarModal = function() {
+    avatarModal.classList.add("hidden");
+    avatarModal.classList.remove("flex");
+    if (mediaModal.classList.contains("hidden")) {
+        document.body.style.overflow = "auto";
+    }
 }
 
 function formatDate(date) {
@@ -480,7 +515,6 @@ function formatDate(date) {
 function showError(text) { Swal.fire({ icon:"error", title:"Ops!", text }); }
 function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"success", title:text, showConfirmButton:false, timer:2200 }); }
 
-// Compressão de avatar para no máximo 512x512 em WebP (75-80%)
 async function compressAvatarImage(file) {
     return new Promise((resolve) => {
         if (!file.type.startsWith("image/")) { resolve(file); return; }
@@ -524,12 +558,12 @@ async function initialize() {
     document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
     
-    document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
-    document.getElementById("composerAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white");
+    document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full", `window.location.href='./perfil.html'`);
+    document.getElementById("composerAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full", `window.location.href='./perfil.html'`);
 
     document.getElementById("mobileMenuName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("mobileMenuUsername").textContent = "@" + (currentProfile.username || "usuario");
-    document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
+    document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full", `window.location.href='./perfil.html'`);
 
     await loadFeed();
     await checkUnreadCount();
@@ -738,10 +772,9 @@ async function renderPosts(posts) {
                 </div>`;
         }).join("");
 
-        const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
+        const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden", `window.location.href='./perfil.html?id=${escapeHTML(author.id || post.user_id)}'`);
         const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
-        // Menu de 3 pontos para as publicações do usuário autenticado
         const isOwner = post.user_id === currentUser.id;
         const ownerMenuHTML = isOwner ? `
             <div class="relative group/menu">
@@ -760,7 +793,7 @@ async function renderPosts(posts) {
                 <div class="flex items-center gap-3.5 mb-3">
                     ${authorAvatarHTML}
                     <div class="flex-1 min-w-0">
-                        <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+                        <a href="./perfil.html?id=${escapeHTML(author.id || post.user_id)}" class="block text-sm font-bold text-slate-900 hover:underline truncate">${escapeHTML(author.full_name || "Usuário")}</a>
                         <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
                     </div>
                     ${ownerMenuHTML}
@@ -806,6 +839,23 @@ async function renderPosts(posts) {
     lucide.createIcons();
 }
 
+// Abre o modal diretamente nos comentários (sem mensagens de "sem mídia")
+window.openCommentsModalOnly = function(postId) {
+    const post = globalPostsCache.find(p => p.id === postId);
+    if (!post) return;
+
+    activeModalPost = post;
+    activeMediaIndex = 0;
+    modalCommentLimit = 3;
+
+    modalLeftPane.classList.add("hidden"); // Esconde a parte de mídia se clicar em Comentar
+    updateModalHeaderAndContent();
+    loadAndRenderModalComments();
+    mediaModal.classList.remove("hidden");
+    mediaModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+}
+
 window.openMediaModal = function(postId, mediaIndex = 0) {
     const post = globalPostsCache.find(p => p.id === postId);
     if (!post || !post.media || post.media.length === 0) return;
@@ -814,16 +864,18 @@ window.openMediaModal = function(postId, mediaIndex = 0) {
     activeMediaIndex = mediaIndex;
     modalCommentLimit = 3;
 
-    updateModalContent();
+    modalLeftPane.classList.remove("hidden"); // Mostra o visualizador de mídia
+    updateModalMediaContent();
+    updateModalHeaderAndContent();
+    loadAndRenderModalComments();
     mediaModal.classList.remove("hidden");
     mediaModal.classList.add("flex");
     document.body.style.overflow = "hidden";
 }
 
-async function updateModalContent() {
+function updateModalMediaContent() {
     if (!activeModalPost) return;
     const media = activeModalPost.media[activeMediaIndex];
-    const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
 
     if (media.media_type === "video") {
         modalMediaContainer.innerHTML = `
@@ -852,18 +904,22 @@ async function updateModalContent() {
         prevMediaBtn.classList.add("hidden");
         nextMediaBtn.classList.add("hidden");
     }
+}
 
-    const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
+async function updateModalHeaderAndContent() {
+    if (!activeModalPost) return;
+    const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
+    const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden", `window.location.href='./perfil.html?id=${escapeHTML(author.id || activeModalPost.user_id)}'`);
+    
     modalAuthorHeader.innerHTML = `
         ${authorAvatarHTML}
         <div class="flex-1 min-w-0">
-            <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
+            <a href="./perfil.html?id=${escapeHTML(author.id || activeModalPost.user_id)}" class="block text-sm font-bold text-slate-900 hover:underline truncate">${escapeHTML(author.full_name || "Usuário")}</a>
             <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(activeModalPost.created_at))}</small>
         </div>
     `;
 
     modalPostContent.innerHTML = activeModalPost.content ? `<p class="text-slate-800 leading-relaxed whitespace-pre-wrap">${formatRichText(activeModalPost.content)}</p>` : `<span class="text-gray-400 italic">Sem legenda.</span>`;
-    await loadAndRenderModalComments();
     lucide.createIcons();
 }
 
@@ -892,12 +948,12 @@ async function loadAndRenderModalComments() {
 
     const commentsHTMLs = await Promise.all(comments.map(async c => {
         const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
-        const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs");
+        const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs", `window.location.href='./perfil.html?id=${escapeHTML(commentAuthor.id || c.user_id)}'`);
         return `
             <div class="flex gap-3 py-2">
                 ${commentAvatarHTML}
                 <div class="flex-1 bg-gray-50 border border-gray-100 p-3 rounded-2xl text-xs">
-                    <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                    <a href="./perfil.html?id=${escapeHTML(commentAuthor.id || c.user_id)}" class="block text-cyan-700 font-bold hover:underline mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</a>
                     <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
                 </div>
             </div>
@@ -959,8 +1015,8 @@ function setupCustomVideoPlayer() {
     fullscreenBtn.addEventListener("click", () => { if (video.requestFullscreen) video.requestFullscreen(); });
 }
 
-prevMediaBtn.addEventListener("click", () => { if (activeMediaIndex > 0) { activeMediaIndex--; updateModalContent(); } });
-nextMediaBtn.addEventListener("click", () => { if (activeModalPost && activeMediaIndex < activeModalPost.media.length - 1) { activeMediaIndex++; updateModalContent(); } });
+prevMediaBtn.addEventListener("click", () => { if (activeMediaIndex > 0) { activeMediaIndex--; updateModalMediaContent(); } });
+nextMediaBtn.addEventListener("click", () => { if (activeModalPost && activeMediaIndex < activeModalPost.media.length - 1) { activeMediaIndex++; updateModalMediaContent(); } });
 
 closeMediaModal.addEventListener("click", closeModal);
 mediaModal.addEventListener("click", (e) => { if (e.target === mediaModal) closeModal(); });
@@ -1060,32 +1116,7 @@ postsContainer.addEventListener("click", async event => {
     }
 
     if (action === "open-comments-modal") {
-        const post = globalPostsCache.find(p => p.id === postId);
-        if (post && post.media && post.media.length > 0) {
-            openMediaModal(postId, 0);
-        } else {
-            // Se o post não tiver mídia, abre o modal direto forçando a view de comentários
-            activeModalPost = post;
-            activeMediaIndex = 0;
-            modalCommentLimit = 3;
-            modalMediaContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-xs">Sem mídia nesta publicação</div>`;
-            prevMediaBtn.classList.add("hidden");
-            nextMediaBtn.classList.add("hidden");
-            const author = post.author || { full_name: "Usuário", username: "usuario" };
-            const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
-            modalAuthorHeader.innerHTML = `
-                ${authorAvatarHTML}
-                <div class="flex-1 min-w-0">
-                    <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
-                    <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))}</small>
-                </div>
-            `;
-            modalPostContent.innerHTML = post.content ? `<p class="text-slate-800 leading-relaxed whitespace-pre-wrap">${formatRichText(post.content)}</p>` : `<span class="text-gray-400 italic">Sem legenda.</span>`;
-            await loadAndRenderModalComments();
-            mediaModal.classList.remove("hidden");
-            mediaModal.classList.add("flex");
-            document.body.style.overflow = "hidden";
-        }
+        openCommentsModalOnly(postId);
         return;
     }
 
@@ -1148,21 +1179,6 @@ async function applyReaction(postId, reactionType) {
     }
     await loadFeed();
 }
-
-modalCommentForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!activeModalPost) return;
-    const content = modalCommentInput.value.trim();
-    if (!content) return;
-
-    soundFx.playPop();
-    const { error } = await supabase.from("comments").insert({ post_id: activeModalPost.id, user_id: currentUser.id, content });
-    if (!error) {
-        modalCommentInput.value = "";
-        await loadAndRenderModalComments();
-        await loadFeed();
-    }
-});
 
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
