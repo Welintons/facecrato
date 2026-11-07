@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. IMPORTAÇÕES E CONFIGURAÇÕES INICIAIS
+   1. IMPORTAÇÕES E SELETORES DE ELEMENTOS DO DOM
    ========================================================================== */
 import { supabase } from "./supabase.js";
 
@@ -23,30 +23,26 @@ const loadMoreContainer = document.getElementById("loadMoreContainer");
 
 const mediaModal = document.getElementById("mediaModal");
 const closeMediaModal = document.getElementById("closeMediaModal");
-const modalLeftPane = document.getElementById("modalLeftPane");
 const modalMediaContainer = document.getElementById("modalMediaContainer");
 const modalAuthorHeader = document.getElementById("modalAuthorHeader");
 const modalPostContent = document.getElementById("modalPostContent");
 const modalCommentsList = document.getElementById("modalCommentsList");
-const loadMoreCommentsContainer = document.getElementById("loadMoreCommentsContainer");
 const modalCommentForm = document.getElementById("modalCommentForm");
 const modalCommentInput = document.getElementById("modalCommentInput");
 const prevMediaBtn = document.getElementById("prevMediaBtn");
 const nextMediaBtn = document.getElementById("nextMediaBtn");
 
-const avatarModal = document.getElementById("avatarModal");
-const modalAvatarImage = document.getElementById("modalAvatarImage");
-
 let activeModalPost = null;
 let activeMediaIndex = 0;
-let modalCommentLimit = 3;
 let notificationsChannel = null;
 let postLimit = 10;
+let currentUser = null;
+let currentProfile = null;
+let currentFeed = "discover";
+let loadingFeed = false;
 let globalPostsCache = [];
 
-// CACHES EM MEMÓRIA PARA MÁXIMA VELOCIDADE (Evita requisições repetidas)
-const storageUrlCache = new Map();
-const avatarUrlCache = new Map();
+const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
 
 
 /* ==========================================================================
@@ -118,7 +114,7 @@ const soundFx = {
 
 
 /* ==========================================================================
-   3. MENU MOBILE E INTERFACES DE TOPO
+   3. CONTROLE DO MENU MOBILE E INTERFACES DE NAVEGAÇÃO
    ========================================================================== */
 function toggleMobileMenu(open) {
     if (open) {
@@ -150,14 +146,8 @@ document.addEventListener("click", (e) => {
 
 
 /* ==========================================================================
-   4. FUNÇÕES UTILITÁRIAS E SEGURANÇA (HTML Escape, RichText, Datas)
+   4. FUNÇÕES UTILITÁRIAS (Segurança HTML, RichText, Datas, Alertas)
    ========================================================================== */
-let currentUser = null;
-let currentProfile = null;
-let loadingFeed = false;
-
-const reactionIcons = { like: "👍", love: "❤️", haha: "😂", wow: "😮", sad: "😢", angry: "😡" };
-
 function escapeHTML(value = "") {
     return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 }
@@ -185,73 +175,32 @@ function showSuccess(text) { Swal.fire({ toast:true, position:"top", icon:"succe
 
 
 /* ==========================================================================
-   5. GERENCIAMENTO DE STORAGE E CACHE DE AVATARES
+   5. GERENCIAMENTO DE STORAGE E RENDERIZAÇÃO DE AVATARES
    ========================================================================== */
 async function getStorageUrl(bucket, path) {
     if (!path) return null;
     if (/^https?:\/\//i.test(path)) return path;
-    const cacheKey = `${bucket}:${path}`;
-    if (storageUrlCache.has(cacheKey)) {
-        const cached = storageUrlCache.get(cacheKey);
-        if (cached.expires > Date.now()) return cached.url;
-    }
     const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600);
-    if (error || !data?.signedUrl) return null;
-    storageUrlCache.set(cacheKey, { url: data.signedUrl, expires: Date.now() + 3000 * 1000 });
-    return data.signedUrl;
+    if (error) return null;
+    return data?.signedUrl || null;
 }
 
-// Cache global de avatares em memória para evitar reprocessamento
-async function getCachedAvatarUrl(profile) {
-    if (!profile || !profile.avatar_url) return null;
-    const userId = profile.id;
-    const avatarPath = profile.avatar_url;
+async function renderAvatar(profile, classes = "") {
+    const name = profile?.full_name || profile?.username || "U";
+    const avatarPath = profile?.avatar_url;
 
-    if (avatarUrlCache.has(userId)) {
-        const cached = avatarUrlCache.get(userId);
-        if (cached.path === avatarPath && cached.expires > Date.now()) {
-            return cached.url;
+    if (avatarPath) {
+        const avatarUrl = await getStorageUrl("avatars", avatarPath);
+        if (avatarUrl) {
+            return `<div class="${classes} overflow-hidden shrink-0"><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover" loading="lazy"></div>`;
         }
     }
-
-    const url = await getStorageUrl("avatars", avatarPath);
-    if (url) {
-        avatarUrlCache.set(userId, { path: avatarPath, url, expires: Date.now() + 3000 * 1000 });
-    }
-    return url;
-}
-
-async function renderAvatar(profile, classes = "", onClickJs = "") {
-    const name = profile?.full_name || profile?.username || "U";
-    const avatarUrl = await getCachedAvatarUrl(profile);
-
-    if (avatarUrl) {
-        const clickAttr = onClickJs ? `onclick="${onClickJs}"` : `onclick="openAvatarModalFromUrl('${escapeHTML(avatarUrl)}')"`;
-        return `<div class="${classes} overflow-hidden shrink-0 cursor-pointer hover:opacity-90 transition" ${clickAttr}><img src="${escapeHTML(avatarUrl)}" alt="${escapeHTML(name)}" class="w-full h-full object-cover" loading="lazy"></div>`;
-    }
-    const defaultClick = onClickJs ? `onclick="${onClickJs}"` : "";
-    return `<div class="${classes} flex items-center justify-center font-bold shrink-0 cursor-pointer hover:opacity-90 transition bg-gradient-to-tr from-cyan-600 to-violet-600 text-white" ${defaultClick}>${escapeHTML(initials(name))}</div>`;
-}
-
-window.openAvatarModalFromUrl = function(url) {
-    if (!url) return;
-    modalAvatarImage.src = url;
-    avatarModal.classList.remove("hidden");
-    avatarModal.classList.add("flex");
-    document.body.style.overflow = "hidden";
-}
-
-window.closeAvatarModal = function() {
-    avatarModal.classList.add("hidden");
-    avatarModal.classList.remove("flex");
-    if (mediaModal.classList.contains("hidden")) {
-        document.body.style.overflow = "auto";
-    }
+    return `<div class="${classes} flex items-center justify-center font-bold shrink-0">${escapeHTML(initials(name))}</div>`;
 }
 
 
 /* ==========================================================================
-   6. INICIALIZAÇÃO DA SESSÃO E DADOS DO USUÁRIO
+   6. INICIALIZAÇÃO DA SESSÃO E DADOS DO USUÁRIO LOGADO
    ========================================================================== */
 async function initialize() {
     const { data, error } = await supabase.auth.getSession();
@@ -264,12 +213,12 @@ async function initialize() {
     document.getElementById("sideName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("sideUsername").textContent = "@" + (currentProfile.username || "usuario");
     
-    document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full", `window.location.href='./perfil.html'`);
-    document.getElementById("composerAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full", `window.location.href='./perfil.html'`);
+    document.getElementById("sideAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
+    document.getElementById("composerAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white");
 
     document.getElementById("mobileMenuName").textContent = currentProfile.full_name || "Usuário";
     document.getElementById("mobileMenuUsername").textContent = "@" + (currentProfile.username || "usuario");
-    document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full", `window.location.href='./perfil.html'`);
+    document.getElementById("mobileMenuAvatar").innerHTML = await renderAvatar(currentProfile, "w-full h-full rounded-full");
 
     await loadFeed();
     await checkUnreadCount();
@@ -278,7 +227,7 @@ async function initialize() {
 
 
 /* ==========================================================================
-   7. SISTEMA DE NOTIFICAÇÕES (Realtime)
+   7. SISTEMA DE NOTIFICAÇÕES (Contador e Tempo Real)
    ========================================================================== */
 async function checkUnreadCount() {
     const { count, error } = await supabase.from("notifications").select("*", { count: "exact", head: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
@@ -383,14 +332,23 @@ window.markAllReadFromDropdown = async function() {
 
 
 /* ==========================================================================
-   8. CARREGAMENTO E RENDERIZAÇÃO DO FEED DE POSTS
+   8. BUSCA E CARREGAMENTO DO FEED (Posts, Mídias, Comentários e Curtidas)
    ========================================================================== */
+async function getFriendIds() {
+    const { data, error } = await supabase.from("friendships").select("user_a,user_b").eq("status", "accepted").or(`user_a.eq.${currentUser.id},user_b.eq.${currentUser.id}`);
+    if (error) throw error;
+    const ids = new Set([currentUser.id]);
+    (data || []).forEach(f => ids.add(f.user_a === currentUser.id ? f.user_b : f.user_a));
+    return [...ids];
+}
+
 async function loadFeed() {
     if (loadingFeed) return;
     loadingFeed = true;
 
     try {
         let query = supabase.from("posts").select(`id, user_id, content, post_type, visibility, comments_permission, created_at, edited_at`).order("created_at", { ascending:false }).limit(postLimit);
+        if (currentFeed === "friends") query = query.in("user_id", await getFriendIds());
 
         const { data: posts, error } = await query;
         if (error) throw error;
@@ -411,26 +369,34 @@ async function loadFeed() {
         const postIds = posts.map(p => p.id);
         const userIds = [...new Set(posts.map(p => p.user_id))];
 
-        const [profilesRes, mediaRes, reactionsRes, savedRes] = await Promise.all([
+        const [profilesRes, mediaRes, reactionsRes, commentsRes, savedRes] = await Promise.all([
             supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", userIds),
             supabase.from("post_media").select("id,post_id,media_url,media_type,position").in("post_id", postIds).order("position"),
             supabase.from("reactions").select("post_id,user_id,reaction_type").in("post_id", postIds),
+            supabase.from("comments").select("id,post_id,user_id,content,created_at,parent_id").in("post_id", postIds).is("parent_id", null).order("created_at", { ascending:true }),
             supabase.from("saved_posts").select("post_id").eq("user_id", currentUser.id).in("post_id", postIds)
         ]);
 
         const profileMap = Object.fromEntries((profilesRes.data || []).map(p => [p.id, p]));
+        const commentUserIds = [...new Set((commentsRes.data || []).map(c => c.user_id))].filter(id => !profileMap[id]);
+
+        if (commentUserIds.length) {
+            const { data: commentProfiles } = await supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", commentUserIds);
+            (commentProfiles || []).forEach(profile => { profileMap[profile.id] = profile; });
+        }
+
         const mediaMap = {}; (mediaRes.data || []).forEach(m => { if (!mediaMap[m.post_id]) mediaMap[m.post_id] = []; mediaMap[m.post_id].push(m); });
+        const commentsMap = {}; (commentsRes.data || []).forEach(c => { if (!commentsMap[c.post_id]) commentsMap[c.post_id] = []; commentsMap[c.post_id].push(c); });
         const reactionMap = {}; (reactionsRes.data || []).forEach(r => { if (!reactionMap[r.post_id]) reactionMap[r.post_id] = []; reactionMap[r.post_id].push(r); });
         const saved = new Set((savedRes.data || []).map(s => s.post_id));
 
         const prepared = await Promise.all(posts.map(async post => {
             const postMedia = mediaMap[post.id] || [];
             const signedMedia = await Promise.all(postMedia.map(async item => {
-                const signedUrl = await getStorageUrl("post-media", item.media_url);
-                return {...item, signedUrl};
+                const { data } = await supabase.storage.from("post-media").createSignedUrl(item.media_url, 3600);
+                return {...item, signedUrl: data?.signedUrl || null};
             }));
-            const { count: commentCount } = await supabase.from("comments").select("*", { count: "exact", head: true }).eq("post_id", post.id).is("parent_id", null);
-            return { ...post, author: profileMap[post.user_id], media: signedMedia, reactions: reactionMap[post.id] || [], commentCount: commentCount || 0, saved: saved.has(post.id) };
+            return { ...post, author: profileMap[post.user_id], media: signedMedia, reactions: reactionMap[post.id] || [], comments: commentsMap[post.id] || [], saved: saved.has(post.id) };
         }));
 
         globalPostsCache = prepared;
@@ -451,12 +417,16 @@ window.loadMorePosts = async function() {
     if(btn) btn.textContent = "Carregar publicações anteriores...";
 }
 
+
+/* ==========================================================================
+   9. RENDERIZAÇÃO VISUAL DOS POSTS NA TELA
+   ========================================================================== */
 async function renderPosts(posts) {
     const postHTMLs = await Promise.all(posts.map(async post => {
         const author = post.author || { full_name:"Usuário", username:"usuario" };
         const userReaction = post.reactions.find(r => r.user_id === currentUser.id);
         const reactionCount = post.reactions.length;
-        const commentCount = post.commentCount;
+        const commentCount = post.comments.length;
 
         const reactionSummary = Object.entries(
             post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
@@ -477,46 +447,48 @@ async function renderPosts(posts) {
                 </div>`;
         }).join("");
 
-        const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden", `window.location.href='./perfil.html?id=${escapeHTML(author.id || post.user_id)}'`);
-        const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
-
-        const isOwner = post.user_id === currentUser.id;
-        const ownerMenuHTML = isOwner ? `
-            <div class="relative group/menu">
-                <button class="p-2 text-gray-400 hover:text-slate-700 hover:bg-gray-50 rounded-xl transition" title="Opções">
-                    <i data-lucide="more-vertical" class="w-4 h-4"></i>
-                </button>
-                <div class="absolute right-0 top-full mt-1 w-36 bg-white border border-gray-200 rounded-xl shadow-xl hidden group-hover/menu:block z-20 py-1">
-                    <button class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-gray-50 flex items-center gap-2" data-action="edit-post"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Editar</button>
-                    <button class="w-full text-left px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2" data-action="delete-post"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir</button>
+        const commentsHTML = (await Promise.all(post.comments.map(async c => {
+            const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
+            const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-[10px]");
+            return `
+                <div class="flex gap-2.5 my-2.5">
+                    ${commentAvatarHTML}
+                    <div class="flex-1 bg-gray-50 border border-gray-200 p-3 rounded-2xl text-xs">
+                        <strong class="block text-cyan-700 font-bold mb-0.5">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                        <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
+                    </div>
                 </div>
-            </div>
-        ` : "";
+            `;
+        }))).join("");
+
+        const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
+        const visibilityLabel = { public:"Público", friends:"Amigos", private:"Privado" }[post.visibility] || "Público";
 
         return `
             <article class="bg-white border border-gray-200 rounded-2xl p-5 mb-5 shadow-xs" data-post-id="${post.id}">
                 <div class="flex items-center gap-3.5 mb-3">
                     ${authorAvatarHTML}
                     <div class="flex-1 min-w-0">
-                        <a href="./perfil.html?id=${escapeHTML(author.id || post.user_id)}" class="block text-sm font-bold text-slate-900 hover:underline truncate">${escapeHTML(author.full_name || "Usuário")}</a>
+                        <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
                         <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(post.created_at))} · ${visibilityLabel}</small>
                     </div>
-                    ${ownerMenuHTML}
+                    ${post.user_id === currentUser.id ? `<button class="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-50 rounded-lg transition" data-action="delete-post" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ""}
                 </div>
 
                 ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-3 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
                 ${mediaHTML}
 
-                <div class="flex justify-between text-xs text-gray-500 py-2 border-b border-gray-100 mb-1" id="post-stats-${post.id}">
-                    <span class="post-reaction-summary">${reactionSummary || " "}</span>
-                    <span class="post-comment-count">${commentCount} comentário(s)</span>
+                <div class="flex justify-between text-xs text-gray-500 py-2 border-b border-gray-100 mb-1">
+                    <span>${reactionSummary || " "}</span>
+                    <span>${commentCount} comentário(s)</span>
                 </div>
 
                 <div class="grid grid-cols-3 gap-1 pt-1 relative">
                     <div class="reaction-wrapper">
-                        <button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click" id="like-btn-${post.id}">
-                            <span class="like-icon">${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
-                            <span class="like-text">${userReaction ? "Reagiu" : "Curtir"}</span> (<span class="like-count">${reactionCount}</span>)
+                        <button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
+                            <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
+                            <span>${userReaction ? "Reagiu" : "Curtir"}</span>
+                            <span>(${reactionCount})</span>
                         </button>
                         <div class="reaction-popup" id="popup-${post.id}">
                             <button class="react-emoji-btn" data-reaction="like" data-post-id="${post.id}">👍</button>
@@ -528,13 +500,21 @@ async function renderPosts(posts) {
                         </div>
                     </div>
 
-                    <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition" data-action="open-comments-modal">
+                    <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition" data-action="toggle-comments">
                         <i data-lucide="message-circle" class="w-4 h-4"></i> Comentar
                     </button>
 
                     <button class="flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${post.saved ? 'text-violet-600' : ''}" data-action="save-post">
                         <i data-lucide="bookmark" class="w-4 h-4"></i> ${post.saved ? "Salvo" : "Salvar"}
                     </button>
+                </div>
+
+                <div class="comments-area pt-3 border-t border-gray-100 mt-2" id="comments-${post.id}">
+                    ${commentsHTML || `<p class="text-xs text-gray-400">Nenhum comentário ainda.</p>`}
+                    <form class="flex gap-2 mt-3" data-post-id="${post.id}">
+                        <input type="text" name="comment" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-gray-100 border border-transparent focus:border-cyan-600 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none">
+                        <button type="submit" class="bg-cyan-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-cyan-700 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+                    </form>
                 </div>
             </article>
         `;
@@ -546,113 +526,25 @@ async function renderPosts(posts) {
 
 
 /* ==========================================================================
-   9. SISTEMA DE CURTIDAS E REAÇÕES (Atualização Instantânea Otimista)
+   10. MODAL DE MÍDIA, VÍDEOS E PLAYER PERSONALIZADO
    ========================================================================== */
-function updatePostUIOptimistically(postId, newReactions) {
-    const post = globalPostsCache.find(p => p.id === postId);
-    if (!post) return;
-
-    post.reactions = newReactions;
-    const userReaction = post.reactions.find(r => r.user_id === currentUser.id);
-    const reactionCount = post.reactions.length;
-
-    const likeBtn = document.getElementById(`like-btn-${postId}`);
-    if (likeBtn) {
-        likeBtn.className = `w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}`;
-        likeBtn.querySelector(".like-icon").textContent = userReaction ? reactionIcons[userReaction.reaction_type] : "👍";
-        likeBtn.querySelector(".like-text").textContent = userReaction ? "Reagiu" : "Curtir";
-        likeBtn.querySelector(".like-count").textContent = reactionCount;
-    }
-
-    const statsContainer = document.getElementById(`post-stats-${postId}`);
-    if (statsContainer) {
-        const reactionSummary = Object.entries(
-            post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
-        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
-        
-        statsContainer.querySelector(".post-reaction-summary").textContent = reactionSummary || " ";
-    }
-}
-
-async function applyReaction(postId, reactionType) {
-    document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
-    soundFx.playPop();
-
-    const post = globalPostsCache.find(p => p.id === postId);
-    if (post) {
-        let currentReactions = [...post.reactions];
-        const existingIndex = currentReactions.findIndex(r => r.user_id === currentUser.id);
-        if (existingIndex !== -1) {
-            if (currentReactions[existingIndex].reaction_type === reactionType) {
-                currentReactions.splice(existingIndex, 1);
-            } else {
-                currentReactions.splice(existingIndex, 1);
-                currentReactions.push({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
-            }
-        } else {
-            currentReactions.push({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
-        }
-        updatePostUIOptimistically(postId, currentReactions);
-    }
-
-    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
-
-    if (existing) {
-        if (existing.reaction_type === reactionType) {
-            await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
-        } else {
-            await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
-        }
-    } else {
-        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
-    }
-
-    const { data: freshReactions } = await supabase.from("reactions").select("post_id,user_id,reaction_type").eq("post_id", postId);
-    if (freshReactions) {
-        updatePostUIOptimistically(postId, freshReactions);
-    }
-}
-
-
-/* ==========================================================================
-   10. MODAL DE MÍDIA, VÍDEO E COMENTÁRIOS
-   ========================================================================== */
-window.openCommentsModalOnly = function(postId) {
-    const post = globalPostsCache.find(p => p.id === postId);
-    if (!post) return;
-
-    activeModalPost = post;
-    activeMediaIndex = 0;
-    modalCommentLimit = 3;
-
-    modalLeftPane.classList.add("hidden");
-    updateModalHeaderAndContent();
-    loadAndRenderModalComments();
-    mediaModal.classList.remove("hidden");
-    mediaModal.classList.add("flex");
-    document.body.style.overflow = "hidden";
-}
-
 window.openMediaModal = function(postId, mediaIndex = 0) {
     const post = globalPostsCache.find(p => p.id === postId);
     if (!post || !post.media || post.media.length === 0) return;
 
     activeModalPost = post;
     activeMediaIndex = mediaIndex;
-    modalCommentLimit = 3;
 
-    modalLeftPane.classList.remove("hidden");
-    updateModalMediaContent();
-    updateModalHeaderAndContent();
-    loadAndRenderModalComments();
+    updateModalContent();
     mediaModal.classList.remove("hidden");
     mediaModal.classList.add("flex");
     document.body.style.overflow = "hidden";
 }
 
-function updateModalMediaContent() {
+async function updateModalContent() {
     if (!activeModalPost) return;
     const media = activeModalPost.media[activeMediaIndex];
+    const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
 
     if (media.media_type === "video") {
         modalMediaContainer.innerHTML = `
@@ -681,73 +573,19 @@ function updateModalMediaContent() {
         prevMediaBtn.classList.add("hidden");
         nextMediaBtn.classList.add("hidden");
     }
-}
 
-async function updateModalHeaderAndContent() {
-    if (!activeModalPost) return;
-    const author = activeModalPost.author || { full_name: "Usuário", username: "usuario" };
-    const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden", `window.location.href='./perfil.html?id=${escapeHTML(author.id || activeModalPost.user_id)}'`);
-    
+    const authorAvatarHTML = await renderAvatar(author, "w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden");
     modalAuthorHeader.innerHTML = `
         ${authorAvatarHTML}
         <div class="flex-1 min-w-0">
-            <a href="./perfil.html?id=${escapeHTML(author.id || activeModalPost.user_id)}" class="block text-sm font-bold text-slate-900 hover:underline truncate">${escapeHTML(author.full_name || "Usuário")}</a>
+            <strong class="block text-sm font-bold text-slate-900">${escapeHTML(author.full_name || "Usuário")}</strong>
             <small class="text-xs text-gray-400">@${escapeHTML(author.username || "usuario")} · ${escapeHTML(formatDate(activeModalPost.created_at))}</small>
         </div>
     `;
 
     modalPostContent.innerHTML = activeModalPost.content ? `<p class="text-slate-800 leading-relaxed whitespace-pre-wrap">${formatRichText(activeModalPost.content)}</p>` : `<span class="text-gray-400 italic">Sem legenda.</span>`;
+    await renderModalComments();
     lucide.createIcons();
-}
-
-async function loadAndRenderModalComments() {
-    if (!activeModalPost) return;
-    const { data: comments, error, count } = await supabase
-        .from("comments")
-        .select("id, post_id, user_id, content, created_at", { count: "exact" })
-        .eq("post_id", activeModalPost.id)
-        .is("parent_id", null)
-        .order("created_at", { ascending: true })
-        .range(0, modalCommentLimit - 1);
-
-    if (error || !comments || comments.length === 0) {
-        modalCommentsList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhum comentário ainda. Seja o primeiro a comentar!</div>`;
-        loadMoreCommentsContainer.classList.add("hidden");
-        return;
-    }
-
-    const userIds = [...new Set(comments.map(c => c.user_id))];
-    const missingUserIds = userIds.filter(id => !window.__faceCratoProfiles?.[id]);
-    if (missingUserIds.length > 0) {
-        const { data: profiles } = await supabase.from("profiles").select("id,username,full_name,avatar_url").in("id", missingUserIds);
-        (profiles || []).forEach(p => { window.__faceCratoProfiles[p.id] = p; });
-    }
-
-    const commentsHTMLs = await Promise.all(comments.map(async c => {
-        const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
-        const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs", `window.location.href='./perfil.html?id=${escapeHTML(commentAuthor.id || c.user_id)}'`);
-        return `
-            <div class="flex gap-3 py-2">
-                ${commentAvatarHTML}
-                <div class="flex-1 bg-gray-50 border border-gray-100 p-3 rounded-2xl text-xs">
-                    <a href="./perfil.html?id=${escapeHTML(commentAuthor.id || c.user_id)}" class="block text-cyan-700 font-bold hover:underline mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</a>
-                    <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
-                </div>
-            </div>
-        `;
-    }));
-
-    modalCommentsList.innerHTML = commentsHTMLs.join("");
-    if (count > modalCommentLimit) {
-        loadMoreCommentsContainer.classList.remove("hidden");
-    } else {
-        loadMoreCommentsContainer.classList.add("hidden");
-    }
-}
-
-window.loadMoreModalComments = async function() {
-    modalCommentLimit += 5;
-    await loadAndRenderModalComments();
 }
 
 function setupCustomVideoPlayer() {
@@ -792,8 +630,31 @@ function setupCustomVideoPlayer() {
     fullscreenBtn.addEventListener("click", () => { if (video.requestFullscreen) video.requestFullscreen(); });
 }
 
-prevMediaBtn.addEventListener("click", () => { if (activeMediaIndex > 0) { activeMediaIndex--; updateModalMediaContent(); } });
-nextMediaBtn.addEventListener("click", () => { if (activeModalPost && activeMediaIndex < activeModalPost.media.length - 1) { activeMediaIndex++; updateModalMediaContent(); } });
+async function renderModalComments() {
+    if (!activeModalPost) return;
+    const comments = activeModalPost.comments || [];
+    if (comments.length === 0) {
+        modalCommentsList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhum comentário ainda. Seja o primeiro a comentar!</div>`;
+        return;
+    }
+    const commentsHTMLs = await Promise.all(comments.map(async c => {
+        const commentAuthor = window.__faceCratoProfiles?.[c.user_id] || { full_name: "Usuário", username: "usuario" };
+        const commentAvatarHTML = await renderAvatar(commentAuthor, "w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white text-xs");
+        return `
+            <div class="flex gap-3 py-2">
+                ${commentAvatarHTML}
+                <div class="flex-1 bg-gray-50 border border-gray-100 p-3 rounded-2xl text-xs">
+                    <strong class="block text-cyan-700 font-bold mb-1">${escapeHTML(commentAuthor.full_name || "Usuário")}</strong>
+                    <p class="text-slate-800 leading-relaxed">${formatRichText(c.content)}</p>
+                </div>
+            </div>
+        `;
+    }));
+    modalCommentsList.innerHTML = commentsHTMLs.join("");
+}
+
+prevMediaBtn.addEventListener("click", () => { if (activeMediaIndex > 0) { activeMediaIndex--; updateModalContent(); } });
+nextMediaBtn.addEventListener("click", () => { if (activeModalPost && activeMediaIndex < activeModalPost.media.length - 1) { activeMediaIndex++; updateModalContent(); } });
 
 closeMediaModal.addEventListener("click", closeModal);
 mediaModal.addEventListener("click", (e) => { if (e.target === mediaModal) closeModal(); });
@@ -813,17 +674,18 @@ modalCommentForm.addEventListener("submit", async (e) => {
     if (!content) return;
 
     soundFx.playPop();
-    const { error } = await supabase.from("comments").insert({ post_id: activeModalPost.id, user_id: currentUser.id, content });
-    if (!error) {
+    const { data, error } = await supabase.from("comments").insert({ post_id: activeModalPost.id, user_id: currentUser.id, content }).select("id, post_id, user_id, content, created_at").single();
+    if (!error && data) {
+        activeModalPost.comments.push(data);
         modalCommentInput.value = "";
-        await loadAndRenderModalComments();
+        await renderModalComments();
         await loadFeed();
     }
 });
 
 
 /* ==========================================================================
-   11. CRIAÇÃO, EDIÇÃO E EXCLUSÃO DE PUBLICAÇÕES
+   11. CRIAÇÃO E PUBLICAÇÃO DE NOVOS POSTS
    ========================================================================== */
 mediaInput.addEventListener("change", () => {
     const file = mediaInput.files[0];
@@ -831,38 +693,6 @@ mediaInput.addEventListener("change", () => {
     filePreview.classList.remove("hidden");
     filePreview.textContent = `Arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 });
-
-async function compressAvatarImage(file) {
-    return new Promise((resolve) => {
-        if (!file.type.startsWith("image/")) { resolve(file); return; }
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => {
-                const canvas = document.createElement("canvas");
-                let width = img.width;
-                let height = img.height;
-                const maxDim = 512;
-                if (width > height) {
-                    if (width > maxDim) { height *= maxDim / width; width = maxDim; }
-                } else {
-                    if (height > maxDim) { width *= maxDim / height; height = maxDim; }
-                }
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-                canvas.toBlob((blob) => {
-                    resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: "image/webp" }));
-                }, "image/webp", 0.78);
-            };
-            img.onerror = () => resolve(file);
-        };
-        reader.onerror = () => resolve(file);
-    });
-}
 
 publishButton.addEventListener("click", async () => {
     const content = postContent.value.trim();
@@ -873,21 +703,16 @@ publishButton.addEventListener("click", async () => {
     publishButton.textContent = "Publicando...";
 
     try {
-        let processedFile = file;
-        if (file && file.type.startsWith("image/")) {
-            processedFile = await compressAvatarImage(file);
-        }
-
-        const postType = processedFile ? (processedFile.type.startsWith("video/") ? "video" : "photo") : "text";
+        const postType = file ? (file.type.startsWith("video/") ? "video" : "photo") : "text";
         const { data: post, error: postErr } = await supabase.from("posts").insert({ user_id: currentUser.id, content, post_type: postType, visibility: visibility.value, comments_permission: "everyone" }).select("id").single();
         if (postErr) throw postErr;
 
-        if (processedFile) {
-            const ext = processedFile.name.split(".").pop();
+        if (file) {
+            const ext = file.name.split(".").pop();
             const filePath = `${currentUser.id}/${post.id}/${crypto.randomUUID()}.${ext}`;
-            const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, processedFile, { contentType: processedFile.type });
+            const { error: upErr } = await supabase.storage.from("post-media").upload(filePath, file, { contentType: file.type });
             if (upErr) throw upErr;
-            await supabase.from("post_media").insert({ post_id: post.id, media_url: filePath, media_type: processedFile.type.startsWith("video/") ? "video" : "image", position: 0 });
+            await supabase.from("post_media").insert({ post_id: post.id, media_url: filePath, media_type: file.type.startsWith("video/") ? "video" : "image", position: 0 });
         }
 
         postContent.value = ""; mediaInput.value = ""; filePreview.classList.add("hidden");
@@ -904,7 +729,7 @@ publishButton.addEventListener("click", async () => {
 
 
 /* ==========================================================================
-   12. EVENT LISTENERS DO FEED (Cliques em botões, reações, menu de opções)
+   12. EVENT LISTENERS DO FEED (Curtidas, Comentários Inline, Exclusão)
    ========================================================================== */
 postsContainer.addEventListener("click", async event => {
     const target = event.target;
@@ -932,9 +757,8 @@ postsContainer.addEventListener("click", async event => {
         return;
     }
 
-    if (action === "open-comments-modal") {
-        openCommentsModalOnly(postId);
-        return;
+    if (action === "toggle-comments") { 
+        document.getElementById(`comments-${postId}`)?.classList.toggle("open"); 
     }
 
     if (action === "save-post") {
@@ -946,42 +770,43 @@ postsContainer.addEventListener("click", async event => {
     }
 
     if (action === "delete-post") {
-        const confirm = await Swal.fire({ title:"Excluir publicação?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626", confirmButtonText:"Sim, excluir" });
+        const confirm = await Swal.fire({ title:"Excluir?", icon:"warning", showCancelButton:true, confirmButtonColor:"#dc2626" });
         if (!confirm.isConfirmed) return;
         await supabase.from("posts").delete().eq("id", postId).eq("user_id", currentUser.id);
         showSuccess("Excluído com sucesso.");
         await loadFeed();
     }
-
-    if (action === "edit-post") {
-        const post = globalPostsCache.find(p => p.id === postId);
-        if (!post) return;
-        document.getElementById("editPostId").value = postId;
-        document.getElementById("editPostContent").value = post.content || "";
-        document.getElementById("editPostModal").classList.remove("hidden");
-        document.getElementById("editPostModal").classList.add("flex");
-    }
 });
 
-window.closeEditModal = function() {
-    document.getElementById("editPostModal").classList.add("hidden");
-    document.getElementById("editPostModal").classList.remove("flex");
-}
+async function applyReaction(postId, reactionType) {
+    document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+    soundFx.playPop();
+    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
 
-window.submitEditPost = async function() {
-    const postId = document.getElementById("editPostId").value;
-    const content = document.getElementById("editPostContent").value.trim();
-    if (!postId) return;
-
-    const { error } = await supabase.from("posts").update({ content, edited_at: new Date().toISOString() }).eq("id", postId).eq("user_id", currentUser.id);
-    if (!error) {
-        closeEditModal();
-        showSuccess("Publicação atualizada!");
-        await loadFeed();
+    if (existing) {
+        if (existing.reaction_type === reactionType) await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
+        else await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
     } else {
-        showError("Erro ao atualizar publicação.");
+        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
     }
+    await loadFeed();
 }
+
+postsContainer.addEventListener("submit", async event => {
+    const form = event.target.closest("form");
+    if (!form || !form.dataset.postId) return;
+    event.preventDefault();
+
+    const postId = form.dataset.postId;
+    const input = form.querySelector("input[name='comment']");
+    const content = input.value.trim();
+    if (!content) return;
+
+    soundFx.playPop();
+    await supabase.from("comments").insert({ post_id: postId, user_id: currentUser.id, content });
+    await loadFeed();
+    document.getElementById(`comments-${postId}`)?.classList.add("open");
+});
 
 
 /* ==========================================================================
