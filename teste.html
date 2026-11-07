@@ -17,15 +17,13 @@
 
 <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
-    <!-- LADO ESQUERDO: BRANDING COM PAPEL DE PAREDE TEMÁTICO DE CACTOS / SERTÃO -->
-    <section class="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden text-white border-r border-gray-200">
+    <!-- LADO ESQUERDO: BRANDING COM DESIGN SERTANEJO MODERNO -->
+    <section class="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden text-white border-r border-gray-200 bg-gradient-to-br from-emerald-950 via-slate-900 to-cyan-950">
         
-        <!-- Background com imagem temática de cactos e sobreposição escura para legibilidade -->
-        <div class="absolute inset-0 bg-cover bg-center z-0 filter brightness-40 contrast-125" style="background-image: url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1200&auto=format&fit=crop');"></div>
-        <!-- Gradiente moderno do FaceCrato -->
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-cyan-950/90 z-0"></div>
+        <!-- Padrão geométrico sutil inspirado na caatinga/sertão -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 24px 24px;"></div>
 
-        <!-- CONTEÚDO DO LADO ESQUERDO (Z-10 para ficar acima do fundo) -->
+        <!-- CONTEÚDO DO LADO ESQUERDO -->
         <div class="flex items-center gap-4 z-10">
             <div class="w-16 h-16 rounded-full overflow-hidden shadow-lg shadow-cyan-500/30 border-2 border-cyan-400 shrink-0">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
@@ -68,18 +66,18 @@
                 </div>
             </div>
 
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Crie sua conta</h2>
-            <p class="text-xs sm:text-sm text-gray-500 mb-8">Junte-se à comunidade do FaceCrato.</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Chegue mais, cabra da peste!</h2>
+            <p class="text-xs sm:text-sm text-gray-500 mb-8">Preencha os dados abaixo para fincar seu pé na rede do Cariri.</p>
 
             <form id="registerForm" class="space-y-4">
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="fullName">Nome completo</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="fullName">Como te chamam por aí?</label>
                     <div class="relative">
                         <input
                             id="fullName"
                             type="text"
-                            placeholder="Como você se chama?"
+                            placeholder="Digite seu nome completo..."
                             autocomplete="name"
                             maxlength="100"
                             required
@@ -90,12 +88,12 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="username">Nome de usuário</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="username">Apelido ou alcunha na rede</label>
                     <div class="relative">
                         <input
                             id="username"
                             type="text"
-                            placeholder="exemplo: welington123"
+                            placeholder="exemplo: cicero_raiz"
                             autocomplete="username"
                             maxlength="30"
                             pattern="[a-z0-9_]{3,30}"
@@ -104,11 +102,11 @@
                         >
                         <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
-                    <small class="text-[11px] text-gray-400 mt-1 block">Use letras minúsculas, números e underline. De 3 a 30 caracteres.</small>
+                    <small class="text-[11px] text-gray-400 mt-1 block">Só letra minúscula, número e traço embaixo. De 3 a 30 letras.</small>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">E-mail</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">Onde mandamos recado (E-mail)</label>
                     <div class="relative">
                         <input
                             id="email"
@@ -123,12 +121,12 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Senha</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Crie uma senha de respeito</label>
                     <div class="relative">
                         <input
                             id="password"
                             type="password"
-                            placeholder="Crie uma senha"
+                            placeholder="Sua chave secreta"
                             autocomplete="new-password"
                             minlength="8"
                             required
@@ -143,16 +141,16 @@
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
-                    <small class="text-[11px] text-gray-400 mt-1 block">Mínimo de 8 caracteres.</small>
+                    <small class="text-[11px] text-gray-400 mt-1 block">No mínimo 8 dígitos para ninguém roubar sua prosa.</small>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="confirmPassword">Confirmar senha</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="confirmPassword">Confirme a senha</label>
                     <div class="relative">
                         <input
                             id="confirmPassword"
                             type="password"
-                            placeholder="Digite a senha novamente"
+                            placeholder="Digite de novo pra garantir"
                             autocomplete="new-password"
                             minlength="8"
                             required
@@ -174,7 +172,7 @@
                     id="registerButton"
                     class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2"
                 >
-                    Criar minha conta
+                    Registrar meu nome na bodega
                 </button>
 
                 <div id="message" class="hidden mt-4 p-3.5 rounded-xl text-xs leading-relaxed"></div>
@@ -182,8 +180,8 @@
             </form>
 
             <div class="text-center text-xs text-gray-500 mt-6">
-                Já tem uma conta?
-                <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar</a>
+                Já tem conta por aqui?
+                <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar na rede</a>
             </div>
 
             <div class="text-center text-[11px] text-gray-400 mt-10">
@@ -280,27 +278,27 @@ form.addEventListener("submit", async event => {
     const confirmacao = confirmPassword.value;
 
     if (nome.length < 2) {
-        showMessage("Informe seu nome completo.");
+        showMessage("Opa, bote seu nome completo aí direito!");
         return;
     }
 
     if (!/^[a-z0-9_]{3,30}$/.test(usuario)) {
-        showMessage("Nome de usuário inválido. Use letras minúsculas, números e underline.");
+        showMessage("Esse apelido não tá valendo. Use só letras minúsculas, números e traço embaixo.");
         return;
     }
 
     if (senha.length < 8) {
-        showMessage("Sua senha precisa ter pelo menos 8 caracteres.");
+        showMessage("Essa senha tá muito fraca, meu nobre! Bote pelo menos 8 dígitos.");
         return;
     }
 
     if (senha !== confirmacao) {
-        showMessage("As senhas não são iguais.");
+        showMessage("As senhas tão batendo diferente. Confere aí!");
         return;
     }
 
     button.disabled = true;
-    button.textContent = "Criando sua conta...";
+    button.textContent = "Arrumando seu canto...";
     message.className = "hidden";
 
     try {
@@ -323,18 +321,18 @@ form.addEventListener("submit", async event => {
         if (error) throw error;
 
         if (!data.user) {
-            throw new Error("O Supabase não retornou os dados do usuário.");
+            throw new Error("O sistema não conseguiu puxar os dados do cabra.");
         }
 
         if (data.session) {
             showMessage(
-                "Conta criada! Seu perfil está sendo preparado. Redirecionando...",
+                "Tudo pronto! Seu canto tá arrumado. Entrando na rede...",
                 "success"
             );
             window.location.replace("./feed.html");
         } else {
             showMessage(
-                "Cadastro realizado! Verifique seu e-mail para confirmar a conta antes de entrar.",
+                "Cadastro feito com sucesso! Dá uma olhada no seu e-mail para confirmar a conta.",
                 "success"
             );
             form.reset();
@@ -343,22 +341,22 @@ form.addEventListener("submit", async event => {
     } catch (error) {
         console.error("Erro no cadastro:", error);
 
-        let texto = "Não foi possível criar sua conta.";
+        let texto = "Não deu certo criar sua conta. Tente de novo.";
         const erro = (error.message || "").toLowerCase();
 
         if (
             erro.includes("already registered") ||
             erro.includes("user already registered")
         ) {
-            texto = "Este e-mail já está cadastrado.";
+            texto = "Eita! Esse e-mail já tá cadastrado por aqui.";
         } else if (erro.includes("username")) {
-            texto = "Não foi possível utilizar esse nome de usuário.";
+            texto = "Esse apelido já tem dono. Escolha outro!";
         } else if (erro.includes("password")) {
-            texto = "A senha não atende aos requisitos.";
+            texto = "A senha não passou nos conformes.";
         } else if (erro.includes("email")) {
-            texto = "Verifique se o e-mail foi digitado corretamente.";
+            texto = "Confirme se esse e-mail tá escrito certo.";
         } else if (erro.includes("network")) {
-            texto = "Erro de conexão. Verifique sua internet.";
+            texto = "A internet caiu ou tá lerdinha. Confere aí!";
         } else {
             texto = error.message || texto;
         }
@@ -367,7 +365,7 @@ form.addEventListener("submit", async event => {
 
     } finally {
         button.disabled = false;
-        button.textContent = "Criar minha conta";
+        button.textContent = "Registrar meu nome na bodega";
     }
 });
 
