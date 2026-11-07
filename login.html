@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
 
-<title>Entrar | FaceCrato</title>
+<title>Entrar | FaceCrato - A rede do Cariri</title>
 
 <link rel="manifest" href="./manifest.json">
 
@@ -17,51 +17,64 @@
 
 <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
-    <!-- LADO ESQUERDO: BRANDING -->
-    <section class="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-950 text-white border-r border-gray-200">
-        <div class="flex items-center gap-3 text-2xl font-black tracking-tight">
-            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                <i data-lucide="users" class="w-6 h-6"></i>
+    <!-- LADO ESQUERDO: BRANDING COM A SUA FOTO DO GITHUB E TEXTO SERTANEJO -->
+    <section class="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden text-white border-r border-gray-200">
+        
+        <!-- Imagem de fundo puxada do seu repositório GitHub com filtro escurecido -->
+        <div class="absolute inset-0 bg-cover bg-center z-0 filter brightness-40 contrast-125" style="background-image: url('https://raw.githubusercontent.com/Welintons/wsinforcrato/main/77c47f9b19a16142691c7837c67f08c2.jpg');"></div>
+        <!-- Gradiente de sobreposição moderno do FaceCrato -->
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-900/60 to-cyan-950/80 z-0"></div>
+
+        <!-- LOGO E NOME GRANDES NO TOPO DA ESQUERDA -->
+        <div class="flex items-center gap-4 z-10">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-lg shadow-cyan-500/30 border-2 border-cyan-400 shrink-0">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
             </div>
-            FaceCrato
+            <div class="flex flex-col">
+                <span class="text-3xl font-black tracking-tight leading-none text-white">FaceCrato</span>
+                <span class="text-xs font-extrabold text-amber-400 tracking-widest uppercase mt-1">Cariri · Ceará</span>
+            </div>
         </div>
 
-        <div class="max-w-md">
+        <div class="max-w-lg my-auto py-8 z-10">
             <h1 class="text-4xl xl:text-5xl font-black tracking-tight leading-tight mb-6">
-                Pessoas.<br>
-                Conexões.<br>
-                <span class="text-cyan-400">Comunidade.</span>
+                A nossa terra.<br>
+                A nossa gente.<br>
+                <span class="text-cyan-400">A nossa rede.</span>
             </h1>
 
-            <p class="text-slate-300 text-sm xl:text-base leading-relaxed">
-                Uma rede social independente para conectar pessoas, compartilhar momentos e criar novas conexões. De Crato para todos os lugares.
+            <p class="text-slate-200 text-base xl:text-lg leading-relaxed font-medium">
+                Do Crato para todo o Cariri e o mundo. Um cantinho digital feito por nós e para nós, onde a amizade é forte que nem o cacto no sertão e a prosa nunca tem fim. Chegue mais, puxe uma cadeira e venha prosear!
             </p>
         </div>
 
-        <div class="text-xs text-slate-400 tracking-wider font-medium">
-            FACECRATO © 2026 — UMA NOVA FORMA DE SE CONECTAR.
+        <div class="text-xs text-slate-300 tracking-wider font-medium z-10">
+            FACECRATO © 2026 — FEITO COM ORGULHO NO CARIRI.
         </div>
     </section>
 
     <!-- LADO DIREITO: LOGIN -->
-    <section class="flex items-center justify-center p-6 sm:p-12">
+    <section class="flex items-center justify-center p-6 sm:p-12 bg-white">
         <div class="w-full max-w-md">
 
             <!-- LOGO MOBILE -->
-            <div class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 mb-8 lg:hidden">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20">
-                    <i data-lucide="users" class="w-5 h-5"></i>
+            <div class="flex items-center gap-3.5 mb-8 lg:hidden">
+                <div class="w-14 h-14 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
                 </div>
-                FaceCrato
+                <div class="flex flex-col">
+                    <span class="text-2xl font-black tracking-tight text-slate-900 leading-none">FaceCrato</span>
+                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase mt-0.5">Cariri · Ceará</span>
+                </div>
             </div>
 
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Bem-vindo de volta!</h2>
-            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre na sua conta para continuar conectado.</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Eita, que bom te ver de volta!</h2>
+            <p class="text-xs sm:text-sm text-gray-500 mb-8">Entre na sua conta para continuar proseando com a galera.</p>
 
             <form id="loginForm" class="space-y-4">
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">E-mail</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">Onde mandamos seu recado (E-mail)</label>
                     <div class="relative">
                         <input
                             id="email"
@@ -76,7 +89,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Senha</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Sua chave secreta (Senha)</label>
                     <div class="relative">
                         <input
                             id="password"
@@ -100,7 +113,7 @@
 
                 <button
                     type="submit"
-                    class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2"
+                    class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2 cursor-pointer"
                     id="loginButton"
                 >
                     Entrar na minha conta
@@ -111,12 +124,12 @@
             </form>
 
             <div class="text-center text-xs text-gray-500 mt-6">
-                Ainda não tem uma conta?
-                <a href="./cadastro.html" class="text-cyan-700 font-bold hover:underline">Criar conta</a>
+                Ainda não tem conta por aqui?
+                <a href="./cadastro.html" class="text-cyan-700 font-bold hover:underline">Criar conta na rede</a>
             </div>
 
             <div class="text-center text-[11px] text-gray-400 mt-12">
-                FaceCrato — Conectando pessoas.
+                FaceCrato — Conectando o Cariri com estilo.
             </div>
 
         </div>
@@ -194,7 +207,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     button.disabled = true;
-    button.textContent = "Entrando...";
+    button.textContent = "Entrando na rede...";
     message.className = "hidden";
 
     try {
@@ -225,11 +238,11 @@ form.addEventListener("submit", async (event) => {
         const errStr = (error.message || "").toLowerCase();
 
         if (errStr.includes("invalid login credentials")) {
-            texto = "E-mail ou senha incorretos.";
+            texto = "E-mail ou senha incorretos. Confere aí!";
         } else if (errStr.includes("email not confirmed")) {
-            texto = "Confirme seu e-mail antes de entrar.";
+            texto = "Confirme seu e-mail antes de entrar na rede.";
         } else if (errStr.includes("network") || errStr.includes("timeout")) {
-            texto = "Erro de conexão. Verifique sua internet.";
+            texto = "A internet caiu ou tá lerdinha. Confere aí!";
         }
 
         showMessage(texto);
