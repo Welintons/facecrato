@@ -416,27 +416,96 @@ async function checkUnreadCount() {
 }
 
 async function fetchDropdownNotifications() {
-    notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Carregando...</div>`;
-    const { data, error } = await supabase.from("notifications").select("*").eq("recipient_id", currentUser.id).order("created_at", { ascending: false }).limit(6);
+    const container = document.getElementById('notifDropdownList');
+    if (!container) return;
 
-    if (error || !data || data.length === 0) {
-        notifDropdownList.innerHTML = `<div class="p-6 text-center text-xs text-gray-400">Nenhuma notificação por enquanto.</div>`;
+    container.innerHTML = `
+        <div class="p-5 text-center text-xs text-gray-400">
+            Carregando notificações...
+        </div>
+    `;
+
+    const { data: notifications, error } = await supabase
+        .from('notifications')
+        .select(`
+            id,
+            actor_id,
+            notification_type,
+            post_id,
+            message,
+            is_read,
+            created_at,
+            actor:profiles!notifications_actor_id_fkey (
+                id,
+                username,
+                full_name,
+                avatar_url
+            )
+        `)
+        .eq('recipient_id', currentUser.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+    if (error) {
+        console.error('Erro ao buscar notificações:', error);
+        container.innerHTML = `
+            <div class="p-5 text-center text-xs text-red-500">
+                Erro ao carregar notificações.
+            </div>
+        `;
         return;
     }
 
-    notifDropdownList.innerHTML = data.map(item => {
-        const message = escapeHTML(item.message || "Nova atividade");
-        const date = formatDate(item.created_at);
-        const unreadClass = !item.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
-        let target = item.post_id ? `./feed.html?post=${encodeURIComponent(item.post_id)}` : "#";
-
-        return `
-            <a href="${target}" onclick="markOneReadModal('${item.id}')" class="block p-3 hover:bg-gray-50 transition ${unreadClass}">
-                <p class="text-xs text-slate-800 leading-relaxed">${message}</p>
-                <span class="text-[10px] text-gray-400 mt-1 block">${date}</span>
-            </a>
+    if (!notifications || notifications.length === 0) {
+        container.innerHTML = `
+            <div class="p-5 text-center text-xs text-gray-400">
+                Nenhuma notificação por enquanto.
+            </div>
         `;
-    }).join("");
+        return;
+    }
+
+    try {
+        const notificationsHTML = await Promise.all(
+            notifications.map(async (n) => {
+                const avatar = await renderAvatar(
+                    n.actor || {},
+                    'w-9 h-9 rounded-full object-cover shrink-0'
+                );
+
+                const messageSpan = document.createElement('span');
+                messageSpan.textContent = n.message || 'Você recebeu uma notificação.';
+                const safeMessage = messageSpan.innerHTML;
+                const unreadClass = !n.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
+                let target = n.post_id ? `./feed.html?post=${encodeURIComponent(n.post_id)}` : "#";
+
+                return `
+                    <a href="${target}" onclick="markOneReadModal('${n.id}')" class="flex items-start gap-3 p-3 hover:bg-gray-50 transition ${unreadClass}">
+                        <div class="flex-shrink-0">
+                            ${avatar || ''}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-slate-800 leading-relaxed break-words">
+                                ${safeMessage}
+                            </p>
+                            <span class="text-[10px] text-gray-400 mt-1 block">
+                                ${formatDate(n.created_at)}
+                            </span>
+                        </div>
+                    </a>
+                `;
+            })
+        );
+
+        container.innerHTML = notificationsHTML.join('');
+    } catch (error) {
+        console.error('Erro ao renderizar notificações:', error);
+        container.innerHTML = `
+            <div class="p-5 text-center text-xs text-red-500">
+                Erro ao exibir notificações.
+            </div>
+        `;
+    }
 }
 
 window.markOneReadModal = async function(id) {
