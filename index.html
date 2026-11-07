@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101827">
 
-<title>FaceCrato</title>
+<title>FaceCrato - A rede do Cariri</title>
 
 <link rel="manifest" href="./manifest.json">
 
@@ -23,6 +23,27 @@ body {
     background: #0b1120;
     color: #f8fafc;
     font-family: Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+/* IMAGEM DE FUNDO DO SERTÃO (G.ITHUB) */
+.bg-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(35%) contrast(125%);
+    background-image: url('https://raw.githubusercontent.com/Welintons/wsinforcrato/main/77c47f9b19a16142691c7837c67f08c2.jpg');
+    z-index: 0;
+}
+
+/* CAMADA ESCURA DE SOBREPOSIÇÃO */
+.bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 17, 32, 0.85);
+    z-index: 1;
 }
 
 .container {
@@ -30,39 +51,61 @@ body {
     padding: 30px;
     width: 100%;
     max-width: 400px;
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #0f172a;
 }
 
-.logo {
-    width: 65px;
-    height: 65px;
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 19px;
-    background: linear-gradient(135deg, #2563eb, #6366f1);
-    font-size: 30px;
-    font-weight: 900;
+.logo-wrapper {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
+    border: 2px solid #0891b2;
+}
+
+.logo-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 h1 {
-    font-size: 29px;
-    margin: 0 0 10px;
+    font-size: 26px;
+    margin: 0 0 4px;
     font-weight: 900;
     letter-spacing: -1px;
+    color: #0891b2;
+}
+
+.subtitle {
+    font-size: 10px;
+    font-weight: 800;
+    color: #d97706;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
 }
 
 p {
-    color: #94a3b8;
-    font-size: 14px;
+    color: #64748b;
+    font-size: 13px;
+    margin: 0;
 }
 
 .loader {
-    width: 30px;
-    height: 30px;
-    margin: 28px auto;
-    border: 3px solid #26354d;
-    border-top-color: #3b82f6;
+    width: 28px;
+    height: 28px;
+    margin: 24px auto 0;
+    border: 3px solid #e2e8f0;
+    border-top-color: #0891b2;
     border-radius: 50%;
     animation: spin .8s linear infinite;
 }
@@ -73,38 +116,52 @@ p {
 
 .error {
     display: none;
-    margin-top: 20px;
-    padding: 15px;
+    margin-top: 15px;
+    padding: 12px;
     border-radius: 12px;
-    background: #7f1d1d33;
-    border: 1px solid #991b1b66;
-    color: #fca5a5;
-    font-size: 13px;
-    line-height: 1.5;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
 }
 
 button {
     display: none;
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     margin-top: 15px;
     border: none;
-    border-radius: 10px;
-    background: #2563eb;
+    border-radius: 12px;
+    background: #0891b2;
     color: white;
     font-weight: bold;
+    font-size: 13px;
     cursor: pointer;
+    transition: background .2s;
+}
+
+button:hover {
+    background: #0e7490;
 }
 </style>
 </head>
 
 <body>
 
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+
 <div class="container">
 
-    <div class="logo">F</div>
+    <!-- LOGO REDONDINHO -->
+    <div class="logo-wrapper">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="FaceCrato Logo">
+    </div>
 
     <h1>FaceCrato</h1>
+    <div class="subtitle">Cariri · Ceará</div>
 
     <p id="status">Preparando sua conexão...</p>
 
