@@ -85,7 +85,7 @@
     <!-- SIDEBAR ESQUERDA -->
     <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
         <div class="flex items-center gap-3.5 pb-4 border-b border-gray-100 mb-3">
-            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm cursor-pointer" id="sideAvatar">F</div>
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
             <div class="min-w-0">
                 <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
                 <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
@@ -106,7 +106,7 @@
         <!-- CRIAR PUBLICAÇÃO -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-xs">
             <div class="flex gap-3 items-center pb-3 border-b border-gray-100">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs cursor-pointer" id="composerAvatar">F</div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs" id="composerAvatar">F</div>
                 <textarea id="postContent" maxlength="5000" placeholder="No que você está pensando por estas bandas?" class="w-full bg-gray-100 hover:bg-gray-200/50 focus:bg-white border border-transparent focus:border-cyan-600 rounded-full px-4 py-2.5 text-sm text-slate-900 focus:outline-none transition resize-none h-11 placeholder:text-gray-500"></textarea>
             </div>
 
@@ -166,7 +166,7 @@
 
 </main>
 
-<!-- MODAL DE MÍDIA / COMENTÁRIOS -->
+<!-- MODAL DE MÍDIA COM PLAYER PERSONALIZADO -->
 <div id="mediaModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[200] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
     <div class="bg-white w-full max-w-6xl h-[92vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
         
@@ -175,8 +175,8 @@
             <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
-        <!-- LADO ESQUERDO: MÍDIA OU MENSAGEM -->
-        <div id="modalLeftPane" class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
+        <!-- LADO ESQUERDO: MÍDIA E PLAYER -->
+        <div class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
             <div id="modalMediaContainer" class="w-full h-full flex items-center justify-center relative"></div>
             
             <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
@@ -191,13 +191,7 @@
         <div class="w-full lg:w-[420px] bg-white flex flex-col h-[42vh] lg:h-full border-t lg:border-t-0 lg:border-l border-gray-200">
             <div class="p-4 border-b border-gray-100 flex items-center gap-3" id="modalAuthorHeader"></div>
             <div class="p-4 border-b border-gray-100 overflow-y-auto max-h-32 text-xs text-slate-800" id="modalPostContent"></div>
-            
             <div class="flex-1 overflow-y-auto p-4 space-y-3 divide-y divide-gray-50" id="modalCommentsList"></div>
-            
-            <div id="loadMoreCommentsContainer" class="p-2 text-center bg-gray-50 hidden border-t border-gray-100">
-                <button type="button" onclick="loadMoreModalComments()" class="text-xs font-bold text-cyan-600 hover:underline">Ver mais comentários</button>
-            </div>
-
             <div class="p-3 border-t border-gray-100 bg-gray-50/50">
                 <form id="modalCommentForm" class="flex gap-2">
                     <input type="text" id="modalCommentInput" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
@@ -209,38 +203,13 @@
     </div>
 </div>
 
-<!-- MODAL DE AVATAR AMPLIADO -->
-<div id="avatarModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[350] hidden items-center justify-center p-4">
-    <div class="relative max-w-lg w-full flex flex-col items-center">
-        <button onclick="closeAvatarModal()" class="absolute -top-12 right-0 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center transition">
-            <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-        <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-cyan-500 bg-black flex items-center justify-center">
-            <img id="modalAvatarImage" src="" alt="Foto de perfil" class="w-full h-full object-cover">
-        </div>
-    </div>
-</div>
-
-<!-- MODAL DE EDIÇÃO DE PUBLICAÇÃO -->
-<div id="editPostModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[300] hidden items-center justify-center p-4">
-    <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
-        <h3 class="text-base font-black text-slate-900 mb-4">Editar Publicação</h3>
-        <input type="hidden" id="editPostId">
-        <textarea id="editPostContent" maxlength="5000" rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm text-slate-900 focus:outline-none focus:border-cyan-600 mb-4 resize-none"></textarea>
-        <div class="flex justify-end gap-2">
-            <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition">Cancelar</button>
-            <button type="button" onclick="submitEditPost()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded-xl transition">Salvar alterações</button>
-        </div>
-    </div>
-</div>
-
 <!-- MENU MOBILE DESLIZANTE -->
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
 <div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-80 bg-white border-l border-gray-200 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
     
     <div class="p-6 bg-gradient-to-br from-cyan-50 via-white to-gray-50 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-3.5 min-w-0">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500 cursor-pointer" id="mobileMenuAvatar">F</div>
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500" id="mobileMenuAvatar">F</div>
             <div class="min-w-0">
                 <strong id="mobileMenuName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
                 <small id="mobileMenuUsername" class="text-xs text-gray-500 truncate block">@...</small>
@@ -298,6 +267,9 @@
 .comments-area { display: none; }
 .comments-area.open { display: block; }
 </style>
+
+<!-- CHAMADA DO ARQUIVO JS EXTERNO -->
+<script type="module" src="./feed.js"></script>
 
 </body>
 </html>
