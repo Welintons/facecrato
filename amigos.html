@@ -89,15 +89,18 @@
         <section class="mb-6" id="searchResults"></section>
 
         <!-- ABAS DE NAVEGAÇÃO DE AMIZADES -->
-        <div class="grid grid-cols-3 gap-2 mb-6">
+        <div class="grid grid-cols-4 gap-2 mb-6">
             <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-bold text-cyan-700 bg-cyan-50 border-cyan-200 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="friends">
-                <i data-lucide="users" class="w-4 h-4"></i> <span>Meus amigos</span> <span class="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-[10px]" id="friendsCount">0</span>
+                <i data-lucide="users" class="w-4 h-4"></i> <span>Amigos</span> <span class="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-[10px]" id="friendsCount">0</span>
             </button>
             <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-semibold text-gray-600 hover:bg-gray-50 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="received">
                 <i data-lucide="user-plus" class="w-4 h-4"></i> <span>Recebidas</span> <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="receivedCount">0</span>
             </button>
             <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-semibold text-gray-600 hover:bg-gray-50 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="sent">
                 <i data-lucide="send" class="w-4 h-4"></i> <span>Enviadas</span> <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-[10px]" id="sentCount">0</span>
+            </button>
+            <button class="tab-btn rounded-2xl p-3 bg-white border border-gray-200 shadow-xs text-xs font-semibold text-gray-600 hover:bg-gray-50 flex flex-col sm:flex-row items-center justify-center gap-1.5 transition" data-tab="suggestions">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> <span>Sugestões</span>
             </button>
         </div>
 
@@ -107,7 +110,7 @@
         </div>
     </section>
 
-    <!-- SIDEBAR DIREITA (Preenchendo o vazio com widgets úteis) -->
+    <!-- SIDEBAR DIREITA -->
     <aside class="sticky top-20 space-y-6 hidden lg:block">
         
         <!-- WIDGET DE ESTATÍSTICAS -->
@@ -390,6 +393,11 @@ document.querySelectorAll(".tab-btn").forEach(button => {
 });
 
 async function renderTab() {
+    if (activeTab === "suggestions") {
+        await renderSuggestionsTab();
+        return;
+    }
+
     let list = [];
     if (activeTab === "friends") list = getFriends();
     if (activeTab === "received") list = getReceived();
@@ -428,6 +436,78 @@ async function renderTab() {
     `;
 
     attachCardEvents();
+    lucide.createIcons();
+}
+
+async function renderSuggestionsTab() {
+    content.innerHTML = `<div class="p-12 text-center text-gray-400 text-xs">Buscando sugestões no Cariri...</div>`;
+
+    const connectedIds = new Set([currentUser.id, ...friendships.map(getOtherUser)]);
+    const { data: profilesList, error } = await supabase
+        .from("profiles")
+        .select("id,full_name,username,avatar_url,city,state")
+        .neq("id", currentUser.id)
+        .limit(30);
+
+    if (error || !profilesList) {
+        content.innerHTML = `<div class="p-12 text-center text-red-500 text-xs">Erro ao carregar sugestões.</div>`;
+        return;
+    }
+
+    const suggestions = profilesList.filter(p => !connectedIds.has(p.id));
+
+    if (suggestions.length === 0) {
+        content.innerHTML = `
+            <div class="p-12 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-cyan-50 flex items-center justify-center mx-auto mb-4 border border-cyan-100">
+                    <i data-lucide="sparkles" class="w-7 h-7 text-cyan-600"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 mb-1">Sem novas sugestões</h3>
+                <p class="text-xs text-gray-500">Você já se conectou com todo mundo por aqui!</p>
+            </div>
+        `;
+        lucide.createIcons();
+        return;
+    }
+
+    const cardsHTML = await Promise.all(suggestions.map(async profile => {
+        const avatarHTML = await renderAvatar(profile, "w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center shrink-0 overflow-hidden shadow-sm");
+        const location = [profile.city, profile.state].filter(Boolean).join(" - ");
+
+        return `
+            <div class="p-4 flex items-center gap-4 hover:bg-gray-50/80 transition">
+                ${avatarHTML}
+                <div class="flex-1 min-w-0">
+                    <strong class="block text-sm font-bold text-slate-900 truncate">${escapeHTML(profile.full_name || "Usuário")}</strong>
+                    <small class="text-xs text-gray-500">@${escapeHTML(profile.username || "usuario")}${location ? ` · ${escapeHTML(location)}` : ""}</small>
+                    <div class="flex items-center gap-2 mt-2.5">
+                        <button class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-slate-800 rounded-xl text-xs font-semibold transition" data-action="profile" data-id="${profile.id}">Ver perfil</button>
+                        <button class="px-3.5 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition shadow-xs" data-action="add-suggestion" data-id="${profile.id}">Adicionar amigo</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }));
+
+    content.innerHTML = `
+        <div class="p-4 border-b border-gray-100 bg-gray-50/50">
+            <h2 class="font-bold text-sm text-slate-900">Sugestões para você</h2>
+        </div>
+        <div class="divide-y divide-gray-100">
+            ${cardsHTML.join("")}
+        </div>
+    `;
+
+    content.querySelectorAll("[data-action]").forEach(button => {
+        button.addEventListener("click", async () => {
+            soundFx.playPop();
+            const action = button.dataset.action;
+            const userId = button.dataset.id;
+            if (action === "profile") { location.href = profileUrl(userId); return; }
+            if (action === "add-suggestion") { await sendFriendRequest(userId); await renderSuggestionsTab(); }
+        });
+    });
+
     lucide.createIcons();
 }
 
@@ -607,7 +687,7 @@ async function searchPeople(term) {
             const action = button.dataset.searchAction;
             const id = button.dataset.id;
             if (action === "profile") { location.href = profileUrl(id); return; }
-            if (action === "add") { await sendFriendRequest(id); }
+            if (action === "add") { await sendFriendRequest(id); searchPeople(term); }
         });
     });
 
@@ -637,8 +717,6 @@ async function sendFriendRequest(targetId) {
     soundFx.playSuccess();
     notify("Solicitação enviada!");
     await loadFriendships();
-    const term = searchInput.value.trim();
-    if (term.length >= 2) searchPeople(term);
 }
 
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
