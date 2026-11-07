@@ -16,44 +16,44 @@
 
 <!-- TOPO -->
 <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
-    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-4">
+    <div class="max-w-7xl h-[56px] mx-auto px-4 flex items-center justify-between gap-4">
         
         <!-- LOGO E PESQUISA COM A IMAGEM REDONDINHA -->
         <div class="flex items-center gap-3">
             <a href="./feed.html" class="flex items-center gap-2.5 group cursor-pointer" title="Início - FaceCrato">
                 
                 <!-- Ícone / Logo Redondinho -->
-                <div class="w-10 h-10 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 group-hover:scale-105 transition shrink-0 border-2 border-cyan-500">
+                <div class="w-9 h-9 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 group-hover:scale-105 transition shrink-0 border-2 border-cyan-500">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
                 </div>
 
                 <div class="flex flex-col">
-                    <span class="text-xl font-black tracking-tight text-cyan-600 leading-none">FaceCrato</span>
-                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase">Cariri · CE</span>
+                    <span class="text-lg font-black tracking-tight text-cyan-600 leading-none">FaceCrato</span>
+                    <span class="text-[9px] font-bold text-amber-600 tracking-wider uppercase">Cariri · CE</span>
                 </div>
             </a>
 
             <div class="relative hidden sm:block">
-                <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                <input type="search" placeholder="Pesquisar no Cariri..." disabled class="w-48 lg:w-64 h-10 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                <input type="search" placeholder="Pesquisar no Cariri..." disabled class="w-48 lg:w-64 h-9 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
             </div>
         </div>
 
         <!-- BOTÕES DA DIREITA -->
-        <div class="flex items-center gap-2.5 relative">
+        <div class="flex items-center gap-2 relative">
             
             <!-- BOTÃO DE NOTIFICAÇÕES COM DROPDOWN MODAL -->
             <div class="relative">
-                <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition relative" id="notificationsButton" title="Notificações">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
+                <button class="w-9 h-9 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition relative" id="notificationsButton" title="Notificações">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
                     <!-- Badge de não lidas -->
                     <span id="notifBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
                 </button>
 
                 <!-- MODAL DROPDOWN DE NOTIFICAÇÕES -->
-                <div id="notifDropdown" class="fixed top-[70px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
-                    <div class="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
-                        <h3 class="font-bold text-sm text-slate-900">Notificações</h3>
+                <div id="notifDropdown" class="fixed top-[65px] left-4 right-4 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-2 sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-xl hidden z-[100] overflow-hidden">
+                    <div class="flex justify-between items-center p-3.5 border-b border-gray-100 bg-gray-50/50">
+                        <h3 class="font-bold text-xs text-slate-900">Notificações</h3>
                         <button onclick="markAllReadFromDropdown()" class="text-xs font-bold text-cyan-600 hover:underline">Marcar lidas</button>
                     </div>
 
@@ -61,104 +61,104 @@
                         <div class="p-6 text-center text-xs text-gray-400">Carregando...</div>
                     </div>
 
-                    <div class="p-3 border-t border-gray-100 bg-gray-50/50 text-center">
+                    <div class="p-2.5 border-t border-gray-100 bg-gray-50/50 text-center">
                         <a href="./notificacoes.html" class="text-xs font-bold text-cyan-600 hover:underline">Ver todas as notificações</a>
                     </div>
                 </div>
             </div>
 
-            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition" id="profileButton" title="Meu perfil">
-                <i data-lucide="user-round" class="w-5 h-5"></i>
+            <button class="w-9 h-9 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition" id="profileButton" title="Meu perfil">
+                <i data-lucide="user-round" class="w-4 h-4"></i>
             </button>
             
             <!-- BOTÃO SANDUÍCHE (Mobile) -->
-            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition lg:hidden" id="menuToggleBtn" title="Menu">
-                <i data-lucide="menu" class="w-5 h-5"></i>
+            <button class="w-9 h-9 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition lg:hidden" id="menuToggleBtn" title="Menu">
+                <i data-lucide="menu" class="w-4 h-4"></i>
             </button>
         </div>
     </div>
 </header>
 
 <!-- LAYOUT PRINCIPAL -->
-<main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_300px] gap-6 items-start relative">
+<main class="max-w-7xl mx-auto px-3 py-4 grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_280px] gap-4 items-start relative">
 
     <!-- SIDEBAR ESQUERDA -->
-    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
-        <div class="flex items-center gap-3.5 pb-4 border-b border-gray-100 mb-3">
-            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
+    <aside class="sticky top-16 bg-white border border-gray-200 rounded-2xl p-3.5 shadow-xs hidden lg:block">
+        <div class="flex items-center gap-3 pb-3 border-b border-gray-100 mb-2">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden relative shadow-sm" id="sideAvatar">F</div>
             <div class="min-w-0">
-                <strong id="sideName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
-                <small id="sideUsername" class="text-xs text-gray-500 truncate">@...</small>
+                <strong id="sideName" class="block text-xs font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="sideUsername" class="text-[11px] text-gray-500 truncate">@...</small>
             </div>
         </div>
 
-        <nav class="space-y-1">
-            <a href="./feed.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm transition"><i data-lucide="home" class="w-5 h-5"></i> Feed Principal</a>
-            <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="users" class="w-5 h-5"></i> Amigos</a>
-            <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</a>
-            <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition"><i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil</a>
+        <nav class="space-y-0.5">
+            <a href="./feed.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-xs transition"><i data-lucide="home" class="w-4 h-4"></i> Feed Principal</a>
+            <a href="./amigos.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-xs transition"><i data-lucide="users" class="w-4 h-4"></i> Amigos</a>
+            <a href="./notificacoes.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-xs transition"><i data-lucide="bell" class="w-4 h-4"></i> Notificações</a>
+            <a href="./perfil.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold text-xs transition"><i data-lucide="user-round" class="w-4 h-4"></i> Meu Perfil</a>
         </nav>
     </aside>
 
     <!-- FEED CENTRAL -->
-    <section class="min-w-0 max-w-xl mx-auto w-full">
+    <section class="min-w-0 max-w-lg mx-auto w-full space-y-3.5">
 
         <!-- CRIAR PUBLICAÇÃO -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 shadow-xs">
-            <div class="flex gap-3 items-center pb-3 border-b border-gray-100">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs" id="composerAvatar">F</div>
-                <textarea id="postContent" maxlength="5000" placeholder="No que você está pensando por estas bandas?" class="w-full bg-gray-100 hover:bg-gray-200/50 focus:bg-white border border-transparent focus:border-cyan-600 rounded-full px-4 py-2.5 text-sm text-slate-900 focus:outline-none transition resize-none h-11 placeholder:text-gray-500"></textarea>
+        <div class="bg-white border border-gray-200 rounded-2xl p-3.5 shadow-xs">
+            <div class="flex gap-2.5 items-center pb-2.5 border-b border-gray-100">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 relative shadow-xs" id="composerAvatar">F</div>
+                <textarea id="postContent" maxlength="5000" placeholder="No que você está pensando por estas bandas?" class="w-full bg-gray-100 hover:bg-gray-200/50 focus:bg-white border border-transparent focus:border-cyan-600 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none transition resize-none h-10 placeholder:text-gray-500"></textarea>
             </div>
 
-            <div class="file-preview hidden mt-3 text-xs font-bold text-cyan-700" id="filePreview"></div>
+            <div class="file-preview hidden mt-2 text-[11px] font-bold text-cyan-700" id="filePreview"></div>
 
-            <div class="flex items-center justify-between pt-3 mt-1">
-                <label class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 cursor-pointer transition flex-1 justify-center" for="mediaInput">
-                    <i data-lucide="image" class="w-5 h-5 text-emerald-500"></i> Foto/vídeo
+            <div class="flex items-center justify-between pt-2.5 mt-0.5">
+                <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 cursor-pointer transition flex-1 justify-center" for="mediaInput">
+                    <i data-lucide="image" class="w-4 h-4 text-emerald-500"></i> Foto/vídeo
                 </label>
                 <input id="mediaInput" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden>
 
-                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-1.5 text-xs font-medium focus:outline-none">
+                <select id="visibility" class="bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-2.5 py-1 text-[11px] font-medium focus:outline-none">
                     <option value="public">Público</option>
                     <option value="friends">Amigos</option>
                     <option value="private">Privado</option>
                 </select>
 
-                <button class="bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl px-4 py-2 text-xs font-bold shadow transition disabled:opacity-50 ml-2" id="publishButton">
+                <button class="bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl px-3.5 py-1.5 text-xs font-bold shadow transition disabled:opacity-50 ml-2" id="publishButton">
                     Publicar
                 </button>
             </div>
         </div>
 
-        <!-- POSTS CONTAINER -->
-        <div id="postsContainer">
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-xs animate-pulse">
-                <div class="flex gap-3.5 items-center mb-4">
-                    <div class="w-11 h-11 rounded-full bg-gray-200"></div>
-                    <div class="space-y-2"><div class="w-32 h-3.5 bg-gray-200 rounded"></div><div class="w-20 h-3 bg-gray-200 rounded"></div></div>
+        <!-- POSTS CONTAINER (Espaçamento otimizado entre os posts via container space-y-3.5) -->
+        <div id="postsContainer" class="space-y-3.5">
+            <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-xs animate-pulse">
+                <div class="flex gap-3 items-center mb-3">
+                    <div class="w-10 h-10 rounded-full bg-gray-200"></div>
+                    <div class="space-y-1.5"><div class="w-28 h-3 bg-gray-200 rounded"></div><div class="w-16 h-2.5 bg-gray-200 rounded"></div></div>
                 </div>
-                <div class="w-full h-16 bg-gray-100 rounded-xl"></div>
+                <div class="w-full h-14 bg-gray-100 rounded-xl"></div>
             </div>
         </div>
 
         <!-- BOTÃO CARREGAR MAIS -->
-        <div id="loadMoreContainer" class="text-center pb-8 hidden">
-            <button id="loadMoreBtn" onclick="loadMorePosts()" class="bg-white hover:bg-gray-50 border border-gray-200 text-slate-700 text-xs font-bold px-6 py-3 rounded-xl shadow-xs transition">
+        <div id="loadMoreContainer" class="text-center pb-6 hidden">
+            <button id="loadMoreBtn" onclick="loadMorePosts()" class="bg-white hover:bg-gray-50 border border-gray-200 text-slate-700 text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition">
                 Carregar publicações anteriores...
             </button>
         </div>
     </section>
 
     <!-- SIDEBAR DIREITA -->
-    <aside class="sticky top-20 bg-white border border-gray-200 rounded-2xl p-4 shadow-xs hidden lg:block">
-        <h3 class="text-sm font-extrabold text-slate-800 mb-3">Contatos do Cariri</h3>
-        <div class="space-y-2.5">
-            <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">M</div>
+    <aside class="sticky top-16 bg-white border border-gray-200 rounded-2xl p-3.5 shadow-xs hidden lg:block">
+        <h3 class="text-xs font-extrabold text-slate-800 mb-2.5">Contatos do Cariri</h3>
+        <div class="space-y-2">
+            <div class="flex items-center gap-2.5 text-xs font-semibold text-slate-700">
+                <div class="w-7 h-7 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold text-[11px]">M</div>
                 <span>Mila Ribeiro</span>
             </div>
-            <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                <div class="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold">R</div>
+            <div class="flex items-center gap-2.5 text-xs font-semibold text-slate-700">
+                <div class="w-7 h-7 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-[11px]">R</div>
                 <span>Raissa Ribeiro</span>
             </div>
         </div>
@@ -171,31 +171,31 @@
     <div class="bg-white w-full max-w-6xl h-[92vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
         
         <!-- Botão Fechar Modal -->
-        <button id="closeMediaModal" class="absolute top-3 right-3 z-30 w-10 h-10 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition">
-            <i data-lucide="x" class="w-5 h-5"></i>
+        <button id="closeMediaModal" class="absolute top-3 right-3 z-30 w-9 h-9 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
         </button>
 
         <!-- LADO ESQUERDO: MÍDIA E PLAYER -->
         <div class="flex-1 bg-black flex items-center justify-center relative overflow-hidden h-[50vh] lg:h-full select-none">
             <div id="modalMediaContainer" class="w-full h-full flex items-center justify-center relative"></div>
             
-            <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
-                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            <button id="prevMediaBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
             </button>
-            <button id="nextMediaBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
-                <i data-lucide="chevron-right" class="w-6 h-6"></i>
+            <button id="nextMediaBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition hidden z-20">
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
             </button>
         </div>
 
         <!-- LADO DIREITO: DETALHES E COMENTÁRIOS -->
-        <div class="w-full lg:w-[420px] bg-white flex flex-col h-[42vh] lg:h-full border-t lg:border-t-0 lg:border-l border-gray-200">
-            <div class="p-4 border-b border-gray-100 flex items-center gap-3" id="modalAuthorHeader"></div>
-            <div class="p-4 border-b border-gray-100 overflow-y-auto max-h-32 text-xs text-slate-800" id="modalPostContent"></div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-3 divide-y divide-gray-50" id="modalCommentsList"></div>
-            <div class="p-3 border-t border-gray-100 bg-gray-50/50">
+        <div class="w-full lg:w-[400px] bg-white flex flex-col h-[42vh] lg:h-full border-t lg:border-t-0 lg:border-l border-gray-200">
+            <div class="p-3.5 border-b border-gray-100 flex items-center gap-2.5" id="modalAuthorHeader"></div>
+            <div class="p-3.5 border-b border-gray-100 overflow-y-auto max-h-28 text-xs text-slate-800" id="modalPostContent"></div>
+            <div class="flex-1 overflow-y-auto p-3.5 space-y-2.5 divide-y divide-gray-50" id="modalCommentsList"></div>
+            <div class="p-2.5 border-t border-gray-100 bg-gray-50/50">
                 <form id="modalCommentForm" class="flex gap-2">
-                    <input type="text" id="modalCommentInput" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
-                    <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-full w-9 h-9 flex items-center justify-center hover:brightness-110 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
+                    <input type="text" id="modalCommentInput" placeholder="Escreva um comentário..." maxlength="2000" required class="flex-1 bg-white border border-gray-200 rounded-full px-3.5 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-cyan-600">
+                    <button type="submit" class="bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:brightness-110 transition shrink-0"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
                 </form>
             </div>
         </div>
@@ -205,25 +205,25 @@
 
 <!-- MODAL DE DETALHES DA NOTIFICAÇÃO -->
 <div id="notificationModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[250] hidden items-center justify-center p-2 sm:p-6 transition-opacity">
-    <div class="bg-white w-full max-w-4xl h-[85vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col relative">
+    <div class="bg-white w-full max-w-3xl h-[80vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col relative">
         
         <!-- Botão Fechar Modal -->
-        <button onclick="closeNotificationModal()" class="absolute top-3 right-3 z-30 w-10 h-10 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition">
-            <i data-lucide="x" class="w-5 h-5"></i>
+        <button onclick="closeNotificationModal()" class="absolute top-3 right-3 z-30 w-9 h-9 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
         </button>
 
         <!-- Cabeçalho do Modal -->
-        <div class="p-4 border-b border-gray-200 bg-gray-50 flex items-center gap-3">
-            <div id="notifModalAvatar" class="w-10 h-10 rounded-full bg-cyan-600 text-white font-bold flex items-center justify-center overflow-hidden shrink-0"></div>
+        <div class="p-3.5 border-b border-gray-200 bg-gray-50 flex items-center gap-2.5">
+            <div id="notifModalAvatar" class="w-9 h-9 rounded-full bg-cyan-600 text-white font-bold flex items-center justify-center overflow-hidden shrink-0"></div>
             <div>
-                <strong id="notifModalTitle" class="block text-sm font-bold text-slate-900">Notificação</strong>
-                <small id="notifModalDate" class="text-xs text-gray-500"></small>
+                <strong id="notifModalTitle" class="block text-xs font-bold text-slate-900">Notificação</strong>
+                <small id="notifModalDate" class="text-[11px] text-gray-500"></small>
             </div>
         </div>
 
         <!-- Corpo do Modal (Postagem ou Botões de Amizade) -->
-        <div id="notifModalBody" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <div class="text-center text-gray-400 text-xs py-12">Carregando detalhes...</div>
+        <div id="notifModalBody" class="flex-1 overflow-y-auto p-5 space-y-3">
+            <div class="text-center text-gray-400 text-xs py-10">Carregando detalhes...</div>
         </div>
 
     </div>
@@ -233,42 +233,42 @@
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
 <div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-80 bg-white border-l border-gray-200 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
     
-    <div class="p-6 bg-gradient-to-br from-cyan-50 via-white to-gray-50 border-b border-gray-100 flex items-center justify-between">
-        <div class="flex items-center gap-3.5 min-w-0">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500" id="mobileMenuAvatar">F</div>
+    <div class="p-5 bg-gradient-to-br from-cyan-50 via-white to-gray-50 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500" id="mobileMenuAvatar">F</div>
             <div class="min-w-0">
-                <strong id="mobileMenuName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
-                <small id="mobileMenuUsername" class="text-xs text-gray-500 truncate block">@...</small>
+                <strong id="mobileMenuName" class="block text-xs font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="mobileMenuUsername" class="text-[11px] text-gray-500 truncate block">@...</small>
             </div>
         </div>
-        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition shrink-0" id="menuCloseBtn">
-            <i data-lucide="x" class="w-5 h-5"></i>
+        <button class="w-8 h-8 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition shrink-0" id="menuCloseBtn">
+            <i data-lucide="x" class="w-4 h-4"></i>
         </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+    <div class="flex-1 overflow-y-auto p-3 space-y-3">
         <div>
-            <h3 class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider mb-2 px-3">Navegação</h3>
-            <nav class="space-y-1">
-                <a href="./feed.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-cyan-50 text-cyan-700 font-bold text-sm transition">
-                    <i data-lucide="home" class="w-5 h-5"></i> Feed Principal
+            <h3 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mb-1.5 px-3">Navegação</h3>
+            <nav class="space-y-0.5">
+                <a href="./feed.html" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-cyan-50 text-cyan-700 font-bold text-xs transition">
+                    <i data-lucide="home" class="w-4 h-4"></i> Feed Principal
                 </a>
-                <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
-                    <i data-lucide="users" class="w-5 h-5"></i> Amigos & Conexões
+                <a href="./amigos.html" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-xs transition">
+                    <i data-lucide="users" class="w-4 h-4"></i> Amigos & Conexões
                 </a>
-                <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
-                    <i data-lucide="bell" class="w-5 h-5"></i> Notificações
+                <a href="./notificacoes.html" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-xs transition">
+                    <i data-lucide="bell" class="w-4 h-4"></i> Notificações
                 </a>
-                <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
-                    <i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil
+                <a href="./perfil.html" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-xs transition">
+                    <i data-lucide="user-round" class="w-4 h-4"></i> Meu Perfil
                 </a>
             </nav>
         </div>
     </div>
 
-    <div class="p-4 border-t border-gray-100 bg-gray-50/50">
-        <button class="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-red-600 bg-red-50 hover:bg-red-100 font-bold text-sm transition shadow-xs" id="logoutButtonMobile">
-            <i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta
+    <div class="p-3.5 border-t border-gray-100 bg-gray-50/50">
+        <button class="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-2xl text-red-600 bg-red-50 hover:bg-red-100 font-bold text-xs transition shadow-xs" id="logoutButtonMobile">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Sair da conta
         </button>
     </div>
 </div>
@@ -276,11 +276,11 @@
 <style>
 .reaction-wrapper { position: relative; display: flex; justify-content: center; }
 .reaction-popup {
-    position: absolute; bottom: 52px; left: 0;
+    position: absolute; bottom: 48px; left: 0;
     background: #ffffff; border: 1px solid #cbd5e1;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    border-radius: 30px; padding: 6px 10px;
-    display: none; gap: 6px; z-index: 30; opacity: 0;
+    border-radius: 30px; padding: 5px 8px;
+    display: none; gap: 5px; z-index: 30; opacity: 0;
     max-width: calc(100vw - 32px);
     overflow-x: auto;
     transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -288,7 +288,7 @@
 .reaction-wrapper:hover .reaction-popup, .reaction-popup.show {
     display: flex; opacity: 1;
 }
-.react-emoji-btn { background: none; border: 0; font-size: 24px; padding: 2px; border-radius: 50%; cursor: pointer; transition: transform .15s ease; flex-shrink: 0; }
+.react-emoji-btn { background: none; border: 0; font-size: 22px; padding: 2px; border-radius: 50%; cursor: pointer; transition: transform .15s ease; flex-shrink: 0; }
 .react-emoji-btn:hover { transform: scale(1.3); background: #f1f5f9; }
 .comments-area { display: none; }
 .comments-area.open { display: block; }
