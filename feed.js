@@ -23,17 +23,23 @@ const loadMoreContainer = document.getElementById("loadMoreContainer");
 
 const mediaModal = document.getElementById("mediaModal");
 const closeMediaModal = document.getElementById("closeMediaModal");
+const modalLeftPane = document.getElementById("modalLeftPane");
 const modalMediaContainer = document.getElementById("modalMediaContainer");
 const modalAuthorHeader = document.getElementById("modalAuthorHeader");
 const modalPostContent = document.getElementById("modalPostContent");
 const modalCommentsList = document.getElementById("modalCommentsList");
+const loadMoreCommentsContainer = document.getElementById("loadMoreCommentsContainer");
 const modalCommentForm = document.getElementById("modalCommentForm");
 const modalCommentInput = document.getElementById("modalCommentInput");
 const prevMediaBtn = document.getElementById("prevMediaBtn");
 const nextMediaBtn = document.getElementById("nextMediaBtn");
 
+const avatarModal = document.getElementById("avatarModal");
+const modalAvatarImage = document.getElementById("modalAvatarImage");
+
 let activeModalPost = null;
 let activeMediaIndex = 0;
+let modalCommentLimit = 3;
 let notificationsChannel = null;
 let postLimit = 10;
 let currentUser = null;
@@ -227,7 +233,7 @@ async function initialize() {
 
 
 /* ==========================================================================
-   7. SISTEMA DE NOTIFICAÇÕES (Contador e Tempo Real)
+   7. SISTEMA DE NOTIFICAÇÕES (Modal Grande e Ações de Amizade)
    ========================================================================== */
 async function checkUnreadCount() {
     const { count, error } = await supabase.from("notifications").select("*", { count: "exact", head: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
@@ -293,15 +299,14 @@ async function fetchDropdownNotifications() {
                 let actionText = "interagiu com você.";
                 if (n.notification_type === "like") actionText = "curtiu sua publicação.";
                 else if (n.notification_type === "comment") actionText = "comentou na sua publicação.";
-                else if (n.notification_type === "friend_request") actionText = "enviou solicitação de amizade.";
-                else if (n.notification_type === "friend_accepted") actionText = "aceitou sua amizade.";
+                else if (n.notification_type === "friend_request") actionText = "enviou uma solicitação de amizade.";
+                else if (n.notification_type === "friend_accepted") actionText = "aceitou sua solicitação de amizade.";
                 else if (n.message) actionText = n.message;
 
                 const unreadClass = !n.is_read ? "bg-cyan-50/50 border-l-2 border-cyan-600" : "";
-                let target = n.post_id ? `./feed.html?post=${encodeURIComponent(n.post_id)}` : "./perfil.html";
 
                 return `
-                    <a href="${target}" onclick="markOneReadModal('${n.id}')" class="flex items-start gap-3 p-3 hover:bg-gray-50 transition ${unreadClass}">
+                    <div onclick="openNotificationModal('${n.id}', '${n.notification_type}', '${n.post_id || ''}', '${n.actor_id}')" class="flex items-start gap-3 p-3 hover:bg-gray-50 transition cursor-pointer ${unreadClass}">
                         <div class="flex-shrink-0">${avatar || ''}</div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs text-slate-800 leading-relaxed break-words">
@@ -309,7 +314,7 @@ async function fetchDropdownNotifications() {
                             </p>
                             <span class="text-[10px] text-gray-400 mt-1 block">${formatDate(n.created_at)}</span>
                         </div>
-                    </a>
+                    </div>
                 `;
             })
         );
@@ -319,9 +324,106 @@ async function fetchDropdownNotifications() {
     }
 }
 
-window.markOneReadModal = async function(id) {
-    await supabase.from("notifications").update({ is_read: true }).eq("id", id).eq("recipient_id", currentUser.id);
+// FUNÇÃO PARA ABRIR O MODAL GRANDE DA NOTIFICAÇÃO
+window.openNotificationModal = async function(notifId, type, postId, actorId) {
+    await supabase.from("notifications").update({ is_read: true }).eq("id", notifId).eq("recipient_id", currentUser.id);
     await checkUnreadCount();
+    notifDropdown.classList.add("hidden");
+
+    const modal = document.getElementById("notificationModal");
+    const body = document.getElementById("notifModalBody");
+    const title = document.getElementById("notifModalTitle");
+    const avatarContainer = document.getElementById("notifModalAvatar");
+    
+    if (!modal) return;
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    body.innerHTML = `<div class="text-center text-xs text-gray-400 py-12">Carregando detalhes...</div>`;
+
+    const { data: actorProfile } = await supabase.from("profiles").select("id, full_name, username, avatar_url").eq("id", actorId).maybeSingle();
+    const actorName = actorProfile?.full_name || "Usuário";
+    title.textContent = `Notificação de ${actorName}`;
+    avatarContainer.innerHTML = await renderAvatar(actorProfile, "w-full h-full object-cover");
+
+    if (type === "friend_request") {
+        body.innerHTML = `
+            <div class="text-center py-8 space-y-4">
+                <div class="w-20 h-20 mx-auto rounded-full overflow-hidden border-4 border-cyan-500 shadow-md">
+                    ${await renderAvatar(actorProfile, "w-full h-full object-cover")}
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">${escapeHTML(actorName)} enviou uma solicitação de amizade</h3>
+                <p class="text-xs text-gray-500">Deseja aceitar este pedido para começarem a interagir?</p>
+                <div class="flex justify-center gap-3 pt-2" id="friendActionButtons-${actorId}">
+                    <button onclick="respondFriendRequest('${actorId}', 'accepted', '${notifId}')" class="px-6 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded-xl shadow transition">Aceitar</button>
+                    <button onclick="respondFriendRequest('${actorId}', 'rejected', '${notifId}')" class="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 text-slate-700 text-xs font-bold rounded-xl transition">Recusar</button>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    if (postId) {
+        const { data: post } = await supabase.from("posts").select(`id, user_id, content, created_at, visibility`).eq("id", postId).maybeSingle();
+        if (!post) {
+            body.innerHTML = `<div class="text-center text-xs text-gray-400 py-12">Esta publicação foi excluída ou não está mais disponível.</div>`;
+            return;
+        }
+
+        const { data: media } = await supabase.from("post_media").select("media_url, media_type").eq("post_id", postId);
+        let mediaHTML = "";
+        if (media && media.length > 0) {
+            const m = media[0];
+            const signedUrl = await getStorageUrl("post-media", m.media_url);
+            if (signedUrl) {
+                if (m.media_type === "video") {
+                    mediaHTML = `<video controls class="w-full max-h-[400px] object-contain bg-black rounded-xl mb-4"><source src="${signedUrl}"></video>`;
+                } else {
+                    mediaHTML = `<img src="${signedUrl}" class="w-full max-h-[400px] object-cover rounded-xl mb-4" />`;
+                }
+            }
+        }
+
+        body.innerHTML = `
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                <p class="text-sm text-slate-800 leading-relaxed mb-4 whitespace-pre-wrap">${formatRichText(post.content || "")}</p>
+                ${mediaHTML}
+                <div class="text-right">
+                    <button onclick="closeNotificationModal(); openCommentsModalOnly('${post.id}')" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded-xl transition">Ver Comentários / Interagir</button>
+                </div>
+            </div>
+        `;
+    } else {
+        body.innerHTML = `<div class="text-center text-xs text-gray-500 py-12">Você possui uma nova interação geral.</div>`;
+    }
+}
+
+window.closeNotificationModal = function() {
+    const modal = document.getElementById("notificationModal");
+    if (!modal) return;
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.body.style.overflow = "auto";
+}
+
+window.respondFriendRequest = async function(actorId, status) {
+    soundFx.playPop();
+    const actionContainer = document.getElementById(`friendActionButtons-${actorId}`);
+    if(actionContainer) actionContainer.innerHTML = `<span class="text-xs font-bold text-gray-500">Processando...</span>`;
+
+    const { error } = await supabase
+        .from("friendships")
+        .update({ status: status })
+        .eq("user_a", actorId)
+        .eq("user_b", currentUser.id);
+
+    if (error) {
+        await supabase.from("friendships").update({ status: status }).eq("user_a", currentUser.id).eq("user_b", actorId);
+    }
+
+    showSuccess(status === "accepted" ? "Amizade aceita com sucesso!" : "Solicitação recusada.");
+    closeNotificationModal();
+    await fetchDropdownNotifications();
 }
 
 window.markAllReadFromDropdown = async function() {
@@ -478,17 +580,17 @@ async function renderPosts(posts) {
                 ${post.content ? `<div class="text-slate-800 text-sm leading-relaxed mb-3 whitespace-pre-wrap break-words">${formatRichText(post.content)}</div>` : ""}
                 ${mediaHTML}
 
-                <div class="flex justify-between text-xs text-gray-500 py-2 border-b border-gray-100 mb-1">
-                    <span>${reactionSummary || " "}</span>
+                <div class="flex justify-between text-xs text-gray-500 py-2 border-b border-gray-100 mb-1" id="post-stats-${post.id}">
+                    <span class="post-reaction-summary">${reactionSummary || " "}</span>
                     <span>${commentCount} comentário(s)</span>
                 </div>
 
                 <div class="grid grid-cols-3 gap-1 pt-1 relative">
                     <div class="reaction-wrapper">
-                        <button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click">
-                            <span>${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
-                            <span>${userReaction ? "Reagiu" : "Curtir"}</span>
-                            <span>(${reactionCount})</span>
+                        <button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}" data-action="like-click" id="like-btn-${post.id}">
+                            <span class="like-icon">${userReaction ? reactionIcons[userReaction.reaction_type] : "👍"}</span>
+                            <span class="like-text">${userReaction ? "Reagiu" : "Curtir"}</span>
+                            <span>(<span class="like-count">${reactionCount}</span>)</span>
                         </button>
                         <div class="reaction-popup" id="popup-${post.id}">
                             <button class="react-emoji-btn" data-reaction="like" data-post-id="${post.id}">👍</button>
@@ -729,7 +831,76 @@ publishButton.addEventListener("click", async () => {
 
 
 /* ==========================================================================
-   12. EVENT LISTENERS DO FEED (Curtidas, Comentários Inline, Exclusão)
+   12. SISTEMA DE CURTIDAS E REAÇÕES INSTANTÂNEAS (Sem recarregar a página)
+   ========================================================================== */
+function updatePostUIOptimistically(postId, newReactions) {
+    const post = globalPostsCache.find(p => p.id === postId);
+    if (!post) return;
+
+    post.reactions = newReactions;
+    const userReaction = post.reactions.find(r => r.user_id === currentUser.id);
+    const reactionCount = post.reactions.length;
+
+    const likeBtn = document.getElementById(`like-btn-${postId}`);
+    if (likeBtn) {
+        likeBtn.className = `w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition ${userReaction ? 'text-cyan-600 bg-cyan-50' : ''}`;
+        likeBtn.querySelector(".like-icon").textContent = userReaction ? reactionIcons[userReaction.reaction_type] : "👍";
+        likeBtn.querySelector(".like-text").textContent = userReaction ? "Reagiu" : "Curtir";
+        likeBtn.querySelector(".like-count").textContent = reactionCount;
+    }
+
+    const statsContainer = document.getElementById(`post-stats-${postId}`);
+    if (statsContainer) {
+        const reactionSummary = Object.entries(
+            post.reactions.reduce((acc, r) => { acc[r.reaction_type] = (acc[r.reaction_type] || 0) + 1; return acc; }, {})
+        ).map(([type, count]) => `${reactionIcons[type] || "👍"} ${count}`).join(" ");
+        
+        statsContainer.querySelector(".post-reaction-summary").textContent = reactionSummary || " ";
+    }
+}
+
+async function applyReaction(postId, reactionType) {
+    document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
+    soundFx.playPop();
+
+    const post = globalPostsCache.find(p => p.id === postId);
+    if (post) {
+        let currentReactions = [...post.reactions];
+        const existingIndex = currentReactions.findIndex(r => r.user_id === currentUser.id);
+        if (existingIndex !== -1) {
+            if (currentReactions[existingIndex].reaction_type === reactionType) {
+                currentReactions.splice(existingIndex, 1);
+            } else {
+                currentReactions.splice(existingIndex, 1);
+                currentReactions.push({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
+            }
+        } else {
+            currentReactions.push({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
+        }
+        updatePostUIOptimistically(postId, currentReactions);
+    }
+
+    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
+
+    if (existing) {
+        if (existing.reaction_type === reactionType) {
+            await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
+        } else {
+            await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
+        }
+    } else {
+        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
+    }
+
+    const { data: freshReactions } = await supabase.from("reactions").select("post_id,user_id,reaction_type").eq("post_id", postId);
+    if (freshReactions) {
+        updatePostUIOptimistically(postId, freshReactions);
+    }
+}
+
+
+/* ==========================================================================
+   13. EVENT LISTENERS DO FEED (Cliques, Comentários Inline, Exclusão)
    ========================================================================== */
 postsContainer.addEventListener("click", async event => {
     const target = event.target;
@@ -778,20 +949,6 @@ postsContainer.addEventListener("click", async event => {
     }
 });
 
-async function applyReaction(postId, reactionType) {
-    document.querySelectorAll(".reaction-popup").forEach(p => p.classList.remove("show"));
-    soundFx.playPop();
-    const { data: existing } = await supabase.from("reactions").select("id,reaction_type").eq("post_id", postId).eq("user_id", currentUser.id).maybeSingle();
-
-    if (existing) {
-        if (existing.reaction_type === reactionType) await supabase.from("reactions").delete().eq("post_id", postId).eq("user_id", currentUser.id);
-        else await supabase.from("reactions").update({ reaction_type: reactionType }).eq("post_id", postId).eq("user_id", currentUser.id);
-    } else {
-        await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: reactionType });
-    }
-    await loadFeed();
-}
-
 postsContainer.addEventListener("submit", async event => {
     const form = event.target.closest("form");
     if (!form || !form.dataset.postId) return;
@@ -810,7 +967,7 @@ postsContainer.addEventListener("submit", async event => {
 
 
 /* ==========================================================================
-   13. PERFIL E LOGOUT
+   14. PERFIL E LOGOUT
    ========================================================================== */
 document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
@@ -823,6 +980,6 @@ document.getElementById("logoutButtonMobile").addEventListener("click", handleLo
 
 
 /* ==========================================================================
-   14. START DA APLICAÇÃO
+   15. START DA APLICAÇÃO
    ========================================================================== */
 initialize();
