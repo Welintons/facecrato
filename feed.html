@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>Perfil | FaceCrato</title>
+<title>Perfil | FaceCrato - A rede do Cariri</title>
 
 <link rel="manifest" href="./manifest.json">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -12,48 +12,69 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
+<body class="bg-gray-100 text-slate-900 font-sans antialiased min-h-screen">
 
-<!-- TOPO -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
-    <div class="max-w-7xl h-[72px] mx-auto px-6 flex items-center gap-4 sm:gap-6">
-        <!-- LOGO / BOTÃO HOME -->
-        <a href="./feed.html" class="flex items-center gap-3 text-2xl font-black tracking-tight text-slate-900 group cursor-pointer" title="Início">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-violet-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition">
-                <i data-lucide="home" class="w-5 h-5"></i>
+<!-- TOPO PADRONIZADO IDÊNTICO AO FEED -->
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-xs">
+    <div class="max-w-7xl h-[60px] mx-auto px-4 flex items-center justify-between gap-4">
+        
+        <!-- LOGO E PESQUISA COM A IMAGEM REDONDINHA -->
+        <div class="flex items-center gap-3">
+            <a href="./feed.html" class="flex items-center gap-2.5 group cursor-pointer" title="Início - FaceCrato">
+                
+                <!-- Ícone / Logo Redondinho -->
+                <div class="w-10 h-10 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 group-hover:scale-105 transition shrink-0 border-2 border-cyan-500">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
+                </div>
+
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-cyan-600 leading-none">FaceCrato</span>
+                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase">Cariri · CE</span>
+                </div>
+            </a>
+
+            <div class="relative hidden sm:block">
+                <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                <input type="search" placeholder="Pesquisar no Cariri..." disabled class="w-48 lg:w-64 h-10 pl-9 pr-4 bg-gray-100 border-0 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
             </div>
-            FaceCrato
-        </a>
-
-        <div class="flex-1 max-w-md relative hidden sm:block">
-            <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-400"></i>
-            <input type="search" placeholder="Pesquisar no FaceCrato..." disabled class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-cyan-600 focus:bg-white transition">
         </div>
 
-        <div class="ml-auto flex items-center gap-2.5">
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition" onclick="location.href='./notificacoes.html'" title="Notificações"><i data-lucide="bell" class="w-5 h-5"></i></button>
-            <button class="w-10 h-10 bg-cyan-50 border border-cyan-200 rounded-xl text-cyan-700 flex items-center justify-center shadow-sm" id="profileButton" title="Meu perfil"><i data-lucide="user-round" class="w-5 h-5"></i></button>
+        <!-- BOTÕES DA DIREITA -->
+        <div class="flex items-center gap-2.5 relative">
+            
+            <!-- BOTÃO DE NOTIFICAÇÕES -->
+            <div class="relative">
+                <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition relative" onclick="location.href='./notificacoes.html'" title="Notificações">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+            </div>
 
+            <button class="w-10 h-10 bg-cyan-100 text-cyan-700 rounded-full flex items-center justify-center transition font-bold" id="profileButton" title="Meu perfil">
+                <i data-lucide="user-round" class="w-5 h-5"></i>
+            </button>
+            
             <!-- BOTÃO SANDUÍCHE (Mobile) -->
-            <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-100 hover:text-slate-900 transition lg:hidden" id="menuToggleBtn" title="Menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 bg-gray-200/70 hover:bg-gray-200 rounded-full text-slate-800 flex items-center justify-center transition lg:hidden" id="menuToggleBtn" title="Menu">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
         </div>
     </div>
 </header>
 
 <!-- LAYOUT PRINCIPAL -->
-<main class="max-w-4xl mx-auto px-6 py-8">
+<main class="max-w-4xl mx-auto px-4 py-6">
 
     <!-- CARTÃO DO PERFIL -->
-    <section class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mb-8">
+    <section class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs mb-6">
         <!-- CAPA -->
-        <div class="h-64 sm:h-72 relative bg-gradient-to-r from-cyan-600 to-violet-600 bg-cover bg-center" id="cover">
+        <div class="h-60 sm:h-72 relative bg-gradient-to-r from-cyan-600 to-violet-600 bg-cover bg-center" id="cover">
             <button class="absolute right-4 top-4 bg-black/40 hover:bg-black/60 text-white px-3.5 py-2 rounded-xl text-xs font-semibold backdrop-blur-md flex items-center gap-2 transition" id="changeCoverButton" hidden>
                 <i data-lucide="camera" class="w-4 h-4"></i> Alterar capa
             </button>
         </div>
 
         <div class="px-6 sm:px-8 pb-6">
-            <!-- AVATAR CENTRALIZADO (Mobile e Desktop) -->
+            <!-- AVATAR CENTRALIZADO -->
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 relative z-10 mb-6">
                 <div class="flex flex-col items-center sm:items-start -mt-16 sm:-mt-20 w-full sm:w-auto">
                     <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-4 border-white bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black text-4xl flex items-center justify-center overflow-hidden relative shadow-md mx-auto sm:mx-0">
@@ -70,14 +91,20 @@
             </div>
 
             <!-- IDENTIDADE -->
-            <div class="mb-4 text-center sm:text-left">
+            <div class="mb-3 text-center sm:text-left">
                 <h1 id="profileName" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Carregando perfil...</h1>
                 <p id="profileUsername" class="text-xs sm:text-sm text-gray-500 mt-0.5">@...</p>
             </div>
 
-            <div class="text-slate-700 text-sm leading-relaxed mb-6 whitespace-pre-wrap break-words text-center sm:text-left" id="profileBio"></div>
+            <div class="text-slate-700 text-sm leading-relaxed mb-4 whitespace-pre-wrap break-words text-center sm:text-left" id="profileBio"></div>
 
-            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-gray-500 pt-4 border-t border-gray-100">
+            <!-- ESTATÍSTICAS E CONEXÕES -->
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs font-semibold text-gray-600 mb-4 pb-4 border-b border-gray-100">
+                <span class="flex items-center gap-1.5"><i data-lucide="file-text" class="w-4 h-4 text-cyan-600"></i><strong id="statPostsCount" class="text-slate-900">0</strong> publicações</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-4 h-4 text-violet-600"></i><strong id="statFriendsCount" class="text-slate-900">0</strong> amigos</span>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-gray-500">
                 <span id="profileLocation" hidden class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i><span></span></span>
                 <span id="profileDate" class="flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>No FaceCrato</span>
                 <span id="privacyLabel" class="flex items-center gap-1.5"><i data-lucide="globe" class="w-4 h-4 text-gray-400"></i>Perfil público</span>
@@ -88,14 +115,14 @@
     <!-- CABEÇALHO PUBLICAÇÕES -->
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-black text-slate-900 tracking-tight">Publicações</h2>
-        <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-sm" id="refreshButton" title="Atualizar">
+        <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-50 hover:text-slate-900 transition shadow-xs" id="refreshButton" title="Atualizar">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
         </button>
     </div>
 
     <!-- FEED DO PERFIL -->
     <section class="space-y-6" id="postsContainer">
-        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
+        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-xs">
             Carregando publicações...
         </div>
     </section>
@@ -104,22 +131,45 @@
 
 <!-- MENU MOBILE DESLIZANTE -->
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden lg:hidden transition-opacity"></div>
-<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white border-l border-gray-200 p-6 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
-    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
-        <h3 class="text-base font-black text-slate-900">Menu</h3>
-        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition" id="menuCloseBtn"><i data-lucide="x" class="w-5 h-5"></i></button>
+<div id="mobileMenuDrawer" class="fixed top-0 right-0 bottom-0 w-80 bg-white border-l border-gray-200 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col">
+    
+    <div class="p-6 bg-gradient-to-br from-cyan-50 via-white to-gray-50 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm border-2 border-cyan-500" id="mobileMenuAvatar">F</div>
+            <div class="min-w-0">
+                <strong id="mobileMenuName" class="block text-sm font-bold text-slate-900 truncate">Carregando...</strong>
+                <small id="mobileMenuUsername" class="text-xs text-gray-500 truncate block">@...</small>
+            </div>
+        </div>
+        <button class="w-9 h-9 bg-gray-100 rounded-xl text-gray-600 flex items-center justify-center hover:bg-gray-200 transition shrink-0" id="menuCloseBtn">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
     </div>
 
-    <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Navegação</h3>
-    <nav class="space-y-1.5 mb-6">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" onclick="location.href='./feed.html'"><i data-lucide="house" class="w-5 h-5"></i> Feed</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" onclick="location.href='./amigos.html'"><i data-lucide="users" class="w-5 h-5"></i> Amigos</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-slate-900 font-semibold text-sm transition" onclick="location.href='./notificacoes.html'"><i data-lucide="bell" class="w-5 h-5"></i> Notificações</button>
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl bg-cyan-50 text-cyan-700 font-bold text-sm border border-cyan-200" onclick="location.href='./perfil.html'"><i data-lucide="user-round" class="w-5 h-5"></i> Meu perfil</button>
-    </nav>
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+        <div>
+            <h3 class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider mb-2 px-3">Navegação</h3>
+            <nav class="space-y-1">
+                <a href="./feed.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
+                    <i data-lucide="home" class="w-5 h-5"></i> Feed Principal
+                </a>
+                <a href="./amigos.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
+                    <i data-lucide="users" class="w-5 h-5"></i> Amigos & Conexões
+                </a>
+                <a href="./notificacoes.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-700 hover:bg-gray-100 font-semibold text-sm transition">
+                    <i data-lucide="bell" class="w-5 h-5"></i> Notificações
+                </a>
+                <a href="./perfil.html" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-cyan-50 text-cyan-700 font-bold text-sm transition">
+                    <i data-lucide="user-round" class="w-5 h-5"></i> Meu Perfil
+                </a>
+            </nav>
+        </div>
+    </div>
 
-    <div class="mt-auto pt-4 border-t border-gray-100">
-        <button class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-600 bg-red-50 font-semibold text-sm transition" id="logoutButtonMobile"><i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta</button>
+    <div class="p-4 border-t border-gray-100 bg-gray-50/50">
+        <button class="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-red-600 bg-red-50 hover:bg-red-100 font-bold text-sm transition shadow-xs" id="logoutButtonMobile">
+            <i data-lucide="log-out" class="w-5 h-5"></i> Sair da conta
+        </button>
     </div>
 </div>
 
@@ -314,7 +364,7 @@ function showProfileError(message) {
     $("profileName").textContent = "Erro ao carregar perfil";
     $("profileUsername").textContent = message;
     postsContainer.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-sm">
+        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-xs">
             ${escapeHTML(message)}
         </div>
     `;
@@ -345,6 +395,19 @@ async function initialize() {
     currentUser = data.session.user;
     profileId = requestedId || currentUser.id;
     isOwnProfile = profileId === currentUser.id;
+
+    // Preenche dados do menu mobile
+    const { data: myProfile } = await supabase.from("profiles").select("id,username,full_name,avatar_url").eq("id", currentUser.id).maybeSingle();
+    if (myProfile) {
+        $("mobileMenuName").textContent = myProfile.full_name || "Usuário";
+        $("mobileMenuUsername").textContent = "@" + (myProfile.username || "usuario");
+        const mobileAvatar = await storageUrl("avatars", myProfile.avatar_url);
+        if (mobileAvatar) {
+            $("mobileMenuAvatar").innerHTML = `<img src="${escapeHTML(mobileAvatar)}" class="w-full h-full object-cover">`;
+        } else {
+            $("mobileMenuAvatar").textContent = initials(myProfile.full_name || "U");
+        }
+    }
 
     await loadProfile();
     subscribeNotifications();
@@ -391,13 +454,12 @@ async function loadProfile() {
     currentProfile = data;
 
     await renderProfile();
-    await loadUserPosts();
+    await loadUserStatsAndPosts();
 }
 
 // 3. VERIFICAR AMIZADE
 async function loadFriendship() {
     friendship = null;
-
     if (isOwnProfile) return;
 
     const { data, error } = await supabase
@@ -457,43 +519,35 @@ function renderFriendButton() {
     showIcons();
 }
 
-// 5. AÇÃO PRINCIPAL
 async function handleFriendAction() {
     soundFx.playPop();
     if (!friendship) {
         await sendFriendRequest();
         return;
     }
-
     if (friendship.status === "accepted") {
         await removeFriendship();
         return;
     }
-
     if (friendship.requested_by === currentUser.id) {
         await cancelFriendRequest();
         return;
     }
-
     await respondFriendRequest(true);
 }
 
-// 6. ENVIAR SOLICITAÇÃO
 async function sendFriendRequest() {
     const button = $("friendAction");
     if (button) button.disabled = true;
 
     try {
         const [userA, userB] = [currentUser.id, profileId].sort();
-
-        const { error } = await supabase
-            .from("friendships")
-            .insert({
-                user_a: userA,
-                user_b: userB,
-                requested_by: currentUser.id,
-                status: "pending"
-            });
+        const { error } = await supabase.from("friendships").insert({
+            user_a: userA,
+            user_b: userB,
+            requested_by: currentUser.id,
+            status: "pending"
+        });
 
         if (error) throw error;
 
@@ -506,20 +560,16 @@ async function sendFriendRequest() {
 
         notify("Solicitação enviada!");
         soundFx.playSuccess();
-
         await loadFriendship();
         renderFriendButton();
-
     } catch (error) {
         errorMessage(error.message);
         if (button) button.disabled = false;
     }
 }
 
-// 7. ACEITAR OU RECUSAR
 async function respondFriendRequest(accept) {
     if (!friendship) return;
-
     const confirm = await Swal.fire({
         title: accept ? "Aceitar amizade?" : "Recusar solicitação?",
         icon: "question",
@@ -546,7 +596,6 @@ async function respondFriendRequest(accept) {
                 notification_type: "friend_accepted",
                 message: `${currentProfile.full_name || "Alguém"} aceitou sua solicitação de amizade.`
             });
-
             notify("Agora vocês são amigos!");
             soundFx.playSuccess();
         } else {
@@ -555,40 +604,27 @@ async function respondFriendRequest(accept) {
 
         await loadFriendship();
         renderFriendButton();
-
+        await loadUserStatsAndPosts();
     } catch (error) {
         errorMessage(error.message);
     }
 }
 
-// 8. CANCELAR SOLICITAÇÃO
 async function cancelFriendRequest() {
-    const confirm = await Swal.fire({
-        title: "Cancelar solicitação?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#dc2626"
-    });
-
+    const confirm = await Swal.fire({ title: "Cancelar solicitação?", icon: "question", showCancelButton: true, confirmButtonColor: "#dc2626" });
     if (!confirm.isConfirmed) return;
 
     try {
-        const { error } = await supabase.rpc("cancel_friend_request", {
-            p_friendship_id: friendship.id
-        });
-
+        const { error } = await supabase.rpc("cancel_friend_request", { p_friendship_id: friendship.id });
         if (error) throw error;
-
         notify("Solicitação cancelada.");
         await loadFriendship();
         renderFriendButton();
-
     } catch (error) {
         errorMessage(error.message);
     }
 }
 
-// 9. REMOVER AMIZADE
 async function removeFriendship() {
     const confirm = await Swal.fire({
         title: "Remover amizade?",
@@ -596,23 +632,18 @@ async function removeFriendship() {
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#dc2626",
-        confirmButtonText: "Remover",
-        cancelButtonText: "Cancelar"
+        confirmButtonText: "Remover"
     });
 
     if (!confirm.isConfirmed) return;
 
     try {
-        const { error } = await supabase.rpc("remove_friendship", {
-            p_friendship_id: friendship.id
-        });
-
+        const { error } = await supabase.rpc("remove_friendship", { p_friendship_id: friendship.id });
         if (error) throw error;
-
         notify("Amizade removida.");
         await loadFriendship();
         renderFriendButton();
-
+        await loadUserStatsAndPosts();
     } catch (error) {
         errorMessage(error.message);
     }
@@ -627,28 +658,15 @@ async function renderProfile() {
     $("profileName").textContent = name;
     $("profileUsername").textContent = "@" + username;
 
-    $("profileBio").textContent =
-        currentProfile.bio ||
-        (isOwnProfile ? "Adicione uma biografia para contar um pouco sobre você." : "");
+    $("profileBio").textContent = currentProfile.bio || (isOwnProfile ? "Adicione uma biografia para contar um pouco sobre você." : "");
 
-    const locationText = [currentProfile.city, currentProfile.state]
-        .filter(Boolean).join(" - ");
-
+    const locationText = [currentProfile.city, currentProfile.state].filter(Boolean).join(" - ");
     const locationElement = $("profileLocation");
     locationElement.hidden = !locationText;
+    if (locationText) locationElement.querySelector("span").textContent = locationText;
 
-    if (locationText) {
-        locationElement.querySelector("span").textContent = locationText;
-    }
-
-    $("profileDate").innerHTML = `
-        <i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i>
-        No FaceCrato desde ${escapeHTML(formatDate(currentProfile.created_at))}
-    `;
-
-    $("privacyLabel").innerHTML = currentProfile.is_private
-        ? '<i data-lucide="lock" class="w-4 h-4 text-gray-400"></i> Perfil privado'
-        : '<i data-lucide="globe" class="w-4 h-4 text-gray-400"></i> Perfil público';
+    $("profileDate").innerHTML = `<i data-lucide="calendar-days" class="w-4 h-4 text-gray-400"></i> No FaceCrato desde ${escapeHTML(formatDate(currentProfile.created_at))}`;
+    $("privacyLabel").innerHTML = currentProfile.is_private ? '<i data-lucide="lock" class="w-4 h-4 text-gray-400"></i> Perfil privado' : '<i data-lucide="globe" class="w-4 h-4 text-gray-400"></i> Perfil público';
 
     const avatar = await storageUrl("avatars", currentProfile.avatar_url);
     const cover = await storageUrl("covers", currentProfile.cover_url);
@@ -668,57 +686,44 @@ async function renderProfile() {
 
     if (cover) {
         $("cover").style.backgroundImage = `url("${cover.replace(/"/g, "%22")}")`;
-        $("cover").style.backgroundSize = "cover";
-        $("cover").style.backgroundPosition = "center";
     }
 
     if (isOwnProfile) {
         $("changeAvatarButton").hidden = false;
         $("changeCoverButton").hidden = false;
-
         $("profileActions").innerHTML = `
             <button class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-violet-600 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 hover:brightness-110 transition flex items-center gap-2" id="editProfileButton">
-                <i data-lucide="pencil" class="w-4 h-4"></i>
-                Editar perfil
+                <i data-lucide="pencil" class="w-4 h-4"></i> Editar perfil
             </button>
         `;
-
         $("editProfileButton").onclick = () => { soundFx.playPop(); openEditModal(); };
-
     } else {
         await loadFriendship();
-
-        $("profileActions").innerHTML = `
-            <div id="friendButton"></div>
-        `;
-
+        $("profileActions").innerHTML = `<div id="friendButton"></div>`;
         renderFriendButton();
     }
 
     showIcons();
 }
 
-// 11. PUBLICAÇÕES DO PERFIL (Otimizadas com limite inicial)
-async function loadUserPosts() {
-    postsContainer.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
-            Carregando publicações...
-        </div>
-    `;
+// 11. CARREGAR ESTATÍSTICAS E PUBLICAÇÕES
+async function loadUserStatsAndPosts() {
+    postsContainer.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-xs">Carregando dados...</div>`;
 
     try {
-        const { data: posts, error } = await supabase
-            .from("posts")
-            .select("id, user_id, content, created_at")
-            .eq("user_id", profileId)
-            .order("created_at", { ascending: false })
-            .limit(10);
+        // Busca contagem de posts e amigos em paralelo para atualizar estatísticas
+        const [postsRes, friendsRes] = await Promise.all([
+            supabase.from("posts").select("id, user_id, content, created_at").eq("user_id", profileId).order("created_at", { ascending: false }).limit(10),
+            supabase.from("friendships").select("id", { count: "exact", head: true }).eq("status", "accepted").or(`user_a.eq.${profileId},user_b.eq.${profileId}`)
+        ]);
 
-        if (error) throw error;
+        $("statFriendsCount").textContent = friendsRes.count || 0;
 
-        if (!posts || posts.length === 0) {
+        const posts = postsRes.data || [];
+        if (posts.length === 0) {
+            $("statPostsCount").textContent = 0;
             postsContainer.innerHTML = `
-                <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-sm">
+                <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-400 text-xs shadow-xs">
                     <i data-lucide="images" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
                     Nenhuma publicação encontrada.
                 </div>
@@ -727,11 +732,11 @@ async function loadUserPosts() {
             return;
         }
 
+        // Conta aproximada ou total de posts
+        $("statPostsCount").textContent = posts.length;
+
         const postIds = posts.map(p => p.id);
-        const { data: mediaRes } = await supabase
-            .from("post_media")
-            .select("post_id, media_url, media_type")
-            .in("post_id", postIds);
+        const { data: mediaRes } = await supabase.from("post_media").select("post_id, media_url, media_type").in("post_id", postIds);
 
         const mediaMap = {};
         (mediaRes || []).forEach(m => {
@@ -755,18 +760,14 @@ async function loadUserPosts() {
             }).join("");
 
             return `
-                <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs">
                     <div class="flex items-center gap-3.5 mb-4">
                         <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 to-violet-600 text-white font-black flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                             ${escapeHTML(initials(currentProfile.full_name))}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <strong class="block text-sm font-bold text-slate-900">
-                                ${escapeHTML(currentProfile.full_name || "Usuário")}
-                            </strong>
-                            <small class="text-xs text-gray-400">
-                                ${escapeHTML(formatDate(post.created_at))}
-                            </small>
+                            <strong class="block text-sm font-bold text-slate-900">${escapeHTML(currentProfile.full_name || "Usuário")}</strong>
+                            <small class="text-xs text-gray-400">${escapeHTML(formatDate(post.created_at))}</small>
                         </div>
                     </div>
                     <div class="text-slate-800 text-sm leading-relaxed whitespace-pre-wrap break-words">
@@ -778,24 +779,18 @@ async function loadUserPosts() {
         }).join("");
 
         showIcons();
-
     } catch (error) {
-        postsContainer.innerHTML = `
-            <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-sm">
-                Erro ao carregar publicações: ${escapeHTML(error.message)}
-            </div>
-        `;
+        postsContainer.innerHTML = `<div class="bg-white border border-gray-200 rounded-2xl p-12 text-center text-red-500 text-xs shadow-xs">Erro ao carregar publicações.</div>`;
     }
 }
 
-// 12. MODAL DE EDIÇÃO
+// MODAL DE EDIÇÃO
 function openEditModal() {
     $("editName").value = currentProfile.full_name || "";
     $("editUsername").value = currentProfile.username || "";
     $("editBio").value = currentProfile.bio || "";
     $("editCity").value = currentProfile.city || "";
     $("editState").value = currentProfile.state || "";
-
     $("editModal").classList.remove("hidden");
     $("editModal").classList.add("flex");
 }
@@ -809,17 +804,14 @@ function closeEditModal() {
 $("cancelEdit").onclick = closeEditModal;
 $("cancelEditX").onclick = closeEditModal;
 
-// 13. SALVAR PERFIL
 $("editForm").addEventListener("submit", async event => {
     event.preventDefault();
-
     const button = $("saveProfileButton");
     button.disabled = true;
     button.textContent = "Salvando...";
 
     try {
         const username = $("editUsername").value.trim().toLowerCase();
-
         if (!/^[a-z0-9_]{3,30}$/.test(username)) {
             throw new Error("Use de 3 a 30 caracteres: letras minúsculas, números ou underline.");
         }
@@ -832,18 +824,13 @@ $("editForm").addEventListener("submit", async event => {
             state: $("editState").value.trim().toUpperCase()
         };
 
-        const { error } = await supabase
-            .from("profiles")
-            .update(updates)
-            .eq("id", currentUser.id);
-
+        const { error } = await supabase.from("profiles").update(updates).eq("id", currentUser.id);
         if (error) throw error;
 
         closeEditModal();
         soundFx.playSuccess();
         notify("Perfil atualizado!");
         await loadProfile();
-
     } catch (error) {
         errorMessage(error.message);
     } finally {
@@ -852,33 +839,19 @@ $("editForm").addEventListener("submit", async event => {
     }
 });
 
-// 14. UPLOAD DE IMAGENS
 async function uploadImage(file, bucket) {
     if (!file) return;
-
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-        throw new Error("Formato não permitido.");
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-        throw new Error("A imagem deve ter no máximo 5 MB.");
-    }
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) throw new Error("Formato não permitido.");
+    if (file.size > 5 * 1024 * 1024) throw new Error("A imagem deve ter no máximo 5 MB.");
 
     const ext = file.type.split("/")[1];
     const path = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
 
-    const { error: uploadError } = await supabase.storage
-        .from(bucket)
-        .upload(path, file, { contentType: file.type });
-
+    const { error: uploadError } = await supabase.storage.from(bucket).upload(path, file, { contentType: file.type });
     if (uploadError) throw uploadError;
 
     const field = bucket === "avatars" ? "avatar_url" : "cover_url";
-
-    const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ [field]: path })
-        .eq("id", currentUser.id);
+    const { error: updateError } = await supabase.from("profiles").update({ [field]: path }).eq("id", currentUser.id);
 
     if (updateError) {
         await supabase.storage.from(bucket).remove([path]);
@@ -890,54 +863,30 @@ async function uploadImage(file, bucket) {
     await loadProfile();
 }
 
-// 15. EVENTOS DE IMAGEM
 $("changeAvatarButton").onclick = () => $("avatarFile").click();
 $("changeCoverButton").onclick = () => $("coverFile").click();
 
 $("avatarFile").onchange = async event => {
-    try {
-        await uploadImage(event.target.files[0], "avatars");
-    } catch (error) {
-        errorMessage(error.message);
-    }
+    try { await uploadImage(event.target.files[0], "avatars"); } catch (error) { errorMessage(error.message); }
     event.target.value = "";
 };
 
 $("coverFile").onchange = async event => {
-    try {
-        await uploadImage(event.target.files[0], "covers");
-    } catch (error) {
-        errorMessage(error.message);
-    }
+    try { await uploadImage(event.target.files[0], "covers"); } catch (error) { errorMessage(error.message); }
     event.target.value = "";
 };
 
-// 16. ATUALIZAR PUBLICAÇÕES
-$("refreshButton").onclick = () => { soundFx.playPop(); loadUserPosts(); };
+$("refreshButton").onclick = () => { soundFx.playPop(); loadUserStatsAndPosts(); };
 
-// 17. SAIR DA CONTA
 const handleLogout = async () => {
-    const confirm = await Swal.fire({
-        title: "Sair da conta?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#0891b2"
-    });
-
-    if (confirm.isConfirmed) {
-        await supabase.auth.signOut();
-        window.location.replace("./login.html");
-    }
+    const confirm = await Swal.fire({ title: "Sair da conta?", icon: "question", showCancelButton: true, confirmButtonColor: "#0891b2" });
+    if (confirm.isConfirmed) { await supabase.auth.signOut(); window.location.replace("./login.html"); }
 };
 
-$("logoutButton")?.addEventListener("click", handleLogout);
 $("logoutButtonMobile")?.addEventListener("click", handleLogout);
+document.getElementById("profileButton").addEventListener("click", () => window.location.href = "./perfil.html");
 
-// 18. INICIAR
-initialize().catch(error =>
-    showProfileError(error.message || "Erro ao iniciar perfil.")
-);
-
+initialize().catch(error => showProfileError(error.message || "Erro ao iniciar perfil."));
 showIcons();
 </script>
 
