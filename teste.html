@@ -297,7 +297,7 @@ const nextMediaBtn = document.getElementById("nextMediaBtn");
 
 let activeModalPost = null;
 let activeMediaIndex = 0;
-let notifsChannel = null;
+let notificationsChannel = null; // Instância única do canal Realtime
 
 // SISTEMA DE EFEITOS SONOROS (Web Audio API)
 const soundFx = {
@@ -466,7 +466,9 @@ async function initialize() {
 
     await loadFeed();
     await checkUnreadCount();
-    subscribeDropdownNotifications();
+    
+    // Inicialização do Supabase Realtime de Notificações pós-autenticação
+    subscribeNotifications();
 }
 
 async function checkUnreadCount() {
@@ -477,6 +479,47 @@ async function checkUnreadCount() {
     } else {
         notifBadge.classList.add("hidden");
     }
+}
+
+// ATUALIZAÇÃO DA BADGE DE NOTIFICAÇÕES (Exigida na especificação)
+async function updateNotificationBadge() {
+    await checkUnreadCount();
+}
+
+// 1. SUPABASE REALTIME DE NOTIFICAÇÕES
+async function subscribeNotifications() {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return;
+
+    // Remover canal duplicado anterior antes de criar outro
+    if (notificationsChannel) {
+        supabase.removeChannel(notificationsChannel);
+    }
+
+    notificationsChannel = supabase.channel(`public:notifications:recipient_id=eq.${user.id}`)
+        .on(
+            'postgres_changes',
+            {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'notifications',
+                filter: `recipient_id=eq.${user.id}`
+            },
+            async (payload) => {
+                console.log('Nova notificação recebida em tempo real:', payload);
+                soundFx.playNotification();
+                await fetchDropdownNotifications();
+                if (typeof updateNotificationBadge === 'function') {
+                    await updateNotificationBadge();
+                }
+            }
+        )
+        .subscribe((status, err) => {
+            console.log('Status da conexão Realtime (notificações):', status);
+            if (err) {
+                console.error('Erro na subscrição Realtime:', err);
+            }
+        });
 }
 
 async function fetchDropdownNotifications() {
@@ -588,16 +631,6 @@ window.markAllReadFromDropdown = async function() {
     await supabase.from("notifications").update({ is_read: true }).eq("recipient_id", currentUser.id).eq("is_read", false);
     await checkUnreadCount();
     await fetchDropdownNotifications();
-}
-
-function subscribeDropdownNotifications() {
-    if (notifsChannel) supabase.removeChannel(notifsChannel);
-    notifsChannel = supabase.channel("feed-notifs-" + currentUser.id)
-        .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: "recipient_id=eq." + currentUser.id }, async () => {
-            soundFx.playNotification();
-            await checkUnreadCount();
-            if (!notifDropdown.classList.contains("hidden")) await fetchDropdownNotifications();
-        }).subscribe();
 }
 
 async function getFriendIds() {
