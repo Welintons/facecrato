@@ -13,187 +13,150 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-900 font-sans antialiased min-h-screen">
+<body class="bg-slate-950 text-slate-900 font-sans antialiased min-h-screen relative flex items-center justify-center p-4 sm:p-6">
 
-<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+    <!-- IMAGEM DE FUNDO DA TELA INTEIRA -->
+    <div class="absolute inset-0 bg-cover bg-center z-0 filter brightness-40 contrast-125" style="background-image: url('https://raw.githubusercontent.com/Welintons/wsinforcrato/main/77c47f9b19a16142691c7837c67f08c2.jpg');"></div>
+    <!-- Camada escura por cima para o formulário destacar bem -->
+    <div class="absolute inset-0 bg-slate-950/70 z-0"></div>
 
-    <!-- LADO ESQUERDO: BRANDING COM A SUA FOTO DO GITHUB -->
-    <section class="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden text-white border-r border-gray-200">
-        
-        <!-- Imagem de fundo puxada direto do seu repositório GitHub com filtro escurecido -->
-        <div class="absolute inset-0 bg-cover bg-center z-0 filter brightness-40 contrast-125" style="background-image: url('https://raw.githubusercontent.com/Welintons/wsinforcrato/main/77c47f9b19a16142691c7837c67f08c2.jpg');"></div>
-        <!-- Gradiente de sobreposição moderno do FaceCrato -->
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-900/60 to-cyan-950/80 z-0"></div>
+    <!-- CAIXA DO FORMULÁRIO FLUTUANTE NO CENTRO -->
+    <div class="w-full max-w-lg bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-10 relative z-10 border border-white/20 my-8">
 
-        <!-- CONTEÚDO DO LADO ESQUERDO (Z-10 para ficar acima da imagem) -->
-        <div class="flex items-center gap-4 z-10">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-lg shadow-cyan-500/30 border-2 border-cyan-400 shrink-0">
+        <!-- LOGO E NOME NO TOPO -->
+        <div class="flex items-center gap-3.5 mb-6">
+            <div class="w-14 h-14 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
             </div>
             <div class="flex flex-col">
-                <span class="text-3xl font-black tracking-tight leading-none text-white">FaceCrato</span>
-                <span class="text-xs font-extrabold text-amber-400 tracking-widest uppercase mt-1">Cariri · Ceará</span>
+                <span class="text-2xl font-black tracking-tight text-slate-900 leading-none">FaceCrato</span>
+                <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase mt-0.5">Cariri · Ceará</span>
             </div>
         </div>
 
-        <div class="max-w-lg my-auto py-8 z-10">
-            <h1 class="text-4xl xl:text-5xl font-black tracking-tight leading-tight mb-6">
-                Sua história.<br>
-                Suas conexões.<br>
-                <span class="text-cyan-400">Seu espaço.</span>
-            </h1>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-1">Chegue mais, cabra da peste!</h2>
+        <p class="text-xs sm:text-sm text-gray-500 mb-6">Preencha os dados abaixo para fincar seu pé na rede do Cariri.</p>
 
-            <p class="text-slate-200 text-base xl:text-lg leading-relaxed font-medium">
-                Crie sua conta e venha fazer parte da nossa comunidade no Cariri. Compartilhe suas ideias, seus momentos e conecte-se com a nossa gente com muito estilo e aconchego.
-            </p>
-        </div>
+        <form id="registerForm" class="space-y-3.5">
 
-        <div class="text-xs text-slate-300 tracking-wider font-medium z-10">
-            FACECRATO © 2026 — FEITO COM ORGULHO NO CARIRI.
-        </div>
-    </section>
-
-    <!-- LADO DIREITO: FORMULÁRIO DE CADASTRO -->
-    <section class="flex items-center justify-center p-6 sm:p-12 bg-white">
-        <div class="w-full max-w-md">
-
-            <!-- LOGO E NOME GRANDES NO MOBILE -->
-            <div class="flex items-center gap-3.5 mb-8 lg:hidden">
-                <div class="w-14 h-14 rounded-full overflow-hidden shadow-md shadow-cyan-500/20 border-2 border-cyan-500 shrink-0">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjJAn6tuhvX22Ni1tFV4QDjZRcdX1oFv1_HxQf6m03KKB429CdfW_oBc&s=10" alt="Logo FaceCrato" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-2xl font-black tracking-tight text-slate-900 leading-none">FaceCrato</span>
-                    <span class="text-[10px] font-bold text-amber-600 tracking-wider uppercase mt-0.5">Cariri · Ceará</span>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="fullName">Como te chamam por aí?</label>
+                <div class="relative">
+                    <input
+                        id="fullName"
+                        type="text"
+                        placeholder="Digite seu nome completo..."
+                        autocomplete="name"
+                        maxlength="100"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <i data-lucide="user" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                 </div>
             </div>
 
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Chegue mais, cabra da peste!</h2>
-            <p class="text-xs sm:text-sm text-gray-500 mb-8">Preencha os dados abaixo para fincar seu pé na rede do Cariri.</p>
-
-            <form id="registerForm" class="space-y-4">
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="fullName">Como te chamam por aí?</label>
-                    <div class="relative">
-                        <input
-                            id="fullName"
-                            type="text"
-                            placeholder="Digite seu nome completo..."
-                            autocomplete="name"
-                            maxlength="100"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <i data-lucide="user" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
-                    </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="username">Apelido ou alcunha na rede</label>
+                <div class="relative">
+                    <input
+                        id="username"
+                        type="text"
+                        placeholder="exemplo: cicero_raiz"
+                        autocomplete="username"
+                        maxlength="30"
+                        pattern="[a-z0-9_]{3,30}"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="username">Apelido ou alcunha na rede</label>
-                    <div class="relative">
-                        <input
-                            id="username"
-                            type="text"
-                            placeholder="exemplo: cicero_raiz"
-                            autocomplete="username"
-                            maxlength="30"
-                            pattern="[a-z0-9_]{3,30}"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <i data-lucide="at-sign" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
-                    </div>
-                    <small class="text-[11px] text-gray-400 mt-1 block">Só letra minúscula, número e traço embaixo. De 3 a 30 letras.</small>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="email">Onde mandamos recado (E-mail)</label>
-                    <div class="relative">
-                        <input
-                            id="email"
-                            type="email"
-                            placeholder="seuemail@exemplo.com"
-                            autocomplete="email"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <i data-lucide="mail" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="password">Crie uma senha de respeito</label>
-                    <div class="relative">
-                        <input
-                            id="password"
-                            type="password"
-                            placeholder="Sua chave secreta"
-                            autocomplete="new-password"
-                            minlength="8"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <button
-                            type="button"
-                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
-                            data-target="password"
-                            aria-label="Mostrar senha"
-                        >
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <small class="text-[11px] text-gray-400 mt-1 block">No mínimo 8 dígitos para ninguém roubar sua prosa.</small>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5" for="confirmPassword">Confirme a senha</label>
-                    <div class="relative">
-                        <input
-                            id="confirmPassword"
-                            type="password"
-                            placeholder="Digite de novo pra garantir"
-                            autocomplete="new-password"
-                            minlength="8"
-                            required
-                            class="w-full h-12 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
-                        >
-                        <button
-                            type="button"
-                            class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
-                            data-target="confirmPassword"
-                            aria-label="Mostrar confirmação"
-                        >
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button
-                    type="submit"
-                    id="registerButton"
-                    class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2"
-                >
-                    Registrar meu nome na bodega
-                </button>
-
-                <div id="message" class="hidden mt-4 p-3.5 rounded-xl text-xs leading-relaxed"></div>
-
-            </form>
-
-            <div class="text-center text-xs text-gray-500 mt-6">
-                Já tem conta por aqui?
-                <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar na rede</a>
+                <small class="text-[10px] text-gray-400 mt-0.5 block">Só letra minúscula, número e traço embaixo. De 3 a 30 letras.</small>
             </div>
 
-            <div class="text-center text-[11px] text-gray-400 mt-10">
-                FaceCrato — Conectando o Cariri com estilo.
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="email">Onde mandamos recado (E-mail)</label>
+                <div class="relative">
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="seuemail@exemplo.com"
+                        autocomplete="email"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <i data-lucide="mail" class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                </div>
             </div>
 
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="password">Crie uma senha de respeito</label>
+                <div class="relative">
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Sua chave secreta"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <button
+                        type="button"
+                        class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
+                        data-target="password"
+                        aria-label="Mostrar senha"
+                    >
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <small class="text-[10px] text-gray-400 mt-0.5 block">No mínimo 8 dígitos para ninguém roubar sua prosa.</small>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" for="confirmPassword">Confirme a senha</label>
+                <div class="relative">
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        placeholder="Digite de novo pra garantir"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                        class="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 text-xs text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition"
+                    >
+                    <button
+                        type="button"
+                        class="toggle-password absolute right-3 top-3.5 text-gray-400 hover:text-slate-700 bg-transparent border-0 cursor-pointer"
+                        data-target="confirmPassword"
+                        aria-label="Mostrar confirmação"
+                    >
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                id="registerButton"
+                class="w-full h-12 bg-gradient-to-r from-cyan-600 to-violet-600 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-500/20 hover:brightness-110 transition mt-2 cursor-pointer"
+            >
+                Registrar meu nome na bodega
+            </button>
+
+            <div id="message" class="hidden mt-3 p-3 rounded-xl text-xs leading-relaxed"></div>
+
+        </form>
+
+        <div class="text-center text-xs text-gray-500 mt-5">
+            Já tem conta por aqui?
+            <a href="./login.html" class="text-cyan-700 font-bold hover:underline">Entrar na rede</a>
         </div>
-    </section>
 
-</div>
+        <div class="text-center text-[10px] text-gray-400 mt-6 border-t border-gray-100 pt-4">
+            FaceCrato © 2026 — Conectando o Cariri com estilo.
+        </div>
+
+    </div>
 
 <script>
 lucide.createIcons();
@@ -238,7 +201,7 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
 
 function showMessage(text, type = "error") {
     message.textContent = text;
-    message.className = `mt-4 p-3.5 rounded-xl text-xs leading-relaxed block ${
+    message.className = `mt-3 p-3 rounded-xl text-xs leading-relaxed block ${
         type === "success"
             ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
             : "bg-red-50 border border-red-200 text-red-700"
