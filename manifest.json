@@ -33,5 +33,15 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "/facecrato/screenshot-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Feed do FaceCrato no celular"
+    }
+  ],
+  "prefer_related_applications": false
 }
