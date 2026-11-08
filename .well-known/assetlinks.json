@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.welintons.twa",
-        "sha256_cert_fingerprints": ["14:42:90:B9:A9:7B:FB:14:46:34:32:70:AD:E1:DA:2D:35:CB:0A:9C:20:40:57:56:87:3D:28:A4:B2:AE:FC:E2"]
-      }
-    }]
