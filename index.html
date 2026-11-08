@@ -100,18 +100,23 @@ p {
     margin: 0;
 }
 
-.loader {
-    width: 28px;
-    height: 28px;
-    margin: 24px auto 0;
-    border: 3px solid #e2e8f0;
-    border-top-color: #0891b2;
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
+/* BARRA DE CARREGAMENTO FALSA */
+.progress-track {
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    margin: 24px 0 0;
+    overflow: hidden;
+    position: relative;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #0891b2;
+    border-radius: 10px;
+    transition: width 2.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .error {
@@ -165,7 +170,10 @@ button:hover {
 
     <p id="status">Preparando sua conexão...</p>
 
-    <div class="loader" id="loader"></div>
+    <!-- BARRA DE CARREGAMENTO -->
+    <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
 
     <div class="error" id="error"></div>
 
@@ -180,14 +188,14 @@ button:hover {
 import { supabase } from "./supabase.js";
 
 const status = document.getElementById("status");
-const loader = document.getElementById("loader");
+const progressFill = document.getElementById("progressFill");
 const errorBox = document.getElementById("error");
 const retryButton = document.getElementById("retryButton");
 
 let direcionando = false;
 
 function mostrarErro(mensagem) {
-    loader.style.display = "none";
+    progressFill.style.background = "#dc2626";
     status.textContent = "Não foi possível continuar.";
     errorBox.textContent = mensagem;
     errorBox.style.display = "block";
@@ -196,31 +204,39 @@ function mostrarErro(mensagem) {
 
 async function iniciar() {
     try {
-        status.textContent = "Verificando sua sessão...";
+        // Inicia a animação da barrinha indo até 100% em 2.5 segundos
+        setTimeout(() => {
+            progressFill.style.width = "100%";
+        }, 100);
 
-        // Cria uma promessa de timeout de 8 segundos para evitar travamentos
+        status.textContent = "Carregando FaceCrato...";
+
+        // Cria a promessa de timeout e a de checar a sessão do Supabase em paralelo
         const timeoutPromise = new Promise((_, reject) => 
             setTimeout(() => reject(new Error("O tempo limite de conexão foi excedido.")), 8000)
         );
-
-        // Dispara o getSession competindo com o timeout
         const sessionPromise = supabase.auth.getSession();
 
-        const { data, error } = await Promise.race([sessionPromise, timeoutPromise]);
+        const [res] = await Promise.all([
+            Promise.race([sessionPromise, timeoutPromise]),
+            new Promise(resolve => setTimeout(resolve, 2500)) // Garante que a barra falsa vai preencher os 2.5s exatos
+        ]);
 
+        const { data, error } = res;
         if (error) throw error;
 
         const destino = data.session ? "./feed.html" : "./login.html";
-
         direcionando = true;
 
-        status.textContent = data.session ? "Bem-vindo de volta!" : "Vamos começar...";
+        status.textContent = data.session ? "Bem-vindo de volta!" : "Tudo pronto!";
 
-        window.location.replace(destino);
+        // Pequeno resfriamento antes de trocar de tela de fato
+        setTimeout(() => {
+            window.location.replace(destino);
+        }, 300);
 
     } catch (error) {
         console.error("Erro de inicialização:", error);
-
         mostrarErro(
             "Verifique sua conexão com a internet e tente novamente. " +
             (error.message ? `(${error.message})` : "")
@@ -230,7 +246,7 @@ async function iniciar() {
 
 iniciar();
 
-// Mantém a sessão sincronizada caso ela mude em outra aba.
+// Mantém a sessão sincronizada caso mude em outra aba
 supabase.auth.onAuthStateChange((event, session) => {
     if (direcionando) return;
 
@@ -250,7 +266,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 <script>
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/facecrato/service-worker.js")
+        navigator.serviceWorker.register("/facecrato/sw.js")
             .then(reg => console.log("Service Worker registrado com sucesso!", reg.scope))
             .catch(error => console.error("Erro PWA:", error));
     });
